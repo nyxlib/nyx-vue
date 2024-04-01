@@ -1,5 +1,7 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+import { inject } from 'vue';
+
 import { createPinia } from 'pinia';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -9,8 +11,6 @@ import mqttPlugin from './plugins/mqtt';
 
 import useIndiStore from './stores/indi';
 
-import IndiDriver from './components/IndiDriver.vue';
-import IndiDevice from './components/IndiDevice.vue';
 import IndiVariable from './components/IndiVariable.vue';
 import IndiDashboard from './components/IndiDashboard.vue';
 
