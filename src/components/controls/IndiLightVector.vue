@@ -14,7 +14,7 @@ defineProps({
 
 const colors = {
     'Idle': 'secondary',
-    'Ok': 'primary',
+    'Ok': 'success',
     'Busy': 'warning',
     'Alert': 'danger',
 };
