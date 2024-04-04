@@ -33,9 +33,15 @@ const indiStore = useIndiStore();
             <div class="row">
                 <div class="col-md-6 text-center align-self-center">
 
-                    <button class="btn btn-primary w-50" type="button" :disabled="indiStore.isConnected" @click="emit('connect')">connect</button>
+                    <button class="btn btn-primary w-50" type="button" :disabled="indiStore.isConnected" @click="emit('connect')">
+                        connect
+                    </button>
+
                     <br /><br />
-                    <button class="btn btn-secondary w-50" type="button" :disabled="!indiStore.isConnected" @click="emit('disconnect')">disconnect</button>
+
+                    <button class="btn btn-secondary w-50" type="button" :disabled="!indiStore.isConnected" @click="emit('disconnect')">
+                        disconnect
+                    </button>
 
                 </div>
                 <div class="col-md-6 text-center align-self-center">

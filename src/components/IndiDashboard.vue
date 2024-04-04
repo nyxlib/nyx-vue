@@ -16,6 +16,13 @@ import IndiDevice from './dashboard/IndiDevice.vue';
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const emit = defineEmits([
+    'connect',
+    'disconnect',
+]);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const indi = inject('indi');
 const mqtt = inject('mqtt');
 
@@ -159,7 +166,7 @@ onUnmounted(() => {
 
             <div :class="`tab-pane align-items-center justify-content-center ${deviceIndex === 0 ? 'show active' : ''}`" :id="`indi_device_pane_${deviceIndex}`" tabindex="0" role="tabpanel" v-for="(deviceInfo, deviceName, deviceIndex) in devices" :key="deviceName">
 
-                <indi-home v-if="deviceName === 'Home'" /><indi-device :device-name="deviceName" :device-info="deviceInfo" :device-index="deviceIndex" v-else />
+                <indi-home @connect="emit('connect')" @disconnect="emit('disconnect')" v-if="deviceName === 'Home'" /><indi-device :device-name="deviceName" :device-info="deviceInfo" :device-index="deviceIndex" v-else />
 
             </div>
 
