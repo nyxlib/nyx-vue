@@ -3,16 +3,6 @@
 
 import { defineStore } from 'pinia';
 
-import { Terminal } from 'xterm';
-
-import 'xterm/css/xterm.css';
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-/* VARIABLES                                                                                                          */
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const TERMINAL = new Terminal({convertEol: true, fontFamily: 'Ubuntu Mono, courier-new, courier, monospace'});
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* STORE                                                                                                              */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -23,7 +13,9 @@ const useIndiStore = defineStore('indi', {
         /*------------------------------------------------------------------------------------------------------------*/
 
         return {
-            currentDeviceName: '---',
+            isConnected: false,
+            /**/
+            curDeviceName: '---',
             /**/
             deviceDict: {},
             messageDict: {},
@@ -61,13 +53,9 @@ const useIndiStore = defineStore('indi', {
         /*------------------------------------------------------------------------------------------------------------*/
     },
     actions: {
+
         /*------------------------------------------------------------------------------------------------------------*/
-
-        setup(div)
-        {
-            TERMINAL.open(div);
-        },
-
+        /* VARIABLES                                                                                                  */
         /*------------------------------------------------------------------------------------------------------------*/
 
         resolve(category, variableName, startsWith = false)
@@ -87,29 +75,12 @@ const useIndiStore = defineStore('indi', {
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
-
-        clearTerminal()
-        {
-            TERMINAL.clear();
-
-            this.messageDict[this.currentDeviceName].length = 0;
-        },
-
+        /* MESSAGES                                                                                                   */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        updateTerminal(newDeviceName = null)
+        numberOfMessages(deviceName)
         {
-            TERMINAL.clear();
-
-            if(newDeviceName)
-            {
-                this.currentDeviceName = newDeviceName;
-            }
-
-            if(this.currentDeviceName in this.messageDict)
-            {
-                this.messageDict[this.currentDeviceName].map((x) => `${x.timestamp} - ${x.message}`).forEach((line) => TERMINAL.writeln(line));
-            }
+            return (deviceName in this.messageDict) ? this.messageDict[deviceName].length : 0;
         },
 
         /*------------------------------------------------------------------------------------------------------------*/

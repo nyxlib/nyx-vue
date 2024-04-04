@@ -8,6 +8,10 @@ import { v4 as uuidV4 } from 'uuid';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+import useIndiStore from "../stores/indi";
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 let _client = null;
 let _endpoint = null;
 let _connectionCallback = null;
@@ -52,6 +56,8 @@ const _update_func = (endpoint, username, password) => {
 
             _connected = true;
 
+            useIndiStore().isConnected = true;
+
             if(_connectionCallback) {
                 _connectionCallback(true);
             }
@@ -62,6 +68,8 @@ const _update_func = (endpoint, username, password) => {
         _client.onConnectionLost = () => {
 
             _connected = false;
+
+            useIndiStore().isConnected = false;
 
             if(_connectionCallback) {
                 _connectionCallback(false);

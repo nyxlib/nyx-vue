@@ -12,7 +12,7 @@ import mqttPlugin from './plugins/mqtt';
 
 import useIndiStore from './stores/indi';
 
-import IndiVariable from './components/IndiVariable.vue';
+import IndiVariables from './components/IndiVariables.vue';
 import IndiDashboard from './components/IndiDashboard.vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -36,7 +36,7 @@ const setup = (app) => {
 export {
     setup,
     useIndiStore,
-    IndiVariable,
+    IndiVariables,
     IndiDashboard,
 };
 

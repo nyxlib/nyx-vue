@@ -3,7 +3,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import { ref, inject, computed, onMounted, onUnmounted } from 'vue';
+import { inject, computed, onMounted, onUnmounted } from 'vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -22,10 +22,6 @@ const mqtt = inject('mqtt');
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const indiStore = useIndiStore();
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const terminalDiv = ref(null);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -81,10 +77,6 @@ const devices = computed(() => {
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 onMounted(() => {
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    indiStore.setup(terminalDiv.value)
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -190,18 +182,22 @@ onUnmounted(() => {
                     <div class="modal-header px-3 py-2">
                         <h5 class="modal-title">
                             <i class="bi bi-card-text"></i>
-                            {{ indiStore.currentDeviceName }}
+                            {{ indiStore.curDeviceName }}
                             [
-                                <button class="btn btn-xs btn-secondary" type="button" @click="indiStore.clearTerminal()">
+                                <button class="btn btn-xs btn-secondary" type="button" @click="indi.clearTerminal()">
                                     <i class="bi bi-trash"></i>
                                     empty
+                                    <span class="badge rounded-pill bg-danger">
+                                        {{ indiStore.numberOfMessages(indiStore.curDeviceName) }}
+                                        <span class="visually-hidden">available messages</span>
+                                    </span>
                                 </button>
                             ]
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
 
-                    <div class="modal-body bg-black px-3 py-2" ref="terminalDiv"></div>
+                    <div class="modal-body bg-black px-3 py-2" id="indi_terminal"></div>
 
                 </div>
             </div>

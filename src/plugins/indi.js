@@ -1,6 +1,29 @@
+// noinspection JSUnusedGlobalSymbols
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+import { Terminal } from '@xterm/xterm';
+import { WebLinksAddon } from '@xterm/addon-web-links';
+
+import '@xterm/xterm/css/xterm.css';
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import useIndiStore from '../stores/indi';
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* VARIABLES                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const TERMINAL = new Terminal({
+    rows: 28,
+    cols: 85,
+    convertEol: true,
+    fontFamily: 'Ubuntu Mono, courier-new, courier, monospace'
+});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+TERMINAL.loadAddon(new WebLinksAddon());
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
@@ -87,18 +110,6 @@ const _processMessage_func = (message) => {
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
-        /* DRIVERS                                                                                                    */
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        else if(message['<>'] === 'drivers' && 'driver_list' in message)
-        {
-            indiStore.driverDefs = message['driver_list'].map(driver => ({
-                value: `indi_${driver}`,
-                label: driver
-            }));
-        }
-
-        /*------------------------------------------------------------------------------------------------------------*/
         /* MESSAGES                                                                                                   */
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -117,10 +128,10 @@ const _processMessage_func = (message) => {
 
             list.unshift({
                 timestamp: message['@timestamp'] || '',
-                message  : message['@message'  ] || '',
+                message: message['@message'] || '',
             });
 
-            indiStore.updateTerminal();
+            _updateTerminal_func();
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -236,15 +247,77 @@ const _buildNewSwitchVectorMessage_func = (defSwitchVector, index) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const _setupTerminal_func = (div, newDeviceName) => {
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    TERMINAL.open(div);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const indiStore = useIndiStore();
+
+    indiStore.curDeviceName = newDeviceName;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const _clearTerminal_func = () => {
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    TERMINAL.clear();
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const indiStore = useIndiStore();
+
+    if(indiStore.curDeviceName in indiStore.messageDict)
+    {
+        indiStore.messageDict[indiStore.curDeviceName].length = 0;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const _updateTerminal_func = () => {
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    TERMINAL.clear();
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const indiStore = useIndiStore();
+
+    if(indiStore.curDeviceName in indiStore.messageDict)
+    {
+        indiStore.messageDict[indiStore.curDeviceName].map((x) => `${x.timestamp} - ${x.message}`).forEach((line) => TERMINAL.writeln(line));
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 export default {
 
     install(app)
     {
         app.provide('indi', {
+            /* MESSAGES */
             processMessage: _processMessage_func,
             buildNewTextVectorMessage: _buildNewTextVectorMessage_func,
             buildNewNumberVectorMessage: _buildNewNumberVectorMessage_func,
             buildNewSwitchVectorMessage: _buildNewSwitchVectorMessage_func,
+            /* TERMINAL */
+            setupTerminal: _setupTerminal_func,
+            clearTerminal: _clearTerminal_func,
+            updateTerminal: _updateTerminal_func,
         });
     }
 };

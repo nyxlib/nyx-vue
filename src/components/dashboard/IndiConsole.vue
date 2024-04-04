@@ -1,6 +1,8 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+import { inject } from 'vue';
+
 import Modal from 'bootstrap/js/src/modal';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -9,6 +11,10 @@ import useIndiStore from '../../stores/indi';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const indi = inject('indi');
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const indiStore = useIndiStore();
@@ -28,9 +34,17 @@ const props = defineProps({
 
 const openModal = () => {
 
-    indiStore.updateTerminal(props.deviceName);
+    const modalEl = document.getElementById('indi_console');
+    const terminalEl = document.getElementById('indi_terminal');
 
-    new Modal(document.getElementById('indi_console')).show();
+    modalEl.addEventListener('shown.bs.modal', () => {
+
+        indi.setupTerminal(terminalEl, props.deviceName);
+
+        indi.updateTerminal();
+    });
+
+    new Modal(modalEl).show();
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -43,6 +57,10 @@ const openModal = () => {
     <button class="btn btn-xs btn-secondary" type="button" @click="openModal()">
         <i class="bi bi-card-text"></i>
         logs
+        <span class="badge rounded-pill bg-danger">
+            {{ indiStore.numberOfMessages(props.deviceName) }}
+            <span class="visually-hidden">available messages</span>
+        </span>
     </button>
 
     <!-- *********************************************************************************************************** -->

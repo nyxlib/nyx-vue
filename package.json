@@ -1,5 +1,5 @@
 {
-    "name": "indi-vue",
+    "name": "vue-indi",
     "version": "1.0.0",
     "description": "Indi client",
     "main": "./src/index.js",
@@ -7,13 +7,14 @@
         "lint": "./node_modules/eslint/bin/eslint.js ./src/"
     },
     "dependencies": {
+        "@xterm/addon-web-links": "^0.10.0",
+        "@xterm/xterm": "^5.4.0",
         "bootstrap": "^5.3.3",
         "bootstrap-icons": "^1.11.3",
-        "pinia": "^2.1.7",
         "paho-mqtt": "^1.1.0",
+        "pinia": "^2.1.7",
         "uuid": "^9.0.1",
-        "vue": "^3.4.21",
-        "xterm": "^5.3.0"
+        "vue": "^3.4.21"
     },
     "devDependencies": {
         "@vue/eslint-config-prettier": "^9.0.0",
