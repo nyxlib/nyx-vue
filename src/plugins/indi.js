@@ -296,7 +296,7 @@ const _updateTerminal_func = () => {
 
     if(indiStore.curDeviceName in indiStore.messageDict)
     {
-        indiStore.messageDict[indiStore.curDeviceName].map((x) => `${x.timestamp} - ${x.message}`).forEach((line) => TERMINAL.writeln(line));
+        indiStore.messageDict[indiStore.curDeviceName].map((x) => `${x.timestamp.replace('T', ' ')} - ${x.message}`).forEach((line) => TERMINAL.writeln(line));
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
