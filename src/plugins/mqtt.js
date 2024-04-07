@@ -1,5 +1,4 @@
 // noinspection JSUnresolvedReference
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import * as paho from 'paho-mqtt';
@@ -12,6 +11,10 @@ import useIndiStore from '../stores/indi';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+let indiStore = null;
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 let _client = null;
@@ -60,7 +63,7 @@ const _update_func = (endpoint, username, password) => {
 
             _connected = true;
 
-            useIndiStore().isConnected = true;
+            indiStore.isConnected = true;
 
             if(_connectionCallback) {
                 _connectionCallback(true);
@@ -73,7 +76,7 @@ const _update_func = (endpoint, username, password) => {
 
             _connected = false;
 
-            useIndiStore().isConnected = false;
+            indiStore.isConnected = false;
 
             if(_connectionCallback) {
                 _connectionCallback(false);
@@ -180,6 +183,8 @@ export default {
 
     install(app)
     {
+        indiStore = useIndiStore();
+
         app.provide('mqtt', {
             connected            : _connected_func            ,
             update               : _update_func               ,

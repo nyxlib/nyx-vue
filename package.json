@@ -12,14 +12,14 @@
         "bootstrap": "^5.3.3",
         "bootstrap-icons": "^1.11.3",
         "paho-mqtt": "^1.1.0",
-        "pinia": "^2.1.7",
-        "uuid": "^9.0.1",
-        "vue": "^3.4.21"
+        "uuid": "^9.0.1"
     },
     "devDependencies": {
         "@vue/eslint-config-prettier": "^9.0.0",
         "eslint": "^8.57.0",
-        "eslint-plugin-vue": "^9.24.0"
+        "eslint-plugin-vue": "^9.24.0",
+        "pinia": "^2.1.7",
+        "vue": "^3.4.21"
     },
     "author": "Jérôme Odier",
     "license": "CeCILL",

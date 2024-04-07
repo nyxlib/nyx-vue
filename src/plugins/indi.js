@@ -14,6 +14,10 @@ import useIndiStore from '../stores/indi';
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+let indiStore = null;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const TERMINAL = new Terminal({
     rows: 28,
     cols: 85,
@@ -34,8 +38,6 @@ const _buildKey = (message) => `${message['@device']}:${message['@name']}`;
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const _processMessage_func = (message) => {
-
-    const indiStore = useIndiStore();
 
     if('<>' in message)
     {
@@ -255,8 +257,6 @@ const _setupTerminal_func = (div, newDeviceName) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const indiStore = useIndiStore();
-
     indiStore.curDeviceName = newDeviceName;
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -271,8 +271,6 @@ const _clearTerminal_func = () => {
     TERMINAL.clear();
 
     /*----------------------------------------------------------------------------------------------------------------*/
-
-    const indiStore = useIndiStore();
 
     if(indiStore.curDeviceName in indiStore.messageDict)
     {
@@ -292,8 +290,6 @@ const _updateTerminal_func = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const indiStore = useIndiStore();
-
     if(indiStore.curDeviceName in indiStore.messageDict)
     {
         indiStore.messageDict[indiStore.curDeviceName].map((x) => `${x.timestamp.replace('T', ' ')} - ${x.message}`).forEach((line) => TERMINAL.writeln(line));
@@ -308,6 +304,8 @@ export default {
 
     install(app)
     {
+        indiStore = useIndiStore();
+
         app.provide('indi', {
             /* MESSAGES */
             processMessage: _processMessage_func,
