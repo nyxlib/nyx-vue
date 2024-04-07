@@ -6,11 +6,11 @@ import * as paho from 'paho-mqtt';
 import { v4 as uuidV4 } from 'uuid';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* VARIABLES                                                                                                          */
+
+import useIndiStore from '../stores/indi';
+
 /*--------------------------------------------------------------------------------------------------------------------*/
-
-let indiStore = null;
-
+/* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 let _client = null;
@@ -59,7 +59,7 @@ const _update_func = (endpoint, username, password) => {
 
             _connected = true;
 
-            indiStore.isConnected = true;
+            useIndiStore().isConnected = true;
 
             if(_connectionCallback) {
                 _connectionCallback(true);
@@ -72,7 +72,7 @@ const _update_func = (endpoint, username, password) => {
 
             _connected = false;
 
-            indiStore.isConnected = false;
+            useIndiStore().isConnected = false;
 
             if(_connectionCallback) {
                 _connectionCallback(false);
@@ -177,10 +177,8 @@ const _emit_func = (topic, payload) => {
 
 export default {
 
-    install(app, options)
+    install(app)
     {
-        indiStore = options.indiStore();
-
         app.provide('mqtt', {
             connected            : _connected_func            ,
             update               : _update_func               ,
