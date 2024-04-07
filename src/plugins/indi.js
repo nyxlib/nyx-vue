@@ -302,9 +302,9 @@ const _updateTerminal_func = () => {
 
 export default {
 
-    install(app)
+    install(app, options)
     {
-        indiStore = useIndiStore();
+        indiStore = options.indiStore();
 
         app.provide('indi', {
             /* MESSAGES */

@@ -181,9 +181,9 @@ const _emit_func = (topic, payload) => {
 
 export default {
 
-    install(app)
+    install(app, options)
     {
-        indiStore = useIndiStore();
+        indiStore = options.indiStore();
 
         app.provide('mqtt', {
             connected            : _connected_func            ,

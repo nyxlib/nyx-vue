@@ -17,8 +17,10 @@ import IndiDashboard from './components/IndiDashboard.vue';
 
 const setup = (app) => {
 
-    app.use(indiPlugin);
-    app.use(mqttPlugin);
+    const indiStore = useIndiStore();
+
+    app.use(indiPlugin, {indiStore: indiStore});
+    app.use(mqttPlugin, {indiStore: indiStore});
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
