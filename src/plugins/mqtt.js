@@ -59,7 +59,7 @@ const _update_func = (endpoint, username, password) => {
 
             _connected = true;
 
-            useIndiStore().isConnected = true;
+            useIndiStore(window.pinia).isConnected = true;
 
             if(_connectionCallback) {
                 _connectionCallback(true);
@@ -72,7 +72,7 @@ const _update_func = (endpoint, username, password) => {
 
             _connected = false;
 
-            useIndiStore().isConnected = false;
+            useIndiStore(window.pinia).isConnected = false;
 
             if(_connectionCallback) {
                 _connectionCallback(false);
@@ -96,15 +96,17 @@ const _update_func = (endpoint, username, password) => {
 
         _client.connect({
             useSSL: url.protocol === 'wss:',
-            userName: username,
-            password: password,
+            userName: username || '',
+            password: password || '',
             reconnect: true,
         });
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
-    catch(_)
+    catch(e)
     {
+        console.error(e);
+
         _client = null;
     }
 

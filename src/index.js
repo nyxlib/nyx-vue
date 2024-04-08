@@ -12,6 +12,7 @@ import useIndiStore from './stores/indi';
 
 import IndiVariables from './components/IndiVariables.vue';
 import IndiDashboard from './components/IndiDashboard.vue';
+import IndiMonitoring from './components/IndiMonitoring.vue'
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -28,6 +29,7 @@ export {
     useIndiStore,
     IndiVariables,
     IndiDashboard,
+    IndiMonitoring,
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/

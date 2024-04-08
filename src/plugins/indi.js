@@ -35,7 +35,7 @@ const _buildKey = (message) => `${message['@device']}:${message['@name']}`;
 
 const _processMessage_func = (message) => {
 
-    const indiStore = useIndiStore();
+    const indiStore = useIndiStore(window.pinia);
 
     if('<>' in message)
     {
@@ -255,7 +255,7 @@ const _setupTerminal_func = (div, newDeviceName) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const indiStore = useIndiStore();
+    const indiStore = useIndiStore(window.pinia);
 
     indiStore.curDeviceName = newDeviceName;
 
@@ -272,7 +272,7 @@ const _clearTerminal_func = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const indiStore = useIndiStore();
+    const indiStore = useIndiStore(window.pinia);
 
     if(indiStore.curDeviceName in indiStore.messageDict)
     {
@@ -292,7 +292,7 @@ const _updateTerminal_func = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const indiStore = useIndiStore();
+    const indiStore = useIndiStore(window.pinia);
 
     if(indiStore.curDeviceName in indiStore.messageDict)
     {
@@ -306,7 +306,7 @@ const _updateTerminal_func = () => {
 
 export default {
 
-    install(app, options)
+    install(app)
     {
         app.provide('indi', {
             /* MESSAGES */
