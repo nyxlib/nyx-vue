@@ -77,13 +77,9 @@ onMounted(() => {
     background-color: rgba(0, 0, 0, 2.5%) !important;
 }
 
-html:has([data-bs-theme="dark"]),
-body:has([data-bs-theme="dark"]) {
+[data-bs-theme=dark] .grid-stack > .grid-stack-item > .grid-stack-item-content {
 
-    .grid-stack > .grid-stack-item > .grid-stack-item-content {
-
-        background-color: rgba(255, 255, 255, 10%) !important;
-    }
+    background-color: rgba(255, 255, 255, 10%) !important;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
