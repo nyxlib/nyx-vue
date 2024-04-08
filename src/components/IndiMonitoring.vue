@@ -6,8 +6,6 @@ import { inject, onMounted } from 'vue';
 import { GridStack } from 'gridstack';
 import { Tooltip } from 'bootstrap';
 
-import 'gridstack/dist/gridstack.min.css';
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -70,6 +68,10 @@ onMounted(() => {
 <style>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+@import "gridstack/dist/gridstack.css";
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 .grid-stack > .grid-stack-item > .grid-stack-item-content {
 
     background-color: rgba(0, 0, 0, 2.5%) !important;
@@ -79,7 +81,7 @@ onMounted(() => {
 
     .grid-stack > .grid-stack-item > .grid-stack-item-content {
 
-        background-color: rgba(255, 255, 255, 10%) !important;
+        background-color: rgba(255, 255, 255, 10%);
     }
 }
 
