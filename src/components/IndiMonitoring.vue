@@ -54,7 +54,7 @@ onMounted(() => {
     <div class="position-absolute" style="right: 1rem; bottom: 1rem;">
 
         <button class="btn btn-primary ms-0" type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add a new widget" @click="addWidget">
-            <i class="bi bi-plus"></i>
+            <i class="bi bi-plus-lg"></i>
         </button>
 
         <button class="btn btn-danger ms-1" type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Drop here to remove" id="AAE7F472">
