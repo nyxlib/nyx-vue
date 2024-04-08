@@ -3,7 +3,7 @@
 
 import { inject } from 'vue';
 
-import Modal from 'bootstrap/js/src/modal';
+import { Modal } from 'bootstrap';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 

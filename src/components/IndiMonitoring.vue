@@ -4,6 +4,7 @@
 import { inject, onMounted } from 'vue';
 
 import { GridStack } from 'gridstack';
+import { Tooltip } from 'bootstrap';
 
 import 'gridstack/dist/gridstack.min.css';
 
@@ -14,20 +15,29 @@ import 'gridstack/dist/gridstack.min.css';
 const indi = inject('indi');
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+let grid = null;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const addWidget = () => {
+
+    grid.addWidget({w: 2, content: 'item'});
+};
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 onMounted(() => {
 
-    const grid = GridStack.init();
+    new Tooltip(document.body, {
+        selector: '[data-bs-toggle="tooltip"]'
+    })
 
-    const serializedData = [
-        {x: 0, y: 0, w: 2, h: 2},
-        {x: 2, y: 3, w: 3, content: 'item 2'},
-        {x: 1, y: 3}
-    ];
-
-    grid.load(serializedData);
+    grid = GridStack.init({
+        removable: '#AAE7F472'
+    });
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -38,6 +48,20 @@ onMounted(() => {
     <!-- *********************************************************************************************************** -->
 
     <div class="grid-stack h-100 w-100"></div>
+
+    <!-- *********************************************************************************************************** -->
+
+    <div class="position-absolute" style="right: 1rem; bottom: 1rem;">
+
+        <button class="btn btn-primary ms-0" type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add a new widget" @click="addWidget">
+            <i class="bi bi-plus"></i>
+        </button>
+
+        <button class="btn btn-danger ms-1" type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Drop here to remove" id="AAE7F472">
+            <i class="bi bi-trash2"></i>
+        </button>
+
+    </div>
 
     <!-- *********************************************************************************************************** -->
 
