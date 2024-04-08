@@ -81,7 +81,7 @@ onMounted(() => {
 
     .grid-stack > .grid-stack-item > .grid-stack-item-content {
 
-        background-color: rgba(255, 255, 255, 10%);
+        background-color: rgba(255, 255, 255, 10%) !important;
     }
 }
 
