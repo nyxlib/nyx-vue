@@ -44,7 +44,7 @@ const openModal = () => {
         indi.updateTerminal();
     });
 
-    new Modal(modalEl).show();
+    Modal.getOrCreateInstance(modalEl).show();
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/

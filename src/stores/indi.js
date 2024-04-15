@@ -60,18 +60,27 @@ const useIndiStore = defineStore('indi', {
 
         resolve(category, variableName, startsWith = false)
         {
-            const names = Object.values(this.deviceDict).filter((device) => device.category === category).map((device) => `${device.device}:${variableName}`);
+            /*--------------------------------------------------------------------------------------------------------*/
 
-            if(names.length > 0)
+            if(category)
             {
-                return startsWith ? Object.entries(this.variables).filter((variable) => variable[0].startsWith(names[0])).map((variable) => variable[1])///
-                                  : Object.entries(this.variables).filter((variable) => variable[0]    ===    (names[0])).map((variable) => variable[1])[0]
-                ;
+                const names = Object.values(this.deviceDict).filter((device) => device.category === category).map((device) => `${device.device}:${variableName}`);
+
+                if(names.length > 0)
+                {
+                    return startsWith ? Object.entries(this.variables).filter((variable) => variable[0].startsWith(names[0])).map((variable) => variable[1])///
+                                      : Object.entries(this.variables).filter((variable) => variable[0]    ===    (names[0])).map((variable) => variable[1])[0]
+                    ;
+                }
             }
 
-            return startsWith ? [  ]
-                              : null
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            return startsWith ? Object.entries(this.variables).filter((variable) => variable[0].startsWith(variableName)).map((variable) => variable[1])///
+                              : Object.entries(this.variables).filter((variable) => variable[0]    ===    (variableName)).map((variable) => variable[1])[0]
             ;
+
+            /*--------------------------------------------------------------------------------------------------------*/
         },
 
         /*------------------------------------------------------------------------------------------------------------*/

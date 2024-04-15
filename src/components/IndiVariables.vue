@@ -66,7 +66,7 @@ const filteredVariables = computed(() => {
                     </thead>
                     <tbody>
                         <tr v-for="(value, name) in filteredVariables" :key="name">
-                            <td>${<i>{{name}}</i>}</td>
+                            <td><span class="non-selectable">${</span><i>{{name}}</i><span class="non-selectable">}</span></td>
                             <td>{{value['$']}}</td>
                         </tr>
                     </tbody>
@@ -82,3 +82,19 @@ const filteredVariables = computed(() => {
     <!-- *********************************************************************************************************** -->
 
 </template>
+
+<style scoped>
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+.non-selectable {
+
+    color: var(--bs-secondary);
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+</style>
