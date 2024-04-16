@@ -1,0 +1,31 @@
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+@import url(bootstrap/dist/css/bootstrap.css);
+
+@import url(bootstrap-icons/font/bootstrap-icons.css);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+:root {
+
+    //--ms-py: 0.25rem;
+
+    --ms-radius: 0.75rem;
+
+    --ms-bg: var(--bs-body-bg);
+    --ms-border-color: var(--bs-border-color);
+    --ms-border-width: var(--bs-border-width);
+
+    --ms-dropdown-bg: var(--bs-body-bg);
+    --ms-dropdown-border-color: var(--bs-border-color);
+    --ms-dropdown-border-width: var(--bs-border-width);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+.multiselect-tags-search {
+
+    background-color: transparent;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
