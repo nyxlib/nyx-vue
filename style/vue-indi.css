@@ -4,8 +4,11 @@
 
 @import "gridstack/dist/gridstack.css";
 
+@import "@xterm/xterm/css/xterm.css";
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/* noinspection CssNonIntegerLengthInPixels */
 :root {
 
     --ms-py: calc(0.25rem - 0.5px);

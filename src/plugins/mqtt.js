@@ -3,7 +3,7 @@
 
 import * as paho from 'paho-mqtt';
 
-import { v4 as uuid } from 'uuid';
+import {v4 as uuid} from 'uuid';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 

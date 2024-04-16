@@ -176,10 +176,10 @@ onMounted(() => {
                         <!-- *************************************************************************************** -->
 
                         <div class="mb-3">
-                            <label for="D05CFEFF" class="form-label">Plot type</label>
+                            <label for="F8E884DD" class="form-label">Plot type</label>
                             <multiselect
                                 mode="single"
-                                id="D05CFEFF"
+                                id="F8E884DD"
                                 :can-clear="false"
                                 :searchable="true"
                                 :create-option="false"
@@ -241,6 +241,8 @@ onMounted(() => {
 
                     <div class="modal-footer px-3 py-1">
 
+                        <!-- *************************************************************************************** -->
+
                         <button class="btn btn-outline-secondary" type="button" data-bs-dismiss="modal">
                             Cancel
                         </button>
@@ -248,6 +250,8 @@ onMounted(() => {
                         <button class="btn btn-primary" type="button" @click="addWidget" :disabled="!isValid">
                             <i class="bi bi-plus-ls">Add</i>
                         </button>
+
+                        <!-- *************************************************************************************** -->
 
                     </div>
 

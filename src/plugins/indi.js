@@ -1,10 +1,9 @@
 // noinspection JSUnusedGlobalSymbols
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import { Terminal } from '@xterm/xterm';
-import { WebLinksAddon } from '@xterm/addon-web-links';
+import {Terminal} from '@xterm/xterm';
 
-import '@xterm/xterm/css/xterm.css';
+import {WebLinksAddon} from '@xterm/addon-web-links';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
