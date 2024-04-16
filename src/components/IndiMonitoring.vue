@@ -1,7 +1,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {ref, inject, computed, onMounted} from 'vue';
+import {ref, inject, computed, onMounted, onUnmounted} from 'vue';
 
 import Multiselect from '@vueform/multiselect';
 
@@ -25,10 +25,14 @@ const indiStore = useIndiStore(window.pinia);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-defineProps({
+const props = defineProps({
     groups: {
         type: Array,
         default: ['Global'],
+    },
+    metrics: {
+        type: Array,
+        default: [/* EMPTY */],
     },
     refreshInterval: {
         type: Number,
@@ -43,6 +47,10 @@ const plotName = ref('');
 const plotGroup = ref('');
 const metric1 = ref([]);
 const metric2 = ref([]);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+let timer = null;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -78,9 +86,31 @@ const newWidget = () => {
 
 const addWidget = () => {
 
-    //grid.addWidget({w: 2, content: 'item'});
+    const el = document.querySelector(`[data-title="${plotGroup.value}"]`);
 
-    Modal.getOrCreateInstance(document.getElementById('indi_metrics')).hide();
+    if(el)
+    {
+        const grid = el.gridstack;
+
+        grid.addWidget({w: 2, content: plotName.value});
+
+        props.metrics.push({
+            plotType: plotType.value,
+            plotName: plotName.value,
+            plotGroup: plotGroup.value,
+            metric1: metric1.value,
+            metric2: metric2.value,
+        });
+
+        Modal.getOrCreateInstance(document.getElementById('indi_metrics')).hide();
+    }
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const update = () => {
+
+    console.log('*')
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -89,13 +119,33 @@ const addWidget = () => {
 
 onMounted(() => {
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     new Tooltip(document.body, {
         selector: '[data-bs-title]'
     });
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     GridStack.init({
         removable: '#AAE7F472'
     });
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    timer = setInterval(update, props.refreshInterval);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+onUnmounted(() => {
+
+    if(timer)
+    {
+        clearInterval(timer);
+    }
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -129,11 +179,11 @@ onMounted(() => {
 
         <!-- *********************************************************************************************************** -->
 
-        <div class="tab-content">
+        <div class="tab-content h-100 w-100">
 
-            <div :class="`tab-pane fade ${groupIndex === 0 ? 'show active' : ''}`" :id="`indi_monitoring_pane_${groupIndex}`" role="tabpanel" tabindex="0" v-for="(groupName, groupIndex) in groups" :key="groupIndex">
+            <div :class="`tab-pane fade ${groupIndex === 0 ? 'show active' : ''} h-100 w-100`" :id="`indi_monitoring_pane_${groupIndex}`" role="tabpanel" tabindex="0" v-for="(groupName, groupIndex) in groups" :key="groupIndex">
 
-                <div class="grid-stack h-100 w-100" :data-title="groupName"></div>
+                <div class="grid-stack bg-primary h-100 w-100" :data-title="groupName"></div>
 
             </div>
 
