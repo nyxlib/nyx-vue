@@ -73,36 +73,57 @@ const isValid = computed(() => !!plotName.value && !!plotGroup.value && metric1.
 
 const newWidget = () => {
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     plotType.value = 'line';
     plotName.value = '';
     plotGroup.value = '';
     metric1.value = [];
     metric2.value = [];
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     Modal.getOrCreateInstance(document.getElementById('indi_metrics')).show();
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const addWidget = () => {
 
-    const el = document.querySelector(`[data-title="${plotGroup.value}"]`);
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const data = {
+        plotType: plotType.value,
+        plotName: plotName.value,
+        plotGroup: plotGroup.value,
+        metric1: metric1.value,
+        metric2: metric2.value,
+    };
+
+    props.metrics.push(data);
+
+    createWidget(data);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    Modal.getOrCreateInstance(document.getElementById('indi_metrics')).hide();
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const createWidget = (metric) => {
+
+    const el = document.querySelector(`[data-title="${metric.plotGroup}"]`);
 
     if(el)
     {
-        props.metrics.push({
-            plotType: plotType.value,
-            plotName: plotName.value,
-            plotGroup: plotGroup.value,
-            metric1: metric1.value,
-            metric2: metric2.value,
-        });
-
         const grid = el.gridstack;
 
-        grid.addWidget({w: 2, content: plotName.value});
-
-        Modal.getOrCreateInstance(document.getElementById('indi_metrics')).hide();
+        grid.addWidget({w: 2, content: metric.plotName});
     }
 };
 
@@ -110,7 +131,7 @@ const addWidget = () => {
 
 const update = () => {
 
-    console.log('*')
+    console.log('*');
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -130,6 +151,8 @@ onMounted(() => {
     GridStack.init({
         removable: '#AAE7F472'
     });
+
+    props.metrics.forEach(createWidget);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -167,7 +190,7 @@ onUnmounted(() => {
 
             <li class="nav-item" role="presentation" v-for="(groupName, groupIndex) in groups" :key="groupIndex">
 
-                <button :class="`nav-link ${groupIndex === 0 ? 'active' : ''} px-3 py-2`" type="button" data-bs-toggle="tab" :data-bs-target="`#indi_monitoring_pane_${groupIndex}`" role="tab">
+                <button :class="`nav-link ${groupIndex === 0 ? 'active' : 'xxxxxx'} px-3 py-2`" type="button" data-bs-toggle="tab" :data-bs-target="`#indi_monitoring_pane_${groupIndex}`" role="tab">
                     {{ groupName }}
                 </button>
 
@@ -181,7 +204,7 @@ onUnmounted(() => {
 
         <div class="tab-content0" style="height: calc(100% - 4rem); width: calc(100% - 0rem);">
 
-            <div :class="`grid-stack tab-pane fade ${groupIndex === 0 ? 'show active' : ''} h-100 w-100`" :data-title="groupName" :id="`indi_monitoring_pane_${groupIndex}`" role="tabpanel" tabindex="0" v-for="(groupName, groupIndex) in groups" :key="groupIndex"></div>
+            <div :class="`grid-stack tab-pane fade ${groupIndex === 0 ? 'show active' : 'xxxx xxxxxx'} h-100 w-100`" :data-title="groupName" :id="`indi_monitoring_pane_${groupIndex}`" role="tabpanel" tabindex="0" v-for="(groupName, groupIndex) in groups" :key="groupIndex"></div>
 
         </div>
 
