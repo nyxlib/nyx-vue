@@ -90,10 +90,6 @@ const addWidget = () => {
 
     if(el)
     {
-        const grid = el.gridstack;
-
-        grid.addWidget({w: 2, content: plotName.value});
-
         props.metrics.push({
             plotType: plotType.value,
             plotName: plotName.value,
@@ -101,6 +97,10 @@ const addWidget = () => {
             metric1: metric1.value,
             metric2: metric2.value,
         });
+
+        const grid = el.gridstack;
+
+        grid.addWidget({w: 2, content: plotName.value});
 
         Modal.getOrCreateInstance(document.getElementById('indi_metrics')).hide();
     }
@@ -179,13 +179,9 @@ onUnmounted(() => {
 
         <!-- *********************************************************************************************************** -->
 
-        <div class="tab-content h-100 w-100">
+        <div class="tab-content0" style="height: calc(100% - 4rem); width: calc(100% - 0rem);">
 
-            <div :class="`tab-pane fade ${groupIndex === 0 ? 'show active' : ''} h-100 w-100`" :id="`indi_monitoring_pane_${groupIndex}`" role="tabpanel" tabindex="0" v-for="(groupName, groupIndex) in groups" :key="groupIndex">
-
-                <div class="grid-stack bg-primary h-100 w-100" :data-title="groupName"></div>
-
-            </div>
+            <div :class="`grid-stack tab-pane fade ${groupIndex === 0 ? 'show active' : ''} h-100 w-100`" :data-title="groupName" :id="`indi_monitoring_pane_${groupIndex}`" role="tabpanel" tabindex="0" v-for="(groupName, groupIndex) in groups" :key="groupIndex"></div>
 
         </div>
 
