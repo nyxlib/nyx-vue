@@ -1,14 +1,14 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-@import url(bootstrap/dist/css/bootstrap.css);
+@import "@vueform/multiselect/themes/default.css";
 
-@import url(bootstrap-icons/font/bootstrap-icons.css);
+@import "gridstack/dist/gridstack.css";
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 :root {
 
-    //--ms-py: 0.25rem;
+    --ms-py: calc(0.25rem - 0.5px);
 
     --ms-radius: 0.75rem;
 
@@ -26,6 +26,18 @@
 .multiselect-tags-search {
 
     background-color: transparent;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+[data-bs-theme=light] .grid-stack > .grid-stack-item > .grid-stack-item-content {
+
+    background-color: rgba(000, 000, 000, 2.5%) !important;
+}
+
+[data-bs-theme=dark] .grid-stack > .grid-stack-item > .grid-stack-item-content {
+
+    background-color: rgba(255, 255, 255, 10%) !important;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

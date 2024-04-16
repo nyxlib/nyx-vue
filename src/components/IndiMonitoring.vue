@@ -1,7 +1,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {inject, onMounted} from 'vue';
+import {ref, inject, computed, onMounted} from 'vue';
 
 import Multiselect from '@vueform/multiselect';
 
@@ -25,13 +25,47 @@ const indiStore = useIndiStore(window.pinia);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-let grid = null;
+defineProps({
+    groups: {
+        type: Array,
+        default: ['Global'],
+    },
+});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const plotType = ref('');
+const plotName = ref('');
+const plotGroup = ref('');
+const metric1 = ref([]);
+const metric2 = ref([]);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const PLOT_TYPES = [
+    {value: 'line', label: 'Line'},
+    {value: 'bar', label: 'Bar'},
+    {value: 'doughnut', label: 'Doughnut'},
+    {value: 'polar', label: 'Polar'},
+    {value: 'radar', label: 'Radar'},
+    {value: 'scatter', label: 'Scatter'},
+];
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const isValid = computed(() => !!plotName.value && !!plotGroup.value && metric1.value.length > 0 && (plotType.value !== 'scatter' || metric1.value.length === metric2.value.length));
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const newWidget = () => {
+
+    plotType.value = 'line';
+    plotName.value = '';
+    plotGroup.value = '';
+    metric1.value = [];
+    metric2.value = [];
 
     Modal.getOrCreateInstance(document.getElementById('indi_metrics')).show();
 };
@@ -40,11 +74,13 @@ const newWidget = () => {
 
 const addWidget = () => {
 
-    grid.addWidget({w: 2, content: 'item'});
+    //grid.addWidget({w: 2, content: 'item'});
 
     Modal.getOrCreateInstance(document.getElementById('indi_metrics')).hide();
 };
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* INITIALIZATION                                                                                                     */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 onMounted(() => {
@@ -53,7 +89,7 @@ onMounted(() => {
         selector: '[data-bs-title]'
     });
 
-    grid = GridStack.init({
+    GridStack.init({
         removable: '#AAE7F472'
     });
 });
@@ -67,7 +103,41 @@ onMounted(() => {
     <!-- DASHBOARD                                                                                                   -->
     <!-- *********************************************************************************************************** -->
 
-    <div class="grid-stack h-100 w-100"></div>
+    <div class="h-100 w-100 p-3">
+
+        <!-- ******************************************************************************************************* -->
+
+        <ul class="nav nav-tabs mb-4" role="tablist">
+
+            <!-- *************************************************************************************************** -->
+
+            <li class="nav-item" role="presentation" v-for="(groupName, groupIndex) in groups" :key="groupIndex">
+
+                <button :class="`nav-link ${groupIndex === 0 ? 'active' : ''} px-3 py-2`" type="button" data-bs-toggle="tab" :data-bs-target="`#indi_monitoring_pane_${groupIndex}`" role="tab">
+                    {{ groupName }}
+                </button>
+
+            </li>
+
+            <!-- *************************************************************************************************** -->
+
+        </ul>
+
+        <!-- *********************************************************************************************************** -->
+
+        <div class="tab-content">
+
+            <div :class="`tab-pane fade ${groupIndex === 0 ? 'show active' : ''}`" :id="`indi_monitoring_pane_${groupIndex}`" role="tabpanel" tabindex="0" v-for="(groupName, groupIndex) in groups" :key="groupIndex">
+
+                <div class="grid-stack h-100 w-100" :data-title="groupName"></div>
+
+            </div>
+
+        </div>
+
+        <!-- *********************************************************************************************************** -->
+
+    </div>
 
     <!-- *********************************************************************************************************** -->
 
@@ -103,32 +173,69 @@ onMounted(() => {
 
                     <div class="modal-body px-3 py-2">
 
+                        <!-- *************************************************************************************** -->
+
+                        <div class="mb-3">
+                            <label for="D05CFEFF" class="form-label">Plot type</label>
+                            <multiselect
+                                mode="single"
+                                id="D05CFEFF"
+                                :can-clear="false"
+                                :searchable="true"
+                                :create-option="false"
+                                :close-on-select="true"
+                                :options="PLOT_TYPES" v-model="plotType" />
+                        </div>
+
+                        <!-- *************************************************************************************** -->
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="D05CFEFF" class="form-label">Plot type</label>
-                                    <select class="form-select form-select-sm" id="D05CFEFF">
-                                        <option value="line">Line</option>
-                                        <option value="scatter">Scatter</option>
-                                        <option value="doughnut">Doughnut</option>
-                                        <option value="radar">Radar</option>
-                                    </select>
+                                    <label for="F938E61B" class="form-label">Plot name</label>
+                                    <input class="form-control form-control-sm" type="text" id="F938E61B" placeholder="Name" v-model="plotName" />
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="C8C721F4" class="form-label">Group<sup class="text-secondary">opt</sup></label>
-                                    <input class="form-control form-control-sm" type="text" id="C8C721F4" placeholder="Group" />
+                                    <label for="C8C721F4" class="form-label">Plot group</label>
+                                    <multiselect
+                                        mode="single"
+                                        id="C8C721F4"
+                                        :can-clear="false"
+                                        :searchable="true"
+                                        :create-option="false"
+                                        :close-on-select="true"
+                                        :options="groups.map((x) => ({value: x, label: x}))" v-model="plotGroup" />
                                 </div>
                             </div>
                         </div>
 
-                        <multiselect
-                            mode="tags"
-                            :searchable="true"
-                            :create-option="false"
-                            :close-on-select="false"
-                            :options="Object.keys(indiStore.variables || {}).map((x) => ({value: x, label: x}))" />
+                        <!-- *************************************************************************************** -->
+
+                        <div class="mb-3" v-if="plotType !== ''">
+                            <label for="BBA0018F" class="form-label">Metric 1</label>
+                            <multiselect
+                                mode="tags"
+                                id="BBA0018F"
+                                :searchable="true"
+                                :create-option="false"
+                                :close-on-select="true"
+                                :options="Object.keys(indiStore.variables || {}).map((x) => ({value: x, label: x}))" v-model="metric1" />
+                        </div>
+
+                        <div class="mb-3" v-if="plotType === 'scatter'">
+                            <label for="B5D75D1E" class="form-label">Metric 2</label>
+                            <multiselect
+                                mode="tags"
+                                id="B5D75D1E"
+                                :searchable="true"
+                                :create-option="false"
+                                :close-on-select="true"
+                                :options="Object.keys(indiStore.variables || {}).map((x) => ({value: x, label: x}))" v-model="metric2" />
+                        </div>
+
+                        <!-- *************************************************************************************** -->
 
                     </div>
 
@@ -138,7 +245,7 @@ onMounted(() => {
                             Cancel
                         </button>
 
-                        <button class="btn btn-primary" type="button" @click="addWidget">
+                        <button class="btn btn-primary" type="button" @click="addWidget" :disabled="!isValid">
                             <i class="bi bi-plus-ls">Add</i>
                         </button>
 
@@ -153,27 +260,3 @@ onMounted(() => {
     <!-- *********************************************************************************************************** -->
 
 </template>
-
-<style>
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-@import "gridstack/dist/gridstack.css";
-
-@import "@vueform/multiselect/themes/default.scss";
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-.grid-stack > .grid-stack-item > .grid-stack-item-content {
-
-    background-color: rgba(0, 0, 0, 2.5%) !important;
-}
-
-[data-bs-theme=dark] .grid-stack > .grid-stack-item > .grid-stack-item-content {
-
-    background-color: rgba(255, 255, 255, 10%) !important;
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-</style>
