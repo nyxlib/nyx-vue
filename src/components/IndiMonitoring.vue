@@ -245,7 +245,7 @@ const refreshContent = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    Object.keys(labelsets).forEach((id) => {
+    Object.keys(labelsets).filter((id) => props.metrics[id].plotMode === 'temporal').forEach((id) => {
 
         const dataset = datasets[id];
 
