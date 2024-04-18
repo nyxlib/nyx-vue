@@ -59,11 +59,6 @@ const PLOT_MODES = [
 const PLOT_TYPES = [
     {value: 'line', label: 'Line'},
     {value: 'bar', label: 'Bar'},
-    /*
-    {value: 'doughnut', label: 'Doughnut'},
-    {value: 'polar', label: 'Polar'},
-    {value: 'radar', label: 'Radar'},
-    */
     {value: 'scatter', label: 'Scatter'},
 ];
 
@@ -252,9 +247,9 @@ const refreshContent = () => {
 
     Object.keys(labelsets).forEach((id) => {
 
-        const metric = props.metrics[id];
-
         const dataset = datasets[id];
+
+        const metric = props.metrics[id];
 
         if(metric.plotType === 'scatter')
         {
