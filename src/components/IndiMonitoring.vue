@@ -78,6 +78,13 @@ const PLOT_TYPES = [
 ];
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+const PLOT_MODES = [
+    {value: 'temporal', label: 'Temporal'},
+    {value: 'blob', label: 'BLOB'},
+];
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -385,21 +392,15 @@ onUnmounted(() => {
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Mode</label>
-                                    <div class="input-group input-group-sm">
-                                        <div class="input-group-text">
-                                            <input class="form-check-input mt-0" type="radio" name="indi_metric_mode" value="temporal" id="AD6996F0" v-model="plotMode" />
-                                        </div>
-                                        <label class="input-group-text" for="AD6996F0" style="width: calc(50% - 2rem + 1px);">
-                                            Temporal
-                                        </label>
-                                        <div class="input-group-text">
-                                            <input class="form-check-input mt-0" type="radio" name="indi_metric_mode" value="blob" id="AAE49B7B" v-model="plotMode" />
-                                        </div>
-                                        <label class="input-group-text" for="AAE49B7B" style="width: calc(50% - 2rem + 1px);">
-                                            BLOB
-                                        </label>
-                                    </div>
+                                    <label for="D38EC0FA" class="form-label">Plot mode</label>
+                                    <multiselect
+                                        mode="single"
+                                        id="D38EC0FA"
+                                        :can-clear="false"
+                                        :searchable="true"
+                                        :create-option="false"
+                                        :close-on-select="true"
+                                        :options="PLOT_MODES" v-model="plotMode" />
                                 </div>
                             </div>
                         </div>
