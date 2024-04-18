@@ -175,7 +175,7 @@ const createWidget = (metric) => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        widget.querySelector('.bi').onclick = () => clearWidget(metric.id);
+        widget.querySelector('.bi-eraser-fill').onclick = () => clearWidget(metric.id);
 
         /*------------------------------------------------------------------------------------------------------------*/
 
