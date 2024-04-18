@@ -9,7 +9,15 @@ import Chart from 'chart.js/auto';
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-defineProps({
+const props = defineProps({
+    title: {
+        type: String,
+        default: '',
+    },
+    showLegend: {
+        type: Boolean,
+        default: false,
+    },
     metrics1Names: {
         type: Array,
         default: [],
@@ -38,7 +46,7 @@ onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const datasets = props.metricsNames.map((metricsName) => {
+    const datasets = props.metricNames.map((metricsName) => {
 
         return {
             label: metricsName,
@@ -59,6 +67,15 @@ onMounted(() => {
                 duration: 0,
             },
             responsive: true,
+            plugins: {
+                title: {
+                    display: !!props.title,
+                    text: props.title,
+                },
+                legend: {
+                    display: props.showLegend,
+                },
+            },
         },
     });
 

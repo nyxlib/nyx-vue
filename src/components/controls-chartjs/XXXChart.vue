@@ -10,7 +10,28 @@ import Chart from 'chart.js/auto';
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const props = defineProps({
-    metricsNames: {
+    type: {
+        type: String,
+        default: 'line',
+        validator: (value) => ['line', 'bar', 'doughnut', 'polar', 'radar'].includes(value),
+    },
+    title: {
+        type: String,
+        default: '',
+    },
+    showLegend: {
+        type: Boolean,
+        default: false,
+    },
+    metricNames: {
+        type: Array,
+        default: [],
+    },
+    labelset: {
+        type: Array,
+        default: [],
+    },
+    dataset: {
         type: Array,
         default: [],
     },
@@ -28,33 +49,47 @@ let chart = null;
 
 onMounted(() => {
 
+    if(props.metricNames.length != props.dataset.length)
+    {
+        alert(`Internal error (${props.metricNames.length}, ${props.dataset.length})!`);
+
+        return;
+    }
+
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const labels = [1, 2, 3, 4];
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    const datasets = props.metricsNames.map((metricsName) => {
+    const props_datasets = props.metricNames.map((metricsName, index) => {
 
         return {
             label: metricsName,
-            data: [10, 20, 30, 40],
+            data: props.dataset[index],
+            borderWidth: 1,
+            tension: 0.1,
         };
     });
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     chart = new Chart(canvas.value, {
-        type: 'doughnut',
+        type: props.type,
         data: {
-            labels: labels,
-            datasets: datasets,
+            labels: props.labelset,
+            datasets: props_datasets,
         },
         options: {
             animation: {
                 duration: 0,
             },
             responsive: true,
+            plugins: {
+                title: {
+                    display: !!props.title,
+                    text: props.title,
+                },
+                legend: {
+                    display: props.showLegend,
+                },
+            },
         },
     });
 

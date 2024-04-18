@@ -1,3 +1,4 @@
+<!--suppress HtmlUnknownAttribute -->
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -15,11 +16,7 @@ import {v4} from 'uuid';
 
 import useIndiStore from '../stores/indi';
 
-import BarChart from './controls-chartjs/BarChart.vue';
-import DoughnutChart from './controls-chartjs/DoughnutChart.vue';
-import LineChart from './controls-chartjs/LineChart.vue';
-import PolarChart from './controls-chartjs/PolarChart.vue';
-import RadarChart from './controls-chartjs/RadarChart.vue';
+import XXXChart from './controls-chartjs/XXXChart.vue';
 import ScatterChart from './controls-chartjs/ScatterChart.vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -53,10 +50,17 @@ const props = defineProps({
 
 const plotType = ref('');
 const plotMode = ref('');
-const plotName = ref('');
+const plotTitle = ref('');
 const plotGroup = ref('');
+const showLegend = ref(false);
 const metric1 = ref([]);
 const metric2 = ref([]);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const labelsets = ref({});
+
+const datasets = ref({});
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -77,7 +81,7 @@ const PLOT_TYPES = [
 /* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const isValid = computed(() => !!plotName.value && !!plotGroup.value && metric1.value.length > 0 && (plotType.value !== 'scatter' || metric1.value.length === metric2.value.length));
+const isValid = computed(() => !!plotTitle.value && !!plotGroup.value && metric1.value.length > 0 && (plotType.value !== 'scatter' || metric1.value.length === metric2.value.length));
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -87,8 +91,9 @@ const newWidgetStep1 = () => {
 
     plotType.value = 'line';
     plotMode.value = 'temporal';
-    plotName.value = '';
+    plotTitle.value = '';
     plotGroup.value = '';
+    showLegend.value = false;
     metric1.value = [];
     metric2.value = [];
 
@@ -120,8 +125,9 @@ const newWidgetStep2 = () => {
         id: v4(),
         plotType: plotType.value,
         plotMode: plotMode.value,
-        plotName: plotName.value,
+        plotTitle: plotTitle.value,
         plotGroup: plotGroup.value,
+        showLegend: showLegend.value,
         metric1: metric1.value,
         metric2: metric2.value,
         x: 0, y: 0,
@@ -154,9 +160,19 @@ const createWidget = (metric) => {
 
         widget.metric = metric;
 
-        props.metrics[metric.id] = metric;
+        /*------------------------------------------------------------------------------------------------------------*/
 
-        widget.firstElementChild.id = metric.id;
+        const labelset = [/*----------------------*/];
+
+        const dataset = metric.metric1.map(() => []);
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        labelsets.value[metric.id] = labelset;
+
+        datasets.value[metric.id] = dataset;
+
+        props.metrics[metric.id] = metric;
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -165,39 +181,28 @@ const createWidget = (metric) => {
         switch(metric.plotType)
         {
             case 'line':
-                chart = h(LineChart, {
-                    metricsNames: metric.metric1
-                });
-                break;
-
             case 'bar':
-                chart = h(BarChart, {
-                    metricsNames: metric.metric1
-                });
-                break;
-
             case 'doughnut':
-                chart = h(DoughnutChart, {
-                    metricsNames: metric.metric1
-                });
-                break;
-
             case 'polar':
-                chart = h(PolarChart, {
-                    metricsNames: metric.metric1
-                });
-                break;
-
             case 'radar':
-                chart = h(RadarChart, {
-                    metricsNames: metric.metric1
+                chart = h(XXXChart, {
+                    type: metric.plotType,
+                    title: metric.plotTitle,
+                    showLegend: metric.showLegend,
+                    metricNames: metric.metric1,
+                    labelset: labelset,
+                    dataset: dataset,
                 });
                 break;
 
             case 'scatter':
                 chart = h(ScatterChart, {
+                    title: metric.plotTitle,
+                    showLegend: metric.showLegend,
                     metrics1Names: metric.metric1,
                     metrics2Names: metric.metric2,
+                    labelset: labelset,
+                    dataset: dataset,
                 });
                 break;
         }
@@ -224,7 +229,9 @@ const updateWidget = (e, widget) => {
 
 const removeWidget = (e, widget) => {
 
-    delete props.metrics[widget.el.metric.id];
+    delete datasets.value[widget.metric.id];
+
+    delete props.metrics[widget.metric.id];
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -248,19 +255,18 @@ onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const grid = GridStack.init({
-        removable: '#AAE7F472'
-    });
+    GridStack.initAll({removable: '#AAE7F472'}).forEach((grid) => {
 
-    grid.on('resizestop', updateWidget);
+        grid.on('resizestop', updateWidget);
 
-    grid.on('dragstop', updateWidget);
+        grid.on('dragstop', updateWidget);
 
-    grid.on('removed', (e, items) => {
+        grid.on('removed', (e, items) => {
 
-        items.forEach((item) => {
+            items.forEach((item) => {
 
-            removeWidget(e, item)
+                removeWidget(e, item.el);
+            });
         });
     });
 
@@ -314,15 +320,15 @@ onUnmounted(() => {
 
         </ul>
 
-        <!-- *********************************************************************************************************** -->
+        <!-- ******************************************************************************************************* -->
 
-        <div class="tab-content0" style="height: calc(100% - 3.5rem); width: calc(100% - 0rem);">
+        <div class="tab-content" style="height: calc(100% - 3.5rem); width: calc(100% - 0rem);">
 
             <div :class="`grid-stack tab-pane fade ${groupIndex === 0 ? 'show active' : 'xxxx xxxxxx'} h-100 w-100`" :data-title="groupName" :id="`indi_monitoring_pane_${groupIndex}`" tabindex="0" role="tabpanel" v-for="(groupName, groupIndex) in groups" :key="groupIndex"></div>
 
         </div>
 
-        <!-- *********************************************************************************************************** -->
+        <!-- ******************************************************************************************************* -->
 
     </div>
 
@@ -381,17 +387,17 @@ onUnmounted(() => {
                                     <label class="form-label">Mode</label>
                                     <div class="input-group input-group-sm">
                                         <div class="input-group-text">
-                                            <input class="form-check-input mt-0" type="radio" name="indi_metric_mode">
+                                            <input class="form-check-input mt-0" type="radio" name="indi_metric_mode" value="temporal" id="AD6996F0" v-model="plotMode" />
                                         </div>
-                                        <div class="input-group-text" style="width: calc(50% - 2rem + 1px);">
+                                        <label class="input-group-text" for="AD6996F0" style="width: calc(50% - 2rem + 1px);">
                                             Temporal
-                                        </div>
+                                        </label>
                                         <div class="input-group-text">
-                                            <input class="form-check-input mt-0" type="radio" name="indi_metric_mode">
+                                            <input class="form-check-input mt-0" type="radio" name="indi_metric_mode" value="blob" id="AAE49B7B" v-model="plotMode" />
                                         </div>
-                                        <div class="input-group-text" style="width: calc(50% - 2rem + 1px);">
+                                        <label class="input-group-text" for="AAE49B7B" style="width: calc(50% - 2rem + 1px);">
                                             BLOB
-                                        </div>
+                                        </label>
                                     </div>
                                 </div>
                             </div>
@@ -403,7 +409,13 @@ onUnmounted(() => {
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="F938E61B" class="form-label">Plot name</label>
-                                    <input class="form-control form-control-sm" type="text" id="F938E61B" placeholder="Name" v-model="plotName" />
+                                    <div class="input-group input-group-sm">
+                                        <input class="form-control" type="text" id="F938E61B" placeholder="Name" v-model="plotTitle" />
+                                        <div class="input-group-text">
+                                            <input class="form-check-input mt-0 me-1" type="checkbox" id="C5306DB0" v-model="showLegend" :true-value="true" :false-value="false" />
+                                            <label class="form-check-label" for="C5306DB0">Legend</label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
