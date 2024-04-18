@@ -38,7 +38,11 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
-    logScale: {
+    xLogScale: {
+        type: Boolean,
+        default: false,
+    },
+    yLogScale: {
         type: Boolean,
         default: false,
     },
@@ -88,13 +92,13 @@ onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const props_datasets = props.metric1Names.map((metricsName, index) => {
+    const props_datasets = props.metric1Names.map((label, index) => {
 
         return {
-            label: metricsName,
+            label: label,
             data: props.dataset[index],
             pointRadius: props.type === 'scatter' ? 2 : 0,
-            borderWidth: 1,
+            borderWidth: 1.0,
             tension: 0.1,
         };
     });
@@ -108,12 +112,20 @@ onMounted(() => {
         }
     };
 
+    if(props.xLogScale) {
+        scale_x.type = 'logarithmic';
+    }
+
     const scale_y = {
         title: {
             display: !!props.yTitle,
             text: props.yTitle,
         }
     };
+
+    if(props.yLogScale) {
+        scale_y.type = 'logarithmic';
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

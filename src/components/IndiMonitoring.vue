@@ -71,7 +71,8 @@ const plotGroup = ref('');
 const xTitle = ref('');
 const yTitle = ref('');
 const showLegend = ref(false);
-const logScale = ref(false);
+const xLogScale = ref(false);
+const yLogScale = ref(false);
 const metric1 = ref([]);
 const metric2 = ref([]);
 
@@ -101,7 +102,8 @@ const newWidgetStep1 = () => {
     xTitle.value = '';
     yTitle.value = '';
     showLegend.value = false;
-    logScale.value = false;
+    xLogScale.value = false;
+    yLogScale.value = false;
     metric1.value = [];
     metric2.value = [];
 
@@ -138,7 +140,8 @@ const newWidgetStep2 = () => {
         xTitle: xTitle.value,
         yTitle: yTitle.value,
         showLegend: showLegend.value,
-        logScale: logScale.value,
+        xLogScale: xLogScale.value,
+        yLogScale: yLogScale.value,
         metric1: metric1.value,
         metric2: metric2.value,
         x: 0, y: 0,
@@ -191,7 +194,8 @@ const createWidget = (metric) => {
             xTitle: metric.xTitle,
             yTitle: metric.yTitle,
             showLegend: metric.showLegend,
-            logScale: metric.logScale,
+            xLogScale: metric.xLogScale,
+            yLogScale: metric.yLogScale,
             metric1Names: metric.metric1,
             metric2Names: metric.metric2,
             labelset: labelset_dict[metric.id],
@@ -261,9 +265,27 @@ const removeWidget = (e, widget) => {
 
 const toNumber = (def) => {
 
-    /**/ if(def['<>'] === 'defSwitch')
+    /**/ if(def['<>'] === 'defNumber')
+    {
+        return Number(def['$']);
+    }
+    else if(def['<>'] === 'defSwitch')
     {
         return def['$'] === 'On' ? 1 : 0;
+    }
+    else if(def['<>'] === 'defLight')
+    {
+        switch(def['$'])
+        {
+            case 'Idle':
+                return 0;
+            case 'Ok':
+                return 1;
+            case 'Busy':
+                return 2;
+            case 'Alert':
+                return 3;
+        }
     }
 
     return Math.sqrt(-1);
@@ -551,10 +573,16 @@ onUnmounted(() => {
                                     <label class="form-check-label" for="C5306DB0">Show legend</label>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <div class="form-check form-switch mb-3">
-                                    <input class="form-check-input" type="checkbox" id="CA52C0FD" v-model="logScale" :true-value="true" :false-value="false" />
-                                    <label class="form-check-label" for="CA52C0FD">Log scale</label>
+                                    <input class="form-check-input" type="checkbox" id="CA52C0FD" v-model="xLogScale" :true-value="true" :false-value="false" />
+                                    <label class="form-check-label" for="CA52C0FD">X log scale</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-check form-switch mb-3">
+                                    <input class="form-check-input" type="checkbox" id="F39F6DAF" v-model="yLogScale" :true-value="true" :false-value="false" />
+                                    <label class="form-check-label" for="F39F6DAF">Y log scale</label>
                                 </div>
                             </div>
                         </div>
@@ -573,7 +601,7 @@ onUnmounted(() => {
                         </div>
 
                         <div class="mb-3" v-if="plotType === 'scatter'">
-                            <label class="form-label" for="B5D75D1E">2st metric 2</label>
+                            <label class="form-label" for="B5D75D1E">2st metric</label>
                             <multiselect
                                 mode="tags"
                                 id="B5D75D1E"
