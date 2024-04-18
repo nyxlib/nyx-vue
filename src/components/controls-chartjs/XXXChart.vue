@@ -13,7 +13,7 @@ const props = defineProps({
     type: {
         type: String,
         default: 'line',
-        validator: (value) => ['line', 'bar', 'doughnut', 'polar', 'radar'].includes(value),
+        validator: (value) => ['line', 'bar', 'doughnut', 'polar', 'radar', 'scatter'].includes(value),
     },
     title: {
         type: String,
@@ -49,7 +49,7 @@ let chart = null;
 
 onMounted(() => {
 
-    if(props.metricNames.length != props.dataset.length)
+    if(props.metricNames.length !== props.dataset.length)
     {
         alert(`Internal error (${props.metricNames.length}, ${props.dataset.length})!`);
 

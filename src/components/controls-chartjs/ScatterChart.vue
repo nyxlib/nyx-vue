@@ -10,6 +10,11 @@ import Chart from 'chart.js/auto';
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const props = defineProps({
+    type: {
+        type: String,
+        default: 'scatter',
+        validator: (value) => ['scatter'].includes(value),
+    },
     title: {
         type: String,
         default: '',
@@ -18,11 +23,15 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
-    metrics1Names: {
+    metricNames: {
         type: Array,
         default: [],
     },
-    metrics2Names: {
+    labelset: {
+        type: Array,
+        default: [],
+    },
+    dataset: {
         type: Array,
         default: [],
     },
@@ -57,7 +66,7 @@ onMounted(() => {
     /*----------------------------------------------------------------------------------------------------------------*/
 
     chart = new Chart(canvas.value, {
-        type: 'radar',
+        type: props.type,
         data: {
             labels: labels,
             datasets: datasets,
