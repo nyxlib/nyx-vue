@@ -472,7 +472,7 @@ onUnmounted(() => {
                         </button>
 
                         <button class="btn btn-primary" type="button" @click="newWidgetStep2" :disabled="!isValid">
-                            <i class="bi bi-plus-ls">Add</i>
+                            Add
                         </button>
 
                         <!-- *************************************************************************************** -->
