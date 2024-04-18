@@ -11,16 +11,21 @@
 /* noinspection CssNonIntegerLengthInPixels */
 :root {
 
-    --ms-py: calc(0.25rem - 0.5px);
-
     --ms-radius: 0.75rem;
 
-    --ms-bg: var(--bs-body-bg);
-    --ms-border-color: var(--bs-border-color);
-    --ms-border-width: var(--bs-border-width);
+    --ms-py: calc(0.25rem - 0.5px);
 
+    --ms-ring-width: 0.25rem;
+    --ms-ring-color: rgba(13, 110, 253, 0.25);
+
+    --ms-bg: var(--bs-body-bg);
     --ms-dropdown-bg: var(--bs-body-bg);
-    --ms-dropdown-border-color: var(--bs-border-color);
+
+    --ms-border-color: var(--bs-border-color);
+    --ms-border-color-active: rgba(134, 183, 254, 1.0);
+    --ms-dropdown-border-color: rgba(134, 183, 254, 1.0);
+
+    --ms-border-width: var(--bs-border-width);
     --ms-dropdown-border-width: var(--bs-border-width);
 }
 

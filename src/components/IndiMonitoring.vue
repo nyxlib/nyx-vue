@@ -1,7 +1,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {ref, inject, computed, onMounted, onUnmounted} from 'vue';
+import {h, ref, inject, render, computed, onMounted, onUnmounted} from 'vue';
 
 import Multiselect from '@vueform/multiselect';
 
@@ -9,9 +9,18 @@ import {Modal, Tooltip} from 'bootstrap';
 
 import {GridStack} from 'gridstack';
 
+import {v4} from 'uuid';
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import useIndiStore from '../stores/indi';
+
+import BarChart from './controls-chartjs/BarChart.vue';
+import DoughnutChart from './controls-chartjs/DoughnutChart.vue';
+import LineChart from './controls-chartjs/LineChart.vue';
+import PolarChart from './controls-chartjs/PolarChart.vue';
+import RadarChart from './controls-chartjs/RadarChart.vue';
+import ScatterChart from './controls-chartjs/ScatterChart.vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -31,8 +40,8 @@ const props = defineProps({
         default: ['Global'],
     },
     metrics: {
-        type: Array,
-        default: [/* EMPTY */],
+        type: Object,
+        default: {/*EMPTY*/},
     },
     refreshInterval: {
         type: Number,
@@ -43,6 +52,7 @@ const props = defineProps({
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const plotType = ref('');
+const plotMode = ref('');
 const plotName = ref('');
 const plotGroup = ref('');
 const metric1 = ref([]);
@@ -71,11 +81,12 @@ const isValid = computed(() => !!plotName.value && !!plotGroup.value && metric1.
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const newWidget = () => {
+const newWidgetStep1 = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     plotType.value = 'line';
+    plotMode.value = 'temporal';
     plotName.value = '';
     plotGroup.value = '';
     metric1.value = [];
@@ -90,21 +101,32 @@ const newWidget = () => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const addWidget = () => {
+const newWidgetStep2 = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const data = {
+    let h, w;
+
+    if(['line', 'bar', 'scatter'].includes(plotType.value)) {
+        h = 2; w = 4;
+    }
+    else {
+        h = 2; w = 2;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    createWidget({
+        id: v4(),
         plotType: plotType.value,
+        plotMode: plotMode.value,
         plotName: plotName.value,
         plotGroup: plotGroup.value,
         metric1: metric1.value,
         metric2: metric2.value,
-    };
-
-    props.metrics.push(data);
-
-    createWidget(data);
+        x: 0, y: 0,
+        h: h, w: w,
+    });
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -121,15 +143,93 @@ const createWidget = (metric) => {
 
     if(el)
     {
-        const grid = el.gridstack;
+        /*------------------------------------------------------------------------------------------------------------*/
 
-        grid.addWidget({w: 2, content: metric.plotName});
+        const widget = el.gridstack.addWidget({
+            x: metric.x,
+            y: metric.y,
+            h: metric.h,
+            w: metric.w,
+        });
+
+        widget.metric = metric;
+
+        props.metrics[metric.id] = metric;
+
+        widget.firstElementChild.id = metric.id;
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        let chart;
+
+        switch(metric.plotType)
+        {
+            case 'line':
+                chart = h(LineChart, {
+                    metricsNames: metric.metric1
+                });
+                break;
+
+            case 'bar':
+                chart = h(BarChart, {
+                    metricsNames: metric.metric1
+                });
+                break;
+
+            case 'doughnut':
+                chart = h(DoughnutChart, {
+                    metricsNames: metric.metric1
+                });
+                break;
+
+            case 'polar':
+                chart = h(PolarChart, {
+                    metricsNames: metric.metric1
+                });
+                break;
+
+            case 'radar':
+                chart = h(RadarChart, {
+                    metricsNames: metric.metric1
+                });
+                break;
+
+            case 'scatter':
+                chart = h(ScatterChart, {
+                    metrics1Names: metric.metric1,
+                    metrics2Names: metric.metric2,
+                });
+                break;
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        render(chart, widget.firstElementChild);
+
+        /*------------------------------------------------------------------------------------------------------------*/
     }
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const update = () => {
+const updateWidget = (e, widget) => {
+
+    widget.metric.x = widget.gridstackNode.x;
+    widget.metric.y = widget.gridstackNode.y;
+    widget.metric.h = widget.gridstackNode.h;
+    widget.metric.w = widget.gridstackNode.w;
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const removeWidget = (e, widget) => {
+
+    delete props.metrics[widget.el.metric.id];
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const refreshContent = () => {
 
     console.log('*');
 };
@@ -148,15 +248,29 @@ onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    GridStack.init({
+    const grid = GridStack.init({
         removable: '#AAE7F472'
     });
 
-    props.metrics.forEach(createWidget);
+    grid.on('resizestop', updateWidget);
+
+    grid.on('dragstop', updateWidget);
+
+    grid.on('removed', (e, items) => {
+
+        items.forEach((item) => {
+
+            removeWidget(e, item)
+        });
+    });
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    timer = setInterval(update, props.refreshInterval);
+    Object.values(props.metrics).forEach(createWidget);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    timer = setInterval(refreshContent, props.refreshInterval);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 });
@@ -184,7 +298,7 @@ onUnmounted(() => {
 
         <!-- ******************************************************************************************************* -->
 
-        <ul class="nav nav-tabs mb-4" role="tablist">
+        <ul class="nav nav-tabs mb-1" role="tablist">
 
             <!-- *************************************************************************************************** -->
 
@@ -202,9 +316,9 @@ onUnmounted(() => {
 
         <!-- *********************************************************************************************************** -->
 
-        <div class="tab-content0" style="height: calc(100% - 4rem); width: calc(100% - 0rem);">
+        <div class="tab-content0" style="height: calc(100% - 3.5rem); width: calc(100% - 0rem);">
 
-            <div :class="`grid-stack tab-pane fade ${groupIndex === 0 ? 'show active' : 'xxxx xxxxxx'} h-100 w-100`" :data-title="groupName" :id="`indi_monitoring_pane_${groupIndex}`" role="tabpanel" tabindex="0" v-for="(groupName, groupIndex) in groups" :key="groupIndex"></div>
+            <div :class="`grid-stack tab-pane fade ${groupIndex === 0 ? 'show active' : 'xxxx xxxxxx'} h-100 w-100`" :data-title="groupName" :id="`indi_monitoring_pane_${groupIndex}`" tabindex="0" role="tabpanel" v-for="(groupName, groupIndex) in groups" :key="groupIndex"></div>
 
         </div>
 
@@ -216,7 +330,7 @@ onUnmounted(() => {
 
     <div class="position-absolute" style="right: 1rem; bottom: 1rem;">
 
-        <button class="btn btn-primary ms-0" type="button" data-bs-placement="top" data-bs-title="Add a new widget" @click="newWidget">
+        <button class="btn btn-primary ms-0" type="button" data-bs-placement="top" data-bs-title="Add a new widget" @click="newWidgetStep1">
             <i class="bi bi-plus-lg"></i>
         </button>
 
@@ -248,16 +362,39 @@ onUnmounted(() => {
 
                         <!-- *************************************************************************************** -->
 
-                        <div class="mb-3">
-                            <label for="F8E884DD" class="form-label">Plot type</label>
-                            <multiselect
-                                mode="single"
-                                id="F8E884DD"
-                                :can-clear="false"
-                                :searchable="true"
-                                :create-option="false"
-                                :close-on-select="true"
-                                :options="PLOT_TYPES" v-model="plotType" />
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="F8E884DD" class="form-label">Plot type</label>
+                                    <multiselect
+                                        mode="single"
+                                        id="F8E884DD"
+                                        :can-clear="false"
+                                        :searchable="true"
+                                        :create-option="false"
+                                        :close-on-select="true"
+                                        :options="PLOT_TYPES" v-model="plotType" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Mode</label>
+                                    <div class="input-group input-group-sm">
+                                        <div class="input-group-text">
+                                            <input class="form-check-input mt-0" type="radio" name="indi_metric_mode">
+                                        </div>
+                                        <div class="input-group-text" style="width: calc(50% - 2rem + 1px);">
+                                            Temporal
+                                        </div>
+                                        <div class="input-group-text">
+                                            <input class="form-check-input mt-0" type="radio" name="indi_metric_mode">
+                                        </div>
+                                        <div class="input-group-text" style="width: calc(50% - 2rem + 1px);">
+                                            BLOB
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- *************************************************************************************** -->
@@ -286,7 +423,7 @@ onUnmounted(() => {
 
                         <!-- *************************************************************************************** -->
 
-                        <div class="mb-3" v-if="plotType !== ''">
+                        <div class="mb-3" v-if="plotType !== /**/''/**/">
                             <label for="BBA0018F" class="form-label">Metric 1</label>
                             <multiselect
                                 mode="tags"
@@ -320,7 +457,7 @@ onUnmounted(() => {
                             Cancel
                         </button>
 
-                        <button class="btn btn-primary" type="button" @click="addWidget" :disabled="!isValid">
+                        <button class="btn btn-primary" type="button" @click="newWidgetStep2" :disabled="!isValid">
                             <i class="bi bi-plus-ls">Add</i>
                         </button>
 
