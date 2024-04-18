@@ -5,17 +5,32 @@ import {ref, onMounted} from 'vue';
 
 import Chart from 'chart.js/auto';
 
+import 'chartjs-adapter-date-fns';
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const props = defineProps({
+    mode: {
+        type: String,
+        default: 'temporal',
+        validator: (value) => ['temporal', 'blob'].includes(value),
+    },
     type: {
         type: String,
-        default: 'scatter',
-        validator: (value) => ['scatter'].includes(value),
+        default: 'line',
+        validator: (value) => ['line', 'bar', 'doughnut', 'polar', 'radar', 'scatter'].includes(value),
     },
     title: {
+        type: String,
+        default: '',
+    },
+    xTitle: {
+        type: String,
+        default: '',
+    },
+    yTitle: {
         type: String,
         default: '',
     },
@@ -23,7 +38,11 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
-    metricNames: {
+    metric1Names: {
+        type: Array,
+        default: [],
+    },
+    metric2Names: {
         type: Array,
         default: [],
     },
@@ -34,6 +53,7 @@ const props = defineProps({
     dataset: {
         type: Array,
         default: [],
+        required: true,
     },
 });
 
@@ -49,29 +69,82 @@ let chart = null;
 
 onMounted(() => {
 
+    if(props.metric1Names.length !== props.dataset.length)
+    {
+        alert(`Internal error (${props.metric1Names.length}, ${props.dataset.length})!`);
+
+        return;
+    }
+
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const labels = [1, 2, 3, 4];
+    const props_labelset = props.type !== 'scatter' ? props.labelset
+                                                    : /**/ null /**/
+    ;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const datasets = props.metricNames.map((metricsName) => {
+    const props_datasets = props.metric1Names.map((metricsName, index) => {
 
         return {
             label: metricsName,
-            data: [10, 20, 30, 40],
+            data: props.dataset[index],
+            pointRadius: props.type === 'scatter' ? 2 : 0,
+            borderWidth: 1,
+            tension: 0.1,
         };
     });
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const scale_x = {
+        title: {
+            display: !!props.xTitle,
+            text: props.xTitle,
+        }
+    };
+
+    const scale_y = {
+        title: {
+            display: !!props.yTitle,
+            text: props.yTitle,
+        }
+    };
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(props.mode === 'temporal' && props.type !== 'scatter')
+    {
+        scale_x.type = 'time';
+
+        scale_x.time = {
+            displayFormats: {
+                millisecond: 'HH:mm:ss',
+                second: 'HH:mm:ss',
+                minute: 'HH:mm:ss',
+                hour: 'HH:mm:ss',
+                day: 'HH:mm:ss',
+                week: 'HH:mm:ss',
+                month: 'HH:mm:ss',
+                quarter: 'HH:mm:ss',
+                year: 'HH:mm:ss',
+            },
+        };
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
     chart = new Chart(canvas.value, {
         type: props.type,
         data: {
-            labels: labels,
-            datasets: datasets,
+            labels: props_labelset,
+            datasets: props_datasets,
         },
         options: {
+            scales: {
+                x: scale_x,
+                y: scale_y,
+            },
             animation: {
                 duration: 0,
             },

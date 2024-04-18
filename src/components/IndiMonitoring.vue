@@ -10,14 +10,15 @@ import {Modal, Tooltip} from 'bootstrap';
 
 import {GridStack} from 'gridstack';
 
+import Chart from 'chart.js/auto';
+
 import {v4} from 'uuid';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import useIndiStore from '../stores/indi';
 
-import XXXChart from './controls-chartjs/XXXChart.vue';
-import ScatterChart from './controls-chartjs/ScatterChart.vue';
+import XXXChart from './XXXChart.vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -48,47 +49,48 @@ const props = defineProps({
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const plotType = ref('');
-const plotMode = ref('');
-const plotTitle = ref('');
-const plotGroup = ref('');
-const showLegend = ref(false);
-const metric1 = ref([]);
-const metric2 = ref([]);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const labelsets = ref({});
-
-const datasets = ref({});
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-let timer = null;
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const PLOT_TYPES = [
-    {value: 'line', label: 'Line'},
-    {value: 'bar', label: 'Bar'},
-    {value: 'doughnut', label: 'Doughnut'},
-    {value: 'polar', label: 'Polar'},
-    {value: 'radar', label: 'Radar'},
-    {value: 'scatter', label: 'Scatter'},
-];
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 const PLOT_MODES = [
     {value: 'temporal', label: 'Temporal'},
     {value: 'blob', label: 'BLOB'},
 ];
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+const PLOT_TYPES = [
+    {value: 'line', label: 'Line'},
+    {value: 'bar', label: 'Bar'},
+    /*
+    {value: 'doughnut', label: 'Doughnut'},
+    {value: 'polar', label: 'Polar'},
+    {value: 'radar', label: 'Radar'},
+    */
+    {value: 'scatter', label: 'Scatter'},
+];
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const plotMode = ref('');
+const plotType = ref('');
+const plotTitle = ref('');
+const plotGroup = ref('');
+const xTitle = ref('');
+const yTitle = ref('');
+const showLegend = ref(false);
+const metric1 = ref([]);
+const metric2 = ref([]);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const labelsets = {};
+const datasets = {};
+
+let timer = null;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const isValid = computed(() => !!plotTitle.value && !!plotGroup.value && metric1.value.length > 0 && (plotType.value !== 'scatter' || metric1.value.length === metric2.value.length));
+const isValid = computed(() => !!plotGroup.value && metric1.value.length > 0 && (plotType.value !== 'scatter' || metric1.value.length === metric2.value.length));
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -96,10 +98,12 @@ const newWidgetStep1 = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    plotType.value = 'line';
     plotMode.value = 'temporal';
+    plotType.value = 'line';
     plotTitle.value = '';
     plotGroup.value = '';
+    xTitle.value = '';
+    yTitle.value = '';
     showLegend.value = false;
     metric1.value = [];
     metric2.value = [];
@@ -130,10 +134,12 @@ const newWidgetStep2 = () => {
 
     createWidget({
         id: v4(),
-        plotType: plotType.value,
         plotMode: plotMode.value,
+        plotType: plotType.value,
         plotTitle: plotTitle.value,
         plotGroup: plotGroup.value,
+        xTitle: xTitle.value,
+        yTitle: yTitle.value,
         showLegend: showLegend.value,
         metric1: metric1.value,
         metric2: metric2.value,
@@ -165,55 +171,32 @@ const createWidget = (metric) => {
             w: metric.w,
         });
 
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        labelsets[metric.id] = metric.plotType !== 'scatter' ? [] : null;
+
+        datasets[metric.id] = metric.metric1.map(() =>[]);
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        props.metrics[metric.id] = metric;
+
         widget.metric = metric;
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        const labelset = [/*----------------------*/];
-
-        const dataset = metric.metric1.map(() => []);
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        labelsets.value[metric.id] = labelset;
-
-        datasets.value[metric.id] = dataset;
-
-        props.metrics[metric.id] = metric;
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        let chart;
-
-        switch(metric.plotType)
-        {
-            case 'line':
-            case 'bar':
-            case 'doughnut':
-            case 'polar':
-            case 'radar':
-                chart = h(XXXChart, {
-                    type: metric.plotType,
-                    title: metric.plotTitle,
-                    showLegend: metric.showLegend,
-                    metricNames: metric.metric1,
-                    //////Names: metric.metric2,
-                    labelset: labelset,
-                    dataset: dataset,
-                });
-                break;
-
-            case 'scatter':
-                chart = h(ScatterChart, {
-                    title: metric.plotTitle,
-                    showLegend: metric.showLegend,
-                    metrics1Names: metric.metric1,
-                    metrics2Names: metric.metric2,
-                    labelset: labelset,
-                    dataset: dataset,
-                });
-                break;
-        }
+        const chart = h(XXXChart, {
+            mode: metric.plotMode,
+            type: metric.plotType,
+            title: metric.plotTitle,
+            xTitle: metric.xTitle,
+            yTitle: metric.yTitle,
+            showLegend: metric.showLegend,
+            metric1Names: metric.metric1,
+            metric2Names: metric.metric2,
+            labelset: labelsets[metric.id],
+            dataset: datasets[metric.id],
+        });
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -237,16 +220,94 @@ const updateWidget = (e, widget) => {
 
 const removeWidget = (e, widget) => {
 
-    delete datasets.value[widget.metric.id];
-
     delete props.metrics[widget.metric.id];
+
+    delete labelsets[widget.metric.id];
+
+    delete datasets[widget.metric.id];
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const toNumber = (def) => {
+
+    /**/ if(def['<>'] === 'defSwitch')
+    {
+        return def['$'] === 'On' ? 1 : 0;
+    }
+
+
+    return Math.sqrt(-1);
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const refreshContent = () => {
 
-    console.log('*');
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const currentDate = new Date();
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    Object.keys(labelsets).forEach((id) => {
+
+        const metric = props.metrics[id];
+
+        const dataset = datasets[id];
+
+        if(metric.plotType === 'scatter')
+        {
+            /*--------------------------------------------------------------------------------------------------------*/
+            /* SCATTER CART                                                                                           */
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            for(let i = 0; i < dataset.length; i++)
+            {
+                const def1 = indiStore.resolve(null, metric.metric1[i]);
+                const def2 = indiStore.resolve(null, metric.metric2[i]);
+
+                if(def1 && def2)
+                {
+                    dataset[i].push({
+                        x: toNumber(def1),
+                        y: toNumber(def2),
+                    });
+                }
+            }
+
+            /*--------------------------------------------------------------------------------------------------------*/
+        }
+        else
+        {
+            /*--------------------------------------------------------------------------------------------------------*/
+            /* TEMPORAL CART                                                                                          */
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            for(let i = 0; i < dataset.length; i++)
+            {
+                const def = indiStore.resolve(null, metric.metric1[i]);
+
+                if(def)
+                {
+                    dataset[i].push(toNumber(def));
+                }
+            }
+
+            labelsets[id].push(currentDate);
+
+            /*--------------------------------------------------------------------------------------------------------*/
+        }
+    });
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    for(let id in Chart.instances)
+    {
+        Chart.instances[id].update();
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -379,20 +440,7 @@ onUnmounted(() => {
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="F8E884DD" class="form-label">Plot type</label>
-                                    <multiselect
-                                        mode="single"
-                                        id="F8E884DD"
-                                        :can-clear="false"
-                                        :searchable="true"
-                                        :create-option="false"
-                                        :close-on-select="true"
-                                        :options="PLOT_TYPES" v-model="plotType" />
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="D38EC0FA" class="form-label">Plot mode</label>
+                                    <label class="form-label" for="D38EC0FA">Plot mode</label>
                                     <multiselect
                                         mode="single"
                                         id="D38EC0FA"
@@ -403,6 +451,19 @@ onUnmounted(() => {
                                         :options="PLOT_MODES" v-model="plotMode" />
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label" for="F8E884DD">Plot type</label>
+                                    <multiselect
+                                        mode="single"
+                                        id="F8E884DD"
+                                        :can-clear="false"
+                                        :searchable="true"
+                                        :create-option="false"
+                                        :close-on-select="true"
+                                        :options="PLOT_TYPES" v-model="plotType" />
+                                </div>
+                            </div>
                         </div>
 
                         <!-- *************************************************************************************** -->
@@ -410,19 +471,13 @@ onUnmounted(() => {
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="F938E61B" class="form-label">Plot name</label>
-                                    <div class="input-group input-group-sm">
-                                        <input class="form-control" type="text" id="F938E61B" placeholder="Name" v-model="plotTitle" />
-                                        <div class="input-group-text">
-                                            <input class="form-check-input mt-0 me-1" type="checkbox" id="C5306DB0" v-model="showLegend" :true-value="true" :false-value="false" />
-                                            <label class="form-check-label" for="C5306DB0">Legend</label>
-                                        </div>
-                                    </div>
+                                    <label class="form-label" for="F938E61B">Plot title<sup class="text-secondary">opt</sup></label>
+                                    <input class="form-control form-control-sm" type="text" id="F938E61B" placeholder="Plot title" v-model="plotTitle" />
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="C8C721F4" class="form-label">Plot group</label>
+                                    <label class="form-label" for="C8C721F4">Plot group</label>
                                     <multiselect
                                         mode="single"
                                         id="C8C721F4"
@@ -437,8 +492,34 @@ onUnmounted(() => {
 
                         <!-- *************************************************************************************** -->
 
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" id="C5306DB0" v-model="showLegend" :true-value="true" :false-value="false" />
+                            <label class="form-check-label" for="C5306DB0">Show legend</label>
+                        </div>
+
+                        <!-- *************************************************************************************** -->
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label" for="D8A97782">X title<sup class="text-secondary">opt</sup></label>
+                                    <input class="form-control form-control-sm" type="text" id="D8A97782" placeholder="X title" v-model="xTitle" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="EC986FF8">Y title<sup class="text-secondary">opt</sup></label>
+                                        <input class="form-control form-control-sm" type="text" id="EC986FF8" placeholder="Y title" v-model="yTitle" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- *************************************************************************************** -->
+
                         <div class="mb-3" v-if="plotType !== /**/''/**/">
-                            <label for="BBA0018F" class="form-label">Metric 1</label>
+                            <label class="form-label" for="BBA0018F">1st metric</label>
                             <multiselect
                                 mode="tags"
                                 id="BBA0018F"
@@ -449,7 +530,7 @@ onUnmounted(() => {
                         </div>
 
                         <div class="mb-3" v-if="plotType === 'scatter'">
-                            <label for="B5D75D1E" class="form-label">Metric 2</label>
+                            <label class="form-label" for="B5D75D1E">2st metric 2</label>
                             <multiselect
                                 mode="tags"
                                 id="B5D75D1E"
