@@ -190,6 +190,7 @@ const createWidget = (metric) => {
                     title: metric.plotTitle,
                     showLegend: metric.showLegend,
                     metricNames: metric.metric1,
+                    //////Names: metric.metric2,
                     labelset: labelset,
                     dataset: dataset,
                 });
