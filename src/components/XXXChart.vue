@@ -38,6 +38,10 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    logScale: {
+        type: Boolean,
+        default: false,
+    },
     metric1Names: {
         type: Array,
         default: [],

@@ -71,13 +71,14 @@ const plotGroup = ref('');
 const xTitle = ref('');
 const yTitle = ref('');
 const showLegend = ref(false);
+const logScale = ref(false);
 const metric1 = ref([]);
 const metric2 = ref([]);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const labelsets = {};
-const datasets = {};
+const labelset_dict = {};
+const dataset_dict = {};
 
 let timer = null;
 
@@ -100,6 +101,7 @@ const newWidgetStep1 = () => {
     xTitle.value = '';
     yTitle.value = '';
     showLegend.value = false;
+    logScale.value = false;
     metric1.value = [];
     metric2.value = [];
 
@@ -136,6 +138,7 @@ const newWidgetStep2 = () => {
         xTitle: xTitle.value,
         yTitle: yTitle.value,
         showLegend: showLegend.value,
+        logScale: logScale.value,
         metric1: metric1.value,
         metric2: metric2.value,
         x: 0, y: 0,
@@ -164,19 +167,20 @@ const createWidget = (metric) => {
             y: metric.y,
             h: metric.h,
             w: metric.w,
+            content: `<i class="bi bi-eraser-fill position-absolute" style="right: -0.00rem; top: -0.25rem;"></i>`,
         });
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        labelsets[metric.id] = metric.plotType !== 'scatter' ? [] : null;
-
-        datasets[metric.id] = metric.metric1.map(() =>[]);
+        widget.querySelector('.bi').onclick = () => clearWidget(metric.id);
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        props.metrics[metric.id] = metric;
+        labelset_dict[metric.id] = metric.plotType === 'scatter' ? null : [];
 
-        widget.metric = metric;
+        dataset_dict[metric.id] = metric.metric1.map(() => []);
+
+        props.metrics[metric.id] = widget.metric = metric;
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -187,10 +191,11 @@ const createWidget = (metric) => {
             xTitle: metric.xTitle,
             yTitle: metric.yTitle,
             showLegend: metric.showLegend,
+            logScale: metric.logScale,
             metric1Names: metric.metric1,
             metric2Names: metric.metric2,
-            labelset: labelsets[metric.id],
-            dataset: datasets[metric.id],
+            labelset: labelset_dict[metric.id],
+            dataset: dataset_dict[metric.id],
         });
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -199,6 +204,36 @@ const createWidget = (metric) => {
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const clearWidget = (id) => {
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const labelset = labelset_dict[id];
+
+    const dataset = dataset_dict[id];
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(dataset)
+    {
+        for(let i = 0; i < dataset.length; i++)
+        {
+            dataset[i].length = 0;
+        }
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(labelset)
+    {
+        labelset.length = 0;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -217,9 +252,9 @@ const removeWidget = (e, widget) => {
 
     delete props.metrics[widget.metric.id];
 
-    delete labelsets[widget.metric.id];
+    delete labelset_dict[widget.metric.id];
 
-    delete datasets[widget.metric.id];
+    delete dataset_dict[widget.metric.id];
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -231,7 +266,6 @@ const toNumber = (def) => {
         return def['$'] === 'On' ? 1 : 0;
     }
 
-
     return Math.sqrt(-1);
 };
 
@@ -240,14 +274,16 @@ const toNumber = (def) => {
 const refreshContent = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
+    /* UPDATE DATA                                                                                                    */
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     const currentDate = new Date();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    Object.keys(labelsets).filter((id) => props.metrics[id].plotMode === 'temporal').forEach((id) => {
+    Object.keys(labelset_dict).filter((id) => props.metrics[id].plotMode === 'temporal').forEach((id) => {
 
-        const dataset = datasets[id];
+        const dataset = dataset_dict[id];
 
         const metric = props.metrics[id];
 
@@ -289,12 +325,14 @@ const refreshContent = () => {
                 }
             }
 
-            labelsets[id].push(currentDate);
+            labelset_dict[id].push(currentDate);
 
             /*--------------------------------------------------------------------------------------------------------*/
         }
     });
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* UPDATE CHARTS                                                                                                  */
     /*----------------------------------------------------------------------------------------------------------------*/
 
     for(let id in Chart.instances)
@@ -487,13 +525,6 @@ onUnmounted(() => {
 
                         <!-- *************************************************************************************** -->
 
-                        <div class="form-check form-switch mb-3">
-                            <input class="form-check-input" type="checkbox" id="C5306DB0" v-model="showLegend" :true-value="true" :false-value="false" />
-                            <label class="form-check-label" for="C5306DB0">Show legend</label>
-                        </div>
-
-                        <!-- *************************************************************************************** -->
-
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
@@ -507,6 +538,23 @@ onUnmounted(() => {
                                         <label class="form-label" for="EC986FF8">Y title<sup class="text-secondary">opt</sup></label>
                                         <input class="form-control form-control-sm" type="text" id="EC986FF8" placeholder="Y title" v-model="yTitle" />
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- *************************************************************************************** -->
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-check form-switch mb-3">
+                                    <input class="form-check-input" type="checkbox" id="C5306DB0" v-model="showLegend" :true-value="true" :false-value="false" />
+                                    <label class="form-check-label" for="C5306DB0">Show legend</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check form-switch mb-3">
+                                    <input class="form-check-input" type="checkbox" id="CA52C0FD" v-model="logScale" :true-value="true" :false-value="false" />
+                                    <label class="form-check-label" for="CA52C0FD">Log scale</label>
                                 </div>
                             </div>
                         </div>
