@@ -1,10 +1,10 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import IndiTextVector from '../controls-indi/IndiTextVector.vue';
-import IndiNumberVector from '../controls-indi/IndiNumberVector.vue';
-import IndiSwitchVector from '../controls-indi/IndiSwitchVector.vue';
-import IndiLightVector from '../controls-indi/IndiLightVector.vue';
+import IndiTextVector from '../controls/IndiTextVector.vue';
+import IndiNumberVector from '../controls/IndiNumberVector.vue';
+import IndiSwitchVector from '../controls/IndiSwitchVector.vue';
+import IndiLightVector from '../controls/IndiLightVector.vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */

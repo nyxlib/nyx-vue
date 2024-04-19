@@ -18,7 +18,7 @@ import {v4} from 'uuid';
 
 import useIndiStore from '../stores/indi';
 
-import XXXChart from './XXXChart.vue';
+import XXXChart from './controls/XXXChart.vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */

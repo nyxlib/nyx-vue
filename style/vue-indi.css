@@ -12,6 +12,7 @@
 :root {
 
     --ms-radius: 0.75rem;
+    --ms-tag-radius: 0.50rem;
 
     --ms-py: calc(0.175rem);
 
