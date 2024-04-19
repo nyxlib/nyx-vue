@@ -55,8 +55,7 @@ const filteredVariables = computed(() => {
 
             <!-- *************************************************************************************************** -->
 
-            <div class="table-responsive" style="max-height: 425px; overflow-y: scroll;">
-
+            <div class="table-responsive">
                 <table class="table table-sm table-striped">
                     <thead>
                         <tr>
@@ -71,7 +70,6 @@ const filteredVariables = computed(() => {
                         </tr>
                     </tbody>
                 </table>
-
             </div>
 
             <!-- *************************************************************************************************** -->
