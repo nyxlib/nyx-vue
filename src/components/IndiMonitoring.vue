@@ -18,6 +18,8 @@ import {v4} from 'uuid';
 
 import useIndiStore from '../stores/indi';
 
+import NavTabs from './controls/NavTabs.vue';
+import TabPane from './controls/TabPane.vue';
 import XXXChart from './controls/XXXChart.vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -424,35 +426,17 @@ onUnmounted(() => {
     <!-- DASHBOARD                                                                                                   -->
     <!-- *********************************************************************************************************** -->
 
-    <div class="h-100 w-100 p-3">
+    <div class="h-100 d-flex flex-column">
 
-        <!-- ******************************************************************************************************* -->
+        <nav-tabs margin="mb-1">
 
-        <ul class="nav nav-tabs mb-1" role="tablist">
+            <tab-pane class="align-items-center justify-content-center" :title="groupName" v-for="(groupName, groupIndex) in groups" :key="groupIndex">
 
-            <!-- *************************************************************************************************** -->
+                <div class="grid-stack h-100 w-100" :data-title="groupName"></div>
 
-            <li class="nav-item" role="presentation" v-for="(groupName, groupIndex) in groups" :key="groupIndex">
+            </tab-pane>
 
-                <button :class="`nav-link ${groupIndex === 0 ? 'active' : 'xxxxxx'} px-3 py-2`" type="button" data-bs-toggle="tab" :data-bs-target="`#indi_monitoring_pane_${groupIndex}`" role="tab">
-                    {{ groupName }}
-                </button>
-
-            </li>
-
-            <!-- *************************************************************************************************** -->
-
-        </ul>
-
-        <!-- ******************************************************************************************************* -->
-
-        <div class="tab-content" style="height: calc(100% - 3.5rem); width: calc(100% - 0rem);">
-
-            <div :class="`grid-stack tab-pane fade ${groupIndex === 0 ? 'show active' : 'xxxx xxxxxx'} h-100 w-100`" :data-title="groupName" :id="`indi_monitoring_pane_${groupIndex}`" tabindex="0" role="tabpanel" v-for="(groupName, groupIndex) in groups" :key="groupIndex"></div>
-
-        </div>
-
-        <!-- ******************************************************************************************************* -->
+        </nav-tabs>
 
     </div>
 

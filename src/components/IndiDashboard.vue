@@ -11,6 +11,8 @@ import useIndiStore from '../stores/indi';
 
 import IndiHome from "./dashboard/IndiHome.vue";
 import IndiDevice from './dashboard/IndiDevice.vue';
+import NavTabs from "./controls/NavTabs.vue";
+import TabPane from "./controls/TabPane.vue";
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -35,7 +37,7 @@ const indiStore = useIndiStore(window.pinia);
 const devices = computed(() => {
 
     const result = {
-        'Home': {}
+        'home': 'Home'
     };
 
     Object.values(indiStore.defXXXVectorDict).forEach((defXXXVector) => {
@@ -139,40 +141,17 @@ onUnmounted(() => {
 
     <div class="h-100 d-flex flex-column">
 
-        <!-- ******************************************************************************************************* -->
+        <nav-tabs margin="mb-4">
 
-        <ul class="nav nav-tabs mb-4" role="tablist">
+            <tab-pane class="align-items-center justify-content-center" :title="deviceName" icon="command" v-for="(deviceInfo, deviceName, deviceIndex) in devices" :key="deviceName">
 
-            <!-- *************************************************************************************************** -->
+                <indi-home @connect="emit('connect')" @disconnect="emit('disconnect')" v-if="deviceIndex === 0" />
 
-            <li class="nav-item" role="presentation" v-for="(deviceName, deviceIndex) in Object.keys(devices)" :key="deviceIndex">
+                <indi-device :device-name="deviceName" :device-info="deviceInfo" :device-index="deviceIndex" v-else />
 
-                <button :class="`nav-link ${deviceIndex === 0 ? 'active' : 'xxxxxx'} px-3 py-2`" type="button" data-bs-toggle="tab" :data-bs-target="`#indi_device_pane_${deviceIndex}`" role="tab">
-                    <i class="bi bi-command"></i>
-                    {{ deviceName }}
-                </button>
+            </tab-pane>
 
-            </li>
-
-            <!-- *************************************************************************************************** -->
-
-        </ul>
-
-        <!-- ******************************************************************************************************* -->
-
-        <div class="tab-content flex-grow-1">
-
-            <!-- *************************************************************************************************** -->
-
-            <div :class="`tab-pane align-items-center justify-content-center ${deviceIndex === 0 ? 'show active' : 'xxxx xxxxxx'}`" :id="`indi_device_pane_${deviceIndex}`" tabindex="0" role="tabpanel" v-for="(deviceInfo, deviceName, deviceIndex) in devices" :key="deviceName">
-
-                <indi-home @connect="emit('connect')" @disconnect="emit('disconnect')" v-if="deviceName === 'Home'" /><indi-device :device-name="deviceName" :device-info="deviceInfo" :device-index="deviceIndex" v-else />
-
-            </div>
-
-            <!-- *************************************************************************************************** -->
-
-        </div>
+        </nav-tabs>
 
     </div>
 

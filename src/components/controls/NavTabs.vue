@@ -1,20 +1,37 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {v4} from 'uuid';
+import {ref, provide} from 'vue';
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const props = defineProps({
-    tabNames: {
-        type: Array,
-        default: [],
+    margin: {
+        type: String,
+        default: 'mb-4',
     },
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const id = v4();
+const tabs = ref([]);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* FUNCTIONS                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+provide('addTab', (tabId, tabName, tabIcon) => {
+
+    tabs.value.push({
+        tabId: tabId,
+        tabName: tabName,
+        tabIcon: tabIcon,
+    });
+
+   return tabs.value.length === 1;
+});
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 </script>
@@ -25,12 +42,13 @@ const id = v4();
     <!-- NAV TABS                                                                                                    -->
     <!-- *********************************************************************************************************** -->
 
-    <ul class="nav nav-tabs mb-1" role="tablist">
+    <ul :class="['nav', 'nav-tabs', margin]" role="tablist">
 
-        <li class="nav-item" role="presentation" v-for="(tabName, tabIndex) in tabNames" :key="tabIndex">
+        <li class="nav-item" role="presentation" v-for="(tab, idx) in tabs" :key="idx">
 
-            <button :class="`nav-link ${tabIndex === 0 ? 'active' : 'xxxxxx'} px-3 py-2`" type="button" data-bs-toggle="tab" :data-bs-target="`#${id}`" role="tab">
-                {{ tabName }}
+            <button :class="['nav-link', 'px-3', 'py-2', {'active': idx === 0}]" type="button" data-bs-toggle="tab" :data-bs-target="`#${tab.tabId}`" role="tab">
+                <i :class="['bi', `bi-${tab.tabIcon}`]" v-if="tab.tabIcon"></i>
+                {{ tab.tabName }}
             </button>
 
         </li>
@@ -41,7 +59,7 @@ const id = v4();
     <!-- TABS CONTENT                                                                                                -->
     <!-- *********************************************************************************************************** -->
 
-    <div class="tab-content" style="height: calc(100% - 3.5rem); width: calc(100% - 0rem);">
+    <div class="tab-content flex-grow-1">
 
         <slot></slot>
 
