@@ -55,22 +55,20 @@ const filteredVariables = computed(() => {
 
             <!-- *************************************************************************************************** -->
 
-            <div class="table-responsive">
-                <table class="table table-sm table-striped">
-                    <thead>
-                        <tr>
-                            <th style="width: 66.66%;">Variable</th>
-                            <th style="width: 33.33%;">Value</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(value, name) in filteredVariables" :key="name">
-                            <td><span class="non-selectable">${</span><i>{{name}}</i><span class="non-selectable">}</span></td>
-                            <td>{{value['$']}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <table class="table table-sm table-striped">
+                <thead>
+                    <tr>
+                        <th style="width: 66.66%;">Variable</th>
+                        <th style="width: 33.33%;">Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(value, name) in filteredVariables" :key="name">
+                        <td><span class="non-selectable">${</span><i>{{name}}</i><span class="non-selectable">}</span></td>
+                        <td>{{value['$']}}</td>
+                    </tr>
+                </tbody>
+            </table>
 
             <!-- *************************************************************************************************** -->
 

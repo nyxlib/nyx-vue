@@ -113,65 +113,63 @@ const deviceUp = (device1) => {
 
             <!-- *************************************************************************************************** -->
 
-            <div class="table-responsive">
-                <table class="table table-sm table-striped">
+            <table class="table table-sm table-striped">
 
-                    <!-- ******************************************************************************************* -->
+                <!-- *********************************************************************************************** -->
 
-                    <thead>
-                        <tr>
-                            <th class="text-center" style="width: 105px;">
-                                Tools
-                            </th>
-                            <th class="text-center" style="width: auto;">
-                                Category
-                            </th>
-                            <th class="text-center" style="width: auto;">
-                                Device
-                            </th>
-                        </tr>
-                    </thead>
+                <thead>
+                    <tr>
+                        <th class="text-center" style="width: 105px;">
+                            Tools
+                        </th>
+                        <th class="text-center" style="width: auto;">
+                            Category
+                        </th>
+                        <th class="text-center" style="width: auto;">
+                            Device
+                        </th>
+                    </tr>
+                </thead>
 
-                    <!-- ******************************************************************************************* -->
+                <!-- *********************************************************************************************** -->
 
-                    <tbody>
-                        <tr v-for="device in devices">
-                            <td class="text-center">
-                                <button class="btn btn-sm btn-link" type="button" @click="deviceDw(device)">
-                                    <i class="bi bi-caret-up-fill"></i>
-                                </button>
-                                <button class="btn btn-sm btn-link" type="button" @click="deviceUp(device)">
-                                    <i class="bi bi-caret-down-fill"></i>
-                                </button>
-                                <button class="btn btn-sm btn-link" type="button" @click="deviceRm(device)">
-                                    <i class="bi bi-trash2 text-danger"></i>
-                                </button>
-                            </td>
-                            <td class="text-center">
-                                <multiselect
-                                    mode="single"
-                                    :can-clear="false"
-                                    :searchable="true"
-                                    :create-option="false"
-                                    :close-on-select="true"
-                                    :options="indiStore.categoryDefs" v-model="device.category" />
-                            </td>
-                            <td class="text-center">
-                                <multiselect
-                                    mode="single"
-                                    :can-clear="false"
-                                    :searchable="true"
-                                    :create-option="false"
-                                    :close-on-select="true"
-                                    :options="indiStore.deviceDefs" v-model="device.device" />
-                            </td>
-                        </tr>
-                    </tbody>
+                <tbody>
+                    <tr v-for="device in devices">
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-link" type="button" @click="deviceDw(device)">
+                                <i class="bi bi-caret-up-fill"></i>
+                            </button>
+                            <button class="btn btn-sm btn-link" type="button" @click="deviceUp(device)">
+                                <i class="bi bi-caret-down-fill"></i>
+                            </button>
+                            <button class="btn btn-sm btn-link" type="button" @click="deviceRm(device)">
+                                <i class="bi bi-trash2 text-danger"></i>
+                            </button>
+                        </td>
+                        <td class="text-center">
+                            <multiselect
+                                mode="single"
+                                :can-clear="false"
+                                :searchable="true"
+                                :create-option="false"
+                                :close-on-select="true"
+                                :options="indiStore.categoryDefs" v-model="device.category" />
+                        </td>
+                        <td class="text-center">
+                            <multiselect
+                                mode="single"
+                                :can-clear="false"
+                                :searchable="true"
+                                :create-option="false"
+                                :close-on-select="true"
+                                :options="indiStore.deviceDefs" v-model="device.device" />
+                        </td>
+                    </tr>
+                </tbody>
 
-                    <!-- ******************************************************************************************* -->
+                <!-- *********************************************************************************************** -->
 
-                </table>
-            </div>
+            </table>
 
             <!-- *************************************************************************************************** -->
 
