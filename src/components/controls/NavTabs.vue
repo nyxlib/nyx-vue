@@ -19,7 +19,7 @@ const props = defineProps({
 
 const tabs = ref([]);
 
-const ulRef = ref(null);
+const tabListRef = ref(null);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
@@ -50,7 +50,7 @@ onMounted(() => {
 
         tabs.value.forEach((tab) => {
 
-            const el = ulRef.value.querySelector(`button[data-bs-target="#${tab.tabId}"]`);
+            const el = tabListRef.value.querySelector(`button[data-bs-target="#${tab.tabId}"]`);
 
             if(el)
             {
@@ -76,21 +76,29 @@ onMounted(() => {
     <!-- NAV TABS                                                                                                    -->
     <!-- *********************************************************************************************************** -->
 
-    <ul :class="['nav', 'nav-tabs', margin]" role="tablist" ref="ulRef">
+    <div :class="['nav', 'nav-tabs', margin]" role="tablist" ref="tabListRef">
 
-        <li class="nav-item" role="presentation" v-for="(tab, idx) in tabs" :key="idx">
+        <!-- ******************************************************************************************************* -->
 
-            <button :class="['nav-link', 'px-3', 'py-2', {'active': idx === 0}]" type="button" data-bs-toggle="tab" :data-bs-target="`#${tab.tabId}`" role="tab">
+        <button :class="['nav-link', 'px-3', 'py-2', {'active': idx === 0}]" type="button" data-bs-toggle="tab" :data-bs-target="`#${tab.tabId}`" role="tab" v-for="(tab, idx) in tabs" :key="idx">
 
-                <i :class="['bi', `bi-${tab.tabIcon}`]" v-if="tab.tabIcon"></i>
+            <i :class="['bi', `bi-${tab.tabIcon}`]" v-if="tab.tabIcon"></i>
 
-                {{ tab.tabName }}
+            {{ tab.tabName }}
 
-            </button>
+        </button>
 
-        </li>
+        <!-- ******************************************************************************************************* -->
 
-    </ul>
+        <div class="ms-auto">
+
+            <slot name="button"></slot>
+
+        </div>
+
+        <!-- ******************************************************************************************************* -->
+
+    </div>
 
     <!-- *********************************************************************************************************** -->
     <!-- TABS CONTENT                                                                                                -->

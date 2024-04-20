@@ -438,6 +438,12 @@ onUnmounted(() => {
 
             </tab-pane>
 
+            <template v-slot:button>
+
+                <slot></slot>
+
+            </template>
+
         </nav-tabs>
 
     </div>
