@@ -5,8 +5,6 @@ import {ref, onMounted} from 'vue';
 
 import Chart from 'chart.js/auto';
 
-import 'chartjs-adapter-date-fns';
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -60,7 +58,6 @@ const props = defineProps({
     },
     dataset: {
         type: Array,
-        default: [],
         required: true,
     },
 });
