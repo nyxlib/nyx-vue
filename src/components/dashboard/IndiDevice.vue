@@ -1,6 +1,8 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+import useIndiStore from '../../stores/indi';
+
 import IndiPanel from './IndiGroup.vue';
 import IndiConsole from './IndiConsole.vue';
 
@@ -27,6 +29,10 @@ defineProps({
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+const indiStore = useIndiStore(window.pinia);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 </script>
 
 <template>
@@ -45,7 +51,7 @@ defineProps({
 
             <!-- *************************************************************************************************** -->
 
-            <nav-tabs margin="mb-4">
+            <nav-tabs margin="mb-4" v-if="indiStore.isConnected">
 
                 <tab-pane :title="groupName" v-for="(groupInfo, groupName, groupIndex) in deviceInfo" :key="groupName">
 
@@ -54,6 +60,12 @@ defineProps({
                 </tab-pane>
 
             </nav-tabs>
+
+            <!-- *************************************************************************************************** -->
+
+            <div v-else>
+                No longer connected...
+            </div>
 
             <!-- *************************************************************************************************** -->
 

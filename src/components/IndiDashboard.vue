@@ -11,6 +11,7 @@ import useIndiStore from '../stores/indi';
 
 import IndiHome from "./dashboard/IndiHome.vue";
 import IndiDevice from './dashboard/IndiDevice.vue';
+
 import NavTabs from "./controls/NavTabs.vue";
 import TabPane from "./controls/TabPane.vue";
 
@@ -175,7 +176,6 @@ onUnmounted(() => {
                                     empty
                                     <span class="badge rounded-pill bg-danger">
                                         {{ indiStore.numberOfMessages(indiStore.curDeviceName) }}
-                                        <span class="visually-hidden">available messages</span>
                                     </span>
                                 </button>
                             ]
