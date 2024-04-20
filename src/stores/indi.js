@@ -89,16 +89,16 @@ const useIndiStore = defineStore('indi', {
         /* VARIABLES                                                                                                  */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        resolve(variableName, options)
+        resolve(variableName, options = null)
         {
             /*--------------------------------------------------------------------------------------------------------*/
 
-            if(typeof options !== 'object')
+            if(typeof options !== 'object' || options === null)
             {
                 options = {};
             }
 
-            if(typeof options.deviceDict !== 'object')
+            if(typeof options.deviceDict !== 'object' || options.deviceDict === null)
             {
                 options.deviceDict = {};
             }
