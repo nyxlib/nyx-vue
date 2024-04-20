@@ -17,6 +17,9 @@ import IndiVariables from './components/IndiVariables.vue';
 import IndiDashboard from './components/IndiDashboard.vue';
 import IndiMonitoring from './components/IndiMonitoring.vue'
 
+import NavTabs from './components/controls/NavTabs.vue';
+import TabPane from './components/controls/TabPane.vue'
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const setup = (app) => {
@@ -34,6 +37,8 @@ export {
     IndiVariables,
     IndiDashboard,
     IndiMonitoring,
+    NavTabs,
+    TabPane,
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
