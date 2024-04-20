@@ -174,9 +174,9 @@ const createWidget = (metric) => {
             y: metric.y,
             h: metric.h,
             w: metric.w,
-            content: '<i class="bi bi-pencil-fill position-absolute" style="right: 1.50rem; top: -0.25rem;"></i>'
+            content: '<i class="bi bi-pencil-fill position-absolute" style="cursor: pointer; right: 1.50rem; top: -0.25rem;"></i>'
                      +
-                     '<i class="bi bi-eraser-fill position-absolute" style="right: 0.00rem; top: -0.25rem;"></i>',
+                     '<i class="bi bi-eraser-fill position-absolute" style="cursor: pointer; right: 0.00rem; top: -0.25rem;"></i>',
         });
 
         /*------------------------------------------------------------------------------------------------------------*/
