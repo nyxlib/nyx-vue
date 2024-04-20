@@ -163,7 +163,7 @@ const newWidgetStep2 = () => {
     /*----------------------------------------------------------------------------------------------------------------*/
 
     createWidget({
-        id: edit ? state.id : uuid.v4(),
+        id: state.id || uuid.v4(),
         plotMode: state.plotMode,
         plotType: state.plotType,
         plotTitle: state.plotTitle,
@@ -177,7 +177,7 @@ const newWidgetStep2 = () => {
         metric2: state.metric2,
         x: 0, y: 0,
         h: h, w: w,
-    }, edit);
+    }, !!state.id);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -190,10 +190,12 @@ const newWidgetStep2 = () => {
 
 const createWidget = (metric, edit) => {
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* EDIT                                                                                                           */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     if(edit)
     {
-        /*------------------------------------------------------------------------------------------------------------*/
-        /* EDIT                                                                                                       */
         /*------------------------------------------------------------------------------------------------------------*/
 
         widgetDict[metric.id].gridstack.removeWidget(widgetDict[metric.id], true, false);
@@ -208,81 +210,78 @@ const createWidget = (metric, edit) => {
         metric.w = old.w;
 
         /*------------------------------------------------------------------------------------------------------------*/
-
-        createWidget(metric, false);
-
-        /*------------------------------------------------------------------------------------------------------------*/
     }
-    else
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* CREATE                                                                                                         */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const el = document.querySelector(`[data-title="${metric.plotGroup}"]`);
+
+    if(el)
     {
         /*------------------------------------------------------------------------------------------------------------*/
-        /* CREATE                                                                                                     */
+
+        const widget = el.gridstack.addWidget({
+            x: metric.x,
+            y: metric.y,
+            h: metric.h,
+            w: metric.w,
+            content: (
+                '<i class="bi bi-pencil-fill position-absolute" style="cursor: pointer; right: 1.50rem; top: -0.25rem;"></i>'
+                +
+                '<i class="bi bi-eraser-fill position-absolute" style="cursor: pointer; right: 0.00rem; top: -0.25rem;"></i>'
+            ),
+        });
+
         /*------------------------------------------------------------------------------------------------------------*/
 
-        const el = document.querySelector(`[data-title="${metric.plotGroup}"]`);
+        widget.querySelector('.bi-pencil-fill').onclick = () => newWidgetStep1(metric.id);
 
-        if(el)
+        widget.querySelector('.bi-eraser-fill').onclick = () => clearWidget(metric.id);
+
+        widget.gridstack = el.gridstack;
+
+        widget.metric = metric;
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        if(!edit)
         {
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            const widget = el.gridstack.addWidget({
-                x: metric.x,
-                y: metric.y,
-                h: metric.h,
-                w: metric.w,
-                content: (
-                    '<i class="bi bi-pencil-fill position-absolute" style="cursor: pointer; right: 1.50rem; top: -0.25rem;"></i>'
-                    +
-                    '<i class="bi bi-eraser-fill position-absolute" style="cursor: pointer; right: 0.00rem; top: -0.25rem;"></i>'
-                ),
-            });
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            widget.querySelector('.bi-pencil-fill').onclick = () => newWidgetStep1(metric.id);
-
-            widget.querySelector('.bi-eraser-fill').onclick = () => clearWidget(metric.id);
-
-            widget.gridstack = el.gridstack;
-
-            widget.metric = metric;
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            props.metrics[metric.id] = metric;
-
             labelsetDict[metric.id] = metric.plotType === 'scatter' ? null : [];
 
             datasetDict[metric.id] = metric.metric1.map(() => []);
-
-            widgetDict[metric.id] = widget;
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            const chart = h(XXXChart, {
-                mode: metric.plotMode,
-                type: metric.plotType,
-                title: metric.plotTitle,
-                xTitle: metric.xTitle,
-                yTitle: metric.yTitle,
-                showLegend: metric.showLegend,
-                xLogScale: metric.xLogScale,
-                yLogScale: metric.yLogScale,
-                metric1Names: metric.metric1,
-                metric2Names: metric.metric2,
-                labelset: labelsetDict[metric.id],
-                dataset: datasetDict[metric.id],
-            });
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            render(chart, widget.firstElementChild);
-
-            /*--------------------------------------------------------------------------------------------------------*/
         }
+
+        widgetDict[metric.id] = widget;
+
+        props.metrics[metric.id] = metric;
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        const chart = h(XXXChart, {
+            mode: metric.plotMode,
+            type: metric.plotType,
+            title: metric.plotTitle,
+            xTitle: metric.xTitle,
+            yTitle: metric.yTitle,
+            showLegend: metric.showLegend,
+            xLogScale: metric.xLogScale,
+            yLogScale: metric.yLogScale,
+            metric1Names: metric.metric1,
+            metric2Names: metric.metric2,
+            labelset: labelsetDict[metric.id],
+            dataset: datasetDict[metric.id],
+        });
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        render(chart, widget.firstElementChild);
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -331,11 +330,11 @@ const removeWidget = (e, widget) => {
 
     delete props.metrics[widget.metric.id];
 
-    delete labelsetDict[widget.metric.id];
+    delete widgetDict[widget.metric.id];
 
     delete datasetDict[widget.metric.id];
 
-    delete widgetDict[widget.metric.id];
+    delete labelsetDict[widget.metric.id];
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
