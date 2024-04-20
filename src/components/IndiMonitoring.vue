@@ -200,7 +200,7 @@ const createWidget = (metric) => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        widget.querySelector('.bi-pencil-fill').onclick = () => editWidget(metric.id);
+        widget.querySelector('.bi-pencil-fill').onclick = () => newWidgetStep1(metric.id);
 
         widget.querySelector('.bi-eraser-fill').onclick = () => clearWidget(metric.id);
 
@@ -235,13 +235,6 @@ const createWidget = (metric) => {
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const editWidget = (id) => {
-
-    newWidgetStep1(id);
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -507,7 +500,7 @@ onUnmounted(() => {
                     <div class="modal-header px-3 py-2">
                         <h5 class="modal-title">
                             <i class="bi bi-plus-lg"></i>
-                            Add a metric
+                            Add/edit a metric
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
