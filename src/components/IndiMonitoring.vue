@@ -2,7 +2,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {h, ref, inject, render, computed, onMounted, onUnmounted} from 'vue';
+import {h, inject, render, computed, reactive, onMounted, onUnmounted} from 'vue';
 
 import Multiselect from '@vueform/multiselect';
 
@@ -66,17 +66,19 @@ const PLOT_TYPES = [
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const plotMode = ref('');
-const plotType = ref('');
-const plotTitle = ref('');
-const plotGroup = ref('');
-const xTitle = ref('');
-const yTitle = ref('');
-const showLegend = ref(false);
-const xLogScale = ref(false);
-const yLogScale = ref(false);
-const metric1 = ref([]);
-const metric2 = ref([]);
+const state = reactive({
+    plotMode: '',
+    plotType: '',
+    plotTitle: '',
+    plotGroup: '',
+    xTitle: '',
+    yTitle: '',
+    showLegend: false,
+    xLogScale: false,
+    yLogScale: false,
+    metric1: [],
+    metric2: [],
+});
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -89,7 +91,7 @@ let timer = null;
 /* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const isValid = computed(() => !!plotGroup.value && metric1.value.length > 0 && (plotType.value !== 'scatter' || metric1.value.length === metric2.value.length));
+const isValid = computed(() => !!state.plotGroup && state.metric1.length > 0 && (state.plotType !== 'scatter' || state.metric1.length === state.metric2.length));
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -97,17 +99,17 @@ const newWidgetStep1 = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    plotMode.value = 'temporal';
-    plotType.value = 'line';
-    plotTitle.value = '';
-    plotGroup.value = '';
-    xTitle.value = '';
-    yTitle.value = '';
-    showLegend.value = false;
-    xLogScale.value = false;
-    yLogScale.value = false;
-    metric1.value = [];
-    metric2.value = [];
+    state.plotMode = 'temporal';
+    state.plotType = 'line';
+    state.plotTitle = '';
+    state.plotGroup = '';
+    state.xTitle = '';
+    state.yTitle = '';
+    state.showLegend = false;
+    state.xLogScale = false;
+    state.yLogScale = false;
+    state.metric1 = [];
+    state.metric2 = [];
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -124,7 +126,7 @@ const newWidgetStep2 = () => {
 
     let h, w;
 
-    if(['line', 'bar', 'scatter'].includes(plotType.value)) {
+    if(['line', 'bar', 'scatter'].includes(state.plotType)) {
         h = 2; w = 4;
     }
     else {
@@ -135,17 +137,17 @@ const newWidgetStep2 = () => {
 
     createWidget({
         id: v4(),
-        plotMode: plotMode.value,
-        plotType: plotType.value,
-        plotTitle: plotTitle.value,
-        plotGroup: plotGroup.value,
-        xTitle: xTitle.value,
-        yTitle: yTitle.value,
-        showLegend: showLegend.value,
-        xLogScale: xLogScale.value,
-        yLogScale: yLogScale.value,
-        metric1: metric1.value,
-        metric2: metric2.value,
+        plotMode: state.plotMode,
+        plotType: state.plotType,
+        plotTitle: state.plotTitle,
+        plotGroup: state.plotGroup,
+        xTitle: state.xTitle,
+        yTitle: state.yTitle,
+        showLegend: state.showLegend,
+        xLogScale: state.xLogScale,
+        yLogScale: state.yLogScale,
+        metric1: state.metric1,
+        metric2: state.metric2,
         x: 0, y: 0,
         h: h, w: w,
     });
@@ -487,7 +489,7 @@ onUnmounted(() => {
                                         :searchable="true"
                                         :create-option="false"
                                         :close-on-select="true"
-                                        :options="PLOT_MODES" v-model="plotMode" />
+                                        :options="PLOT_MODES" v-model="state.plotMode" />
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -500,7 +502,7 @@ onUnmounted(() => {
                                         :searchable="true"
                                         :create-option="false"
                                         :close-on-select="true"
-                                        :options="PLOT_TYPES" v-model="plotType" />
+                                        :options="PLOT_TYPES" v-model="state.plotType" />
                                 </div>
                             </div>
                         </div>
@@ -511,7 +513,7 @@ onUnmounted(() => {
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label" for="F938E61B">Plot title<sup class="text-secondary">opt</sup></label>
-                                    <input class="form-control form-control-sm" type="text" id="F938E61B" placeholder="Plot title" v-model="plotTitle" />
+                                    <input class="form-control form-control-sm" type="text" id="F938E61B" placeholder="Plot title" v-model="state.plotTitle" />
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -524,7 +526,7 @@ onUnmounted(() => {
                                         :searchable="true"
                                         :create-option="false"
                                         :close-on-select="true"
-                                        :options="groups.map((x) => ({value: x, label: x}))" v-model="plotGroup" />
+                                        :options="groups.map((x) => ({value: x, label: x}))" v-model="state.plotGroup" />
                                 </div>
                             </div>
                         </div>
@@ -535,14 +537,14 @@ onUnmounted(() => {
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label" for="D8A97782">X title<sup class="text-secondary">opt</sup></label>
-                                    <input class="form-control form-control-sm" type="text" id="D8A97782" placeholder="X title" v-model="xTitle" />
+                                    <input class="form-control form-control-sm" type="text" id="D8A97782" placeholder="X title" v-model="state.xTitle" />
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <div class="mb-3">
                                         <label class="form-label" for="EC986FF8">Y title<sup class="text-secondary">opt</sup></label>
-                                        <input class="form-control form-control-sm" type="text" id="EC986FF8" placeholder="Y title" v-model="yTitle" />
+                                        <input class="form-control form-control-sm" type="text" id="EC986FF8" placeholder="Y title" v-model="state.yTitle" />
                                     </div>
                                 </div>
                             </div>
@@ -553,19 +555,19 @@ onUnmounted(() => {
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-check form-switch mb-3">
-                                    <input class="form-check-input" type="checkbox" id="C5306DB0" v-model="showLegend" :true-value="true" :false-value="false" />
+                                    <input class="form-check-input" type="checkbox" id="C5306DB0" v-model="state.showLegend" :true-value="true" :false-value="false" />
                                     <label class="form-check-label" for="C5306DB0">Show legend</label>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-check form-switch mb-3">
-                                    <input class="form-check-input" type="checkbox" id="CA52C0FD" v-model="xLogScale" :true-value="true" :false-value="false" />
+                                    <input class="form-check-input" type="checkbox" id="CA52C0FD" v-model="state.xLogScale" :true-value="true" :false-value="false" />
                                     <label class="form-check-label" for="CA52C0FD">X log scale</label>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-check form-switch mb-3">
-                                    <input class="form-check-input" type="checkbox" id="F39F6DAF" v-model="yLogScale" :true-value="true" :false-value="false" />
+                                    <input class="form-check-input" type="checkbox" id="F39F6DAF" v-model="state.yLogScale" :true-value="true" :false-value="false" />
                                     <label class="form-check-label" for="F39F6DAF">Y log scale</label>
                                 </div>
                             </div>
@@ -573,7 +575,7 @@ onUnmounted(() => {
 
                         <!-- *************************************************************************************** -->
 
-                        <div class="mb-3" v-if="plotType !== /**/''/**/">
+                        <div class="mb-3" v-if="state.plotType !== /**/''/**/">
                             <label class="form-label" for="BBA0018F">1st metric</label>
                             <multiselect
                                 mode="tags"
@@ -581,10 +583,10 @@ onUnmounted(() => {
                                 :searchable="true"
                                 :create-option="false"
                                 :close-on-select="true"
-                                :options="Object.keys(indiStore.variables || {}).map((x) => ({value: x, label: x}))" v-model="metric1" />
+                                :options="Object.keys(indiStore.variables || {}).map((x) => ({value: x, label: x}))" v-model="state.metric1" />
                         </div>
 
-                        <div class="mb-3" v-if="plotType === 'scatter'">
+                        <div class="mb-3" v-if="state.plotType === 'scatter'">
                             <label class="form-label" for="B5D75D1E">2st metric</label>
                             <multiselect
                                 mode="tags"
@@ -592,7 +594,7 @@ onUnmounted(() => {
                                 :searchable="true"
                                 :create-option="false"
                                 :close-on-select="true"
-                                :options="Object.keys(indiStore.variables || {}).map((x) => ({value: x, label: x}))" v-model="metric2" />
+                                :options="Object.keys(indiStore.variables || {}).map((x) => ({value: x, label: x}))" v-model="state.metric2" />
                         </div>
 
                         <!-- *************************************************************************************** -->
