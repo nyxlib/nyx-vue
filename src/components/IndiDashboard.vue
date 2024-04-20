@@ -171,7 +171,7 @@ onUnmounted(() => {
                             <i class="bi bi-card-text"></i>
                             {{ indiStore.curDeviceName }}
                             [
-                                <button class="btn btn-xs btn-secondary" type="button" @click="indi.clearTerminal()">
+                                <button class="btn btn-xs btn-secondary" type="button" @click="indi.clearTerminal">
                                     <i class="bi bi-trash"></i>
                                     empty
                                     <span class="badge rounded-pill bg-danger">

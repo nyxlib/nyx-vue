@@ -21,7 +21,7 @@ const props = defineProps({
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const colors = {
+const COLORS = {
     'Idle': 'secondary',
     'Ok': 'success',
     'Busy': 'warning',
@@ -54,7 +54,7 @@ const sendMessage = () => {
         <!-- ******************************************************************************************************* -->
 
         <label class="col-lg-2">
-            <span :class="`text-${colors[defNumberVector['@state']]}`">
+            <span :class="`text-${COLORS[defNumberVector['@state']]}`">
                 <i class="bi bi-circle-fill"></i>
             </span>
             {{ defNumberVector['@label'] || defNumberVector['@name'] }}
@@ -84,7 +84,7 @@ const sendMessage = () => {
 
         <div class="col-lg-1 pb-1" v-if="defNumberVector['@perm'] !== 'ro'">
 
-            <button class="btn btn-xs btn-outline-primary h-100 w-100" @click="sendMessage()">
+            <button class="btn btn-xs btn-outline-primary h-100 w-100" @click="sendMessage">
                 Apply
             </button>
 

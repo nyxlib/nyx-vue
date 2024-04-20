@@ -12,7 +12,7 @@ defineProps({
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const colors = {
+const COLORS = {
     'Idle': 'secondary',
     'Ok': 'success',
     'Busy': 'warning',
@@ -31,7 +31,7 @@ const colors = {
         <!-- ******************************************************************************************************* -->
 
         <label class="col-lg-2">
-            <span :class="`text-${colors[defLightVector['@state']]}`">
+            <span :class="`text-${COLORS[defLightVector['@state']]}`">
                 <i class="bi bi-circle-fill"></i>
             </span>
             {{ defLightVector['@label'] || defLightVector['@name'] }}

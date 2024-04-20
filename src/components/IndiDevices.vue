@@ -5,7 +5,7 @@ import {computed} from 'vue';
 
 import Multiselect from '@vueform/multiselect';
 
-import {v4} from 'uuid';
+import * as uuid from 'uuid';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -38,7 +38,7 @@ let rank = 0;
 
 const deviceAppend = () => {
 
-    const id = v4();
+    const id = uuid.v4();
 
     indiStore.deviceDict[id] = {
         id: id,
@@ -103,7 +103,7 @@ const deviceUp = (device1) => {
             <i class="bi bi-node-plus"></i>
             Device
             [
-                <button class="btn btn-xs btn-primary" type="button" @click="deviceAppend()">
+                <button class="btn btn-xs btn-primary" type="button" @click="deviceAppend">
                     <i class="bi bi-plus-lg"></i>
                     Add device
                 </button>

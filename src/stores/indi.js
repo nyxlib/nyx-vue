@@ -1,4 +1,4 @@
-// noinspection JSUnresolvedReference,JSUnusedGlobalSymbols
+// noinspection JSUnresolvedReference
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import {defineStore} from 'pinia';

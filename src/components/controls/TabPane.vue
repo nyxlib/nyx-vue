@@ -3,7 +3,7 @@
 
 import {ref, inject, onMounted} from 'vue';
 
-import {v4} from 'uuid';
+import * as uuid from 'uuid';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -35,11 +35,11 @@ const emit = defineEmits([
 
 const bntRef = ref(null);
 
-const firstTab = ref(false);
+const isFirst = ref(false);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const tabId = `indi_tab_${v4().substring(0, 8)}`;
+const tabId = `indi_tab_${uuid.v4().substring(0, 8)}`;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
@@ -71,7 +71,7 @@ const onHidden = (e) => {
 
 onMounted(() => {
 
-    firstTab.value = addTab(tabId, props.title, props.icon, onShow, onShown, onHide, onHidden);
+    isFirst.value = addTab(tabId, props.title, props.icon, onShow, onShown, onHide, onHidden);
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -81,7 +81,7 @@ onMounted(() => {
 
     <!-- *********************************************************************************************************** -->
 
-    <div :class="['tab-pane', 'h-100', {'show': firstTab, 'active': firstTab}]" :id="tabId">
+    <div :class="['tab-pane', 'h-100', {'show': isFirst, 'active': isFirst}]" :id="tabId">
 
         <slot></slot>
 

@@ -54,7 +54,7 @@ const openModal = () => {
 
     <!-- *********************************************************************************************************** -->
 
-    <button class="btn btn-xs btn-secondary" type="button" @click="openModal()">
+    <button class="btn btn-xs btn-secondary" type="button" @click="openModal">
         <i class="bi bi-card-text"></i>
         logs
         <span class="badge rounded-pill bg-danger">

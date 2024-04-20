@@ -21,7 +21,7 @@ const props = defineProps({
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const colors = {
+const COLORS = {
     'Idle': 'secondary',
     'Ok': 'success',
     'Busy': 'warning',
@@ -54,7 +54,7 @@ const sendMessage = (index) => {
         <!-- ******************************************************************************************************* -->
 
         <label class="col-sm-2 text-start">
-            <span :class="`text-${colors[defSwitchVector['@state']]}`">
+            <span :class="`text-${COLORS[defSwitchVector['@state']]}`">
                 <i class="bi bi-circle-fill"></i>
             </span>
             {{ defSwitchVector['@label'] || defSwitchVector['@name'] }}

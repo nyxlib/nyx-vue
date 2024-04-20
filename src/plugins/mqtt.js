@@ -3,7 +3,7 @@
 
 import * as paho from 'paho-mqtt';
 
-import {v4 as uuid} from 'uuid';
+import * as uuid from 'uuid';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -51,7 +51,7 @@ const _update_func = (endpoint, username, password) => {
 
         const url = new URL(_endpoint = endpoint);
 
-        _client = new paho.Client(url.hostname, parseInt(url.port || '443'), url.pathname, uuid());
+        _client = new paho.Client(url.hostname, parseInt(url.port || '443'), url.pathname, uuid.v4());
 
         /*------------------------------------------------------------------------------------------------------------*/
 

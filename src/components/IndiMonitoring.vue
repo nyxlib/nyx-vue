@@ -12,7 +12,7 @@ import {GridStack} from 'gridstack';
 
 import Chart from 'chart.js/auto';
 
-import {v4} from 'uuid';
+import * as uuid from 'uuid';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -136,7 +136,7 @@ const newWidgetStep2 = () => {
     /*----------------------------------------------------------------------------------------------------------------*/
 
     createWidget({
-        id: v4(),
+        id: uuid.v4(),
         plotMode: state.plotMode,
         plotType: state.plotType,
         plotTitle: state.plotTitle,
