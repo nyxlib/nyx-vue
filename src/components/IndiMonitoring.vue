@@ -96,7 +96,7 @@ let timer = null;
 /* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const newWidgetStep1 = (id = null) => {
+const newWidgetStep1 = (id) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -187,7 +187,7 @@ const newWidgetStep2 = () => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const createWidget = (metric, edit = false) => {
+const createWidget = (metric, edit) => {
 
     if(edit)
     {
@@ -465,7 +465,7 @@ onMounted(() => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        Object.values(props.metrics).forEach((metrix) => createWidget(metrix));
+        Object.values(props.metrics).forEach((metric) => createWidget(metric, false));
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -517,7 +517,7 @@ onUnmounted(() => {
 
     <div class="position-absolute" style="right: 1rem; bottom: 1rem;">
 
-        <button class="btn btn-primary ms-0" type="button" data-bs-placement="top" data-bs-title="Add a new widget" :disabled="!indiStore.isConnected" @click="newWidgetStep1">
+        <button class="btn btn-primary ms-0" type="button" data-bs-placement="top" data-bs-title="Add a new widget" :disabled="!indiStore.isConnected" @click="newWidgetStep1(null)">
             <i class="bi bi-plus-lg"></i>
         </button>
 
@@ -539,8 +539,8 @@ onUnmounted(() => {
 
                     <div class="modal-header px-3 py-2">
                         <h5 class="modal-title">
-                            <i class="bi bi-plus-lg"></i>
-                            Add/edit a metric
+                            <i class="bi bi-pencil"></i>
+                            {{ state.id ? 'Edit' : 'New' }} metric
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
@@ -677,11 +677,11 @@ onUnmounted(() => {
                         <!-- *************************************************************************************** -->
 
                         <button class="btn btn-outline-secondary" type="button" data-bs-dismiss="modal">
-                            Cancel
+                            <i class="bi bi-x-lg"></i> Cancel
                         </button>
 
-                        <button class="btn btn-primary" type="button" @click="newWidgetStep2" :disabled="!isValid">
-                            Add
+                        <button class="btn btn-success" type="button" @click="newWidgetStep2" :disabled="!isValid">
+                            <i class="bi bi-check-lg"></i> Add
                         </button>
 
                         <!-- *************************************************************************************** -->
