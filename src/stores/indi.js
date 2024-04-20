@@ -36,7 +36,6 @@ const useIndiStore = defineStore('indi', {
 
         return {
             isConnected: false,
-            /**/
             curDeviceName: '---',
             /**/
             deviceDict: {},

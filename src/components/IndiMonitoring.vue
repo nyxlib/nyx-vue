@@ -95,21 +95,40 @@ const isValid = computed(() => !!state.plotGroup && state.metric1.length > 0 && 
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const newWidgetStep1 = () => {
+const newWidgetStep1 = (id) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    state.plotMode = 'temporal';
-    state.plotType = 'line';
-    state.plotTitle = '';
-    state.plotGroup = '';
-    state.xTitle = '';
-    state.yTitle = '';
-    state.showLegend = false;
-    state.xLogScale = false;
-    state.yLogScale = false;
-    state.metric1 = [];
-    state.metric2 = [];
+    if(id)
+    {
+        const metric = props.metrics[id];
+
+        state.plotMode = metric.plotMode;
+        state.plotType = metric.plotType;
+        state.plotTitle = metric.plotTitle;
+        state.plotGroup = metric.plotGroup;
+        state.xTitle = metric.xTitle;
+        state.yTitle = metric.yTitle;
+        state.showLegend = metric.showLegend;
+        state.xLogScale = metric.xLogScale;
+        state.yLogScale = metric.yLogScale;
+        state.metric1 = metric.metric1;
+        state.metric2 = metric.metric2;
+    }
+    else
+    {
+        state.plotMode = 'temporal';
+        state.plotType = 'line';
+        state.plotTitle = '';
+        state.plotGroup = '';
+        state.xTitle = '';
+        state.yTitle = '';
+        state.showLegend = false;
+        state.xLogScale = false;
+        state.yLogScale = false;
+        state.metric1 = [];
+        state.metric2 = [];
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -222,7 +241,7 @@ const createWidget = (metric) => {
 
 const editWidget = (id) => {
 
-    alert('TODO edit ' + id);
+    newWidgetStep1(id);
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -394,28 +413,33 @@ onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    GridStack.initAll({removable: '#AAE7F472'}).forEach((grid) => {
+    if(indiStore.isConnected)
+    {
+        GridStack.initAll({removable: '#AAE7F472'}).forEach((grid) => {
 
-        grid.on('resizestop', updateWidget);
+            grid.on('resizestop', updateWidget);
 
-        grid.on('dragstop', updateWidget);
+            grid.on('dragstop', updateWidget);
 
-        grid.on('removed', (e, items) => {
+            grid.on('removed', (e, items) => {
 
-            items.forEach((item) => {
+                items.forEach((item) => {
 
-                removeWidget(e, item.el);
+                    removeWidget(e, item.el);
+                });
             });
         });
-    });
 
-    /*----------------------------------------------------------------------------------------------------------------*/
+        /*------------------------------------------------------------------------------------------------------------*/
 
-    Object.values(props.metrics).forEach(createWidget);
+        Object.values(props.metrics).forEach(createWidget);
 
-    /*----------------------------------------------------------------------------------------------------------------*/
+        /*------------------------------------------------------------------------------------------------------------*/
 
-    timer = setInterval(refreshContent, props.refreshInterval);
+        timer = setInterval(refreshContent, props.refreshInterval);
+
+        /*------------------------------------------------------------------------------------------------------------*/
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 });
@@ -424,10 +448,7 @@ onMounted(() => {
 
 onUnmounted(() => {
 
-    if(timer)
-    {
-        clearInterval(timer);
-    }
+    clearInterval(timer);
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -451,7 +472,7 @@ onUnmounted(() => {
 
             <template v-slot:button>
 
-                <slot></slot>
+                <slot v-if="indiStore.isConnected"></slot>
 
             </template>
 
@@ -463,11 +484,11 @@ onUnmounted(() => {
 
     <div class="position-absolute" style="right: 1rem; bottom: 1rem;">
 
-        <button class="btn btn-primary ms-0" type="button" data-bs-placement="top" data-bs-title="Add a new widget" @click="newWidgetStep1">
+        <button class="btn btn-primary ms-0" type="button" data-bs-placement="top" data-bs-title="Add a new widget" :disabled="!indiStore.isConnected" @click="newWidgetStep1">
             <i class="bi bi-plus-lg"></i>
         </button>
 
-        <button class="btn btn-danger ms-1" type="button" data-bs-placement="top" data-bs-title="Drop here to remove" id="AAE7F472">
+        <button class="btn btn-danger ms-1" type="button" data-bs-placement="top" data-bs-title="Drop here to remove" :disabled="!indiStore.isConnected" id="AAE7F472">
             <i class="bi bi-trash2"></i>
         </button>
 
