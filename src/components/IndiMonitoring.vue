@@ -37,16 +37,16 @@ const indiStore = useIndiStore(window.pinia);
 const props = defineProps({
     groups: {
         type: Array,
-        default: ['Global'],
+        required: true,
     },
     metrics: {
         type: Object,
-        default: {/*EMPTY*/},
+        required: true,
     },
     refreshInterval: {
         type: Number,
         default: 100,
-    }
+    },
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -384,8 +384,8 @@ const refreshContent = () => {
 
             for(let i = 0; i < dataset.length; i++)
             {
-                const def1 = indiStore.resolve(null, metric.metric1[i]);
-                const def2 = indiStore.resolve(null, metric.metric2[i]);
+                const def1 = indiStore.resolve(metric.metric1[i]);
+                const def2 = indiStore.resolve(metric.metric2[i]);
 
                 if(def1 && def2)
                 {
@@ -406,7 +406,7 @@ const refreshContent = () => {
 
             for(let i = 0; i < dataset.length; i++)
             {
-                const def = indiStore.resolve(null, metric.metric1[i]);
+                const def = indiStore.resolve(metric.metric1[i]);
 
                 if(def)
                 {

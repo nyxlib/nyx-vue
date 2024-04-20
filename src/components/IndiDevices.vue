@@ -18,12 +18,21 @@ import useIndiStore from '../stores/indi';
 const indiStore = useIndiStore();
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+const props = defineProps({
+    devices: {
+        type: Object,
+        required: true,
+    },
+});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const devices = computed(() => {
 
-    const result = Object.values(indiStore.deviceDict);
+    const result = Object.values(props.devices);
 
     result.sort((x, y) => x.rank - y.rank);
 
@@ -40,7 +49,7 @@ const deviceAppend = () => {
 
     const id = uuid.v4();
 
-    indiStore.deviceDict[id] = {
+    props.devices[id] = {
         id: id,
         rank: rank,
         category: '',
@@ -54,7 +63,7 @@ const deviceAppend = () => {
 
 const deviceRm = (device) => {
 
-    delete indiStore.deviceDict[device.id];
+    delete props.devices[device.id];
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/

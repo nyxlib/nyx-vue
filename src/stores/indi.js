@@ -26,6 +26,10 @@ const CATEGORY_DEFS = [
 ];
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* STORE                                                                                                              */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -38,7 +42,6 @@ const useIndiStore = defineStore('indi', {
             isConnected: false,
             curDeviceName: '---',
             /**/
-            deviceDict: {},
             messageDict: {},
             defXXXVectorDict: {},
         };
@@ -86,29 +89,44 @@ const useIndiStore = defineStore('indi', {
         /* VARIABLES                                                                                                  */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        resolve(category, variableName, startsWith = false)
+        resolve(variableName, options)
         {
             /*--------------------------------------------------------------------------------------------------------*/
 
-            if(category)
+            if(typeof options !== 'object')
             {
-                const names = Object.values(this.deviceDict).filter((device) => device.category === category).map((device) => `${device.device}:${variableName}`);
+                options = {};
+            }
 
-                if(names.length > 0)
-                {
-                    return startsWith ? Object.entries(this.variables).filter((variable) => variable[0].startsWith(names[0])).map((variable) => variable[1])///
-                                      : Object.entries(this.variables).filter((variable) => variable[0]    ===    (names[0])).map((variable) => variable[1])[0]
-                    ;
-                }
+            if(typeof options.deviceDict !== 'object')
+            {
+                options.deviceDict = {};
             }
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            return startsWith ? Object.entries(this.variables).filter((variable) => variable[0].startsWith(variableName)).map((variable) => variable[1])///
-                              : Object.entries(this.variables).filter((variable) => variable[0]    ===    (variableName)).map((variable) => variable[1])[0]
-            ;
+            if(options.category)
+            {
+                const composedName = Object.values(options.deviceDict).filter((x) => x.category === options.category).map((x) => `${x.device}:${variableName}`)[0];
+
+                if(composedName)
+                {
+                    return options.startsWith ? Object.entries(this.variables).filter((x) => x[0].startsWith(composedName)).map((x) => x[1])///
+                                              : Object.entries(this.variables).filter((x) => x[0]    ===    (composedName)).map((x) => x[1])[0]
+                    ;
+                }
+            }
+            else
+            {
+                return options.startsWith ? Object.entries(this.variables).filter((x) => x[0].startsWith(variableName)).map((x) => x[1])///
+                                          : Object.entries(this.variables).filter((x) => x[0]    ===    (variableName)).map((x) => x[1])[0]
+                ;
+
+            }
 
             /*--------------------------------------------------------------------------------------------------------*/
+
+            return null;
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
