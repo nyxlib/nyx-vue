@@ -87,8 +87,9 @@ const isValid = computed(() => !!state.plotGroup && state.metric1.length > 0 && 
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const labelset_dict = {};
-const dataset_dict = {};
+const labelsetDict = {};
+const datasetDict = {};
+const widgetDict = {};
 
 let timer = null;
 
@@ -195,6 +196,10 @@ const createWidget = (metric, edit) => {
         /* EDIT                                                                                                       */
         /*------------------------------------------------------------------------------------------------------------*/
 
+        widgetDict[metric.id].gridstack.removeWidget(widgetDict[metric.id], true, false);
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
         for(const key of Object.keys(metric))
         {
             if(!['x', 'y', 'h', 'w'].includes(key))
@@ -205,7 +210,7 @@ const createWidget = (metric, edit) => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        alert('Please, save and reload this panel.')
+        createWidget(props.metrics[metric.id], false);
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
@@ -239,15 +244,19 @@ const createWidget = (metric, edit) => {
 
             widget.querySelector('.bi-eraser-fill').onclick = () => clearWidget(metric.id);
 
+            widget.gridstack = el.gridstack;
+
+            widget.metric = metric;
+
             /*--------------------------------------------------------------------------------------------------------*/
-
-            labelset_dict[metric.id] = metric.plotType === 'scatter' ? null : [];
-
-            dataset_dict[metric.id] = metric.metric1.map(() => []);
 
             props.metrics[metric.id] = metric;
 
-            widget.metric = metric;
+            labelsetDict[metric.id] = metric.plotType === 'scatter' ? null : [];
+
+            datasetDict[metric.id] = metric.metric1.map(() => []);
+
+            widgetDict[metric.id] = widget;
 
             /*--------------------------------------------------------------------------------------------------------*/
 
@@ -262,8 +271,8 @@ const createWidget = (metric, edit) => {
                 yLogScale: metric.yLogScale,
                 metric1Names: metric.metric1,
                 metric2Names: metric.metric2,
-                labelset: labelset_dict[metric.id],
-                dataset: dataset_dict[metric.id],
+                labelset: labelsetDict[metric.id],
+                dataset: datasetDict[metric.id],
             });
 
             /*--------------------------------------------------------------------------------------------------------*/
@@ -283,9 +292,9 @@ const clearWidget = (id) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const labelset = labelset_dict[id];
+    const labelset = labelsetDict[id];
 
-    const dataset = dataset_dict[id];
+    const dataset = datasetDict[id];
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -323,9 +332,11 @@ const removeWidget = (e, widget) => {
 
     delete props.metrics[widget.metric.id];
 
-    delete labelset_dict[widget.metric.id];
+    delete labelsetDict[widget.metric.id];
 
-    delete dataset_dict[widget.metric.id];
+    delete datasetDict[widget.metric.id];
+
+    delete widgetDict[widget.metric.id];
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -370,9 +381,9 @@ const refreshContent = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    Object.keys(labelset_dict).filter((id) => props.metrics[id].plotMode === 'temporal').forEach((id) => {
+    Object.keys(labelsetDict).filter((id) => props.metrics[id].plotMode === 'temporal').forEach((id) => {
 
-        const dataset = dataset_dict[id];
+        const dataset = datasetDict[id];
 
         const metric = props.metrics[id];
 
@@ -414,7 +425,7 @@ const refreshContent = () => {
                 }
             }
 
-            labelset_dict[id].push(currentDate);
+            labelsetDict[id].push(currentDate);
 
             /*--------------------------------------------------------------------------------------------------------*/
         }
