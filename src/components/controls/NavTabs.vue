@@ -2,7 +2,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {ref, provide, onMounted} from 'vue';
+import {ref, watch, provide, nextTick, onMounted} from 'vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -46,25 +46,25 @@ provide('addTab', (tabId, tabName, tabIcon, onShow, onShown, onHide, onHidden) =
 
 onMounted(() => {
 
-    setTimeout(() => {
+    watch(tabs, () => {
 
-        tabs.value.forEach((tab) => {
+        nextTick().then(() => {
 
-            const el = tabListRef.value.querySelector(`button[data-bs-target="#${tab.tabId}"]`);
+            tabs.value.forEach((tab) => {
 
-            if(el)
-            {
-                el.addEventListener('show.bs.tab', tab.onShow);
+                const el = tabListRef.value.querySelector(`button[data-bs-target="#${tab.tabId}"]`);
 
-                el.addEventListener('shown.bs.tab', tab.onShown);
-
-                el.addEventListener('hide.bs.tab', tab.onHide);
-
-                el.addEventListener('hidden.bs.tab', tab.onHidden);
-            }
+                if(el)
+                {
+                    el.addEventListener('show.bs.tab', tab.onShow);
+                    el.addEventListener('shown.bs.tab', tab.onShown);
+                    el.addEventListener('hide.bs.tab', tab.onHide);
+                    el.addEventListener('hidden.bs.tab', tab.onHidden);
+                }
+            });
         });
 
-    }, 500);
+    }, {immediate: true});
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
