@@ -200,17 +200,16 @@ const createWidget = (metric, edit) => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        for(const key of Object.keys(metric))
-        {
-            if(!['x', 'y', 'h', 'w'].includes(key))
-            {
-                props.metrics[metric.id][key] = metric[key];
-            }
-        }
+        const old = props.metrics[metric.id];
+
+        metric.x = old.x;
+        metric.y = old.y;
+        metric.h = old.h;
+        metric.w = old.w;
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        createWidget(props.metrics[metric.id], false);
+        createWidget(metric, false);
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
