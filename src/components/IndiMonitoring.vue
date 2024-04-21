@@ -68,8 +68,9 @@ const PLOT_TYPES = [
 
 const state = reactive({
     id: null,
-    plotMode: '',
-    plotType: '',
+    plotMode: 'temporal',
+    divider: 1,
+    plotType: 'line',
     plotTitle: '',
     plotGroup: '',
     xTitle: '',
@@ -91,6 +92,8 @@ const labelsetDict = {};
 const datasetDict = {};
 const widgetDict = {};
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 let timer = null;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -107,6 +110,7 @@ const newWidgetStep1 = (id) => {
 
         state.id = id;
         state.plotMode = metric.plotMode;
+        state.divider = metric.divider;
         state.plotType = metric.plotType;
         state.plotTitle = metric.plotTitle;
         state.plotGroup = metric.plotGroup;
@@ -122,6 +126,7 @@ const newWidgetStep1 = (id) => {
     {
         state.id = null;
         state.plotMode = 'temporal';
+        state.divider = 1;
         state.plotType = 'line';
         state.plotTitle = '';
         state.plotGroup = '';
@@ -147,10 +152,6 @@ const newWidgetStep2 = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const edit = !!state.id;
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
     let h, w;
 
     if(['line', 'bar', 'scatter'].includes(state.plotType)) {
@@ -165,6 +166,7 @@ const newWidgetStep2 = () => {
     createWidget({
         id: state.id || uuid.v4(),
         plotMode: state.plotMode,
+        divider: state.divider,
         plotType: state.plotType,
         plotTitle: state.plotTitle,
         plotGroup: state.plotGroup,
@@ -559,7 +561,7 @@ onUnmounted(() => {
                         <!-- *************************************************************************************** -->
 
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="mb-3">
                                     <label class="form-label" for="D38EC0FA">Plot mode</label>
                                     <multiselect
@@ -571,6 +573,10 @@ onUnmounted(() => {
                                         :close-on-select="true"
                                         :options="PLOT_MODES" v-model="state.plotMode" />
                                 </div>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label" for="E9549BAB">Divider</label>
+                                <input class="form-control form-control-sm" type="number" min="1" step="1" id="E9549BAB" placeholder="Divider" v-model="state.divider" :disabled="state.plotMode !== 'temporal'" />
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
@@ -656,7 +662,7 @@ onUnmounted(() => {
                         <!-- *************************************************************************************** -->
 
                         <div class="mb-3" v-if="state.plotType !== /**/''/**/">
-                            <label class="form-label" for="BBA0018F">1st metric</label>
+                            <label class="form-label" for="BBA0018F">Y metric</label>
                             <multiselect
                                 mode="tags"
                                 id="BBA0018F"
@@ -667,7 +673,7 @@ onUnmounted(() => {
                         </div>
 
                         <div class="mb-3" v-if="state.plotType === 'scatter'">
-                            <label class="form-label" for="B5D75D1E">2st metric</label>
+                            <label class="form-label" for="B5D75D1E">X metric</label>
                             <multiselect
                                 mode="tags"
                                 id="B5D75D1E"
