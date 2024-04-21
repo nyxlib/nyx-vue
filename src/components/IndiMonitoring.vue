@@ -248,7 +248,7 @@ const createWidget = (metric, edit) => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        if(!edit)
+        if(!edit || datasetDict[metric.id].length !== metric.metric1.length)
         {
             labelsetDict[metric.id] = metric.plotType === 'scatter' ? null : [];
 
