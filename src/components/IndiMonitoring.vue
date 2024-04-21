@@ -90,6 +90,7 @@ const isValid = computed(() => !!state.plotGroup && state.metric1.length > 0 && 
 
 const labelsetDict = {};
 const datasetDict = {};
+const counterDict = {};
 const widgetDict = {};
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -253,7 +254,11 @@ const createWidget = (metric, edit) => {
             labelsetDict[metric.id] = metric.plotType === 'scatter' ? null : [];
 
             datasetDict[metric.id] = metric.metric1.map(() => []);
+
+            counterDict[metric.id] = 0;
         }
+
+        /*------------------------------------------------------------------------------------------------------------*/
 
         widgetDict[metric.id] = widget;
 
@@ -381,7 +386,19 @@ const refreshContent = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    Object.keys(labelsetDict).filter((id) => props.metrics[id].plotMode === 'temporal').forEach((id) => {
+    Object.keys(labelsetDict).filter((id) => {
+
+        const metric = props.metrics[id];
+
+        return (
+            metric.plotMode === /**/'temporal'/**/
+            &&
+            metric.divider === ++counterDict[id]
+        );
+
+    }).forEach((id) => {
+
+        counterDict[id] = 0;
 
         const dataset = datasetDict[id];
 
