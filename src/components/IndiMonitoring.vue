@@ -556,7 +556,7 @@ onUnmounted(() => {
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
 
-                    <div class="modal-body px-3 py-2">
+                    <form class="modal-body px-3 py-2" @submit.prevent="newWidgetStep2" id="D1531250">
 
                         <!-- *************************************************************************************** -->
 
@@ -567,6 +567,7 @@ onUnmounted(() => {
                                     <multiselect
                                         mode="single"
                                         id="D38EC0FA"
+                                        :required="true"
                                         :can-clear="false"
                                         :searchable="true"
                                         :create-option="false"
@@ -576,7 +577,7 @@ onUnmounted(() => {
                             </div>
                             <div class="col-md-2">
                                 <label class="form-label" for="E9549BAB">Divider</label>
-                                <input class="form-control form-control-sm" type="number" min="1" step="1" id="E9549BAB" placeholder="Divider" v-model="state.divider" :disabled="state.plotMode !== 'temporal'" />
+                                <input class="form-control form-control-sm" type="number" min="1" step="1" id="E9549BAB" placeholder="Divider" v-model="state.divider" :disabled="state.plotMode !== 'temporal'" required="required" />
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
@@ -584,6 +585,7 @@ onUnmounted(() => {
                                     <multiselect
                                         mode="single"
                                         id="F8E884DD"
+                                        :required="true"
                                         :can-clear="false"
                                         :searchable="true"
                                         :create-option="false"
@@ -608,6 +610,7 @@ onUnmounted(() => {
                                     <multiselect
                                         mode="single"
                                         id="C8C721F4"
+                                        :required="true"
                                         :can-clear="false"
                                         :searchable="true"
                                         :create-option="false"
@@ -666,6 +669,7 @@ onUnmounted(() => {
                             <multiselect
                                 mode="tags"
                                 id="BBA0018F"
+                                :required="true"
                                 :searchable="true"
                                 :create-option="false"
                                 :close-on-select="true"
@@ -677,6 +681,7 @@ onUnmounted(() => {
                             <multiselect
                                 mode="tags"
                                 id="B5D75D1E"
+                                :required="true"
                                 :searchable="true"
                                 :create-option="false"
                                 :close-on-select="true"
@@ -685,7 +690,7 @@ onUnmounted(() => {
 
                         <!-- *************************************************************************************** -->
 
-                    </div>
+                    </form>
 
                     <div class="modal-footer px-3 py-1">
 
@@ -695,7 +700,7 @@ onUnmounted(() => {
                             <i class="bi bi-x-lg"></i> Cancel
                         </button>
 
-                        <button class="btn btn-success" type="button" @click="newWidgetStep2" :disabled="!isValid">
+                        <button class="btn btn-success" type="submit" form="D1531250" :disabled="!isValid">
                             <i class="bi bi-check-lg"></i> Add
                         </button>
 
