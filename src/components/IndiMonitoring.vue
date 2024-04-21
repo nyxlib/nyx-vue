@@ -51,9 +51,12 @@ const props = defineProps({
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const PLOT_MODE_TEMPORAL = 'temporal';
+const PLOT_MODE_BLOB = 'blob';
+
 const PLOT_MODES = [
-    {value: 'temporal', label: 'Temporal'},
-    {value: 'blob', label: 'BLOB'},
+    {value: PLOT_MODE_TEMPORAL, label: 'Temporal'},
+    {value: PLOT_MODE_BLOB, label: 'BLOB'},
 ];
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -68,7 +71,7 @@ const PLOT_TYPES = [
 
 const state = reactive({
     id: null,
-    plotMode: 'temporal',
+    plotMode: PLOT_MODE_TEMPORAL,
     divider: 1,
     plotType: 'line',
     plotTitle: '',
@@ -126,7 +129,7 @@ const newWidgetStep1 = (id) => {
     else
     {
         state.id = null;
-        state.plotMode = 'temporal';
+        state.plotMode = PLOT_MODE_TEMPORAL;
         state.divider = 1;
         state.plotType = 'line';
         state.plotTitle = '';
@@ -391,7 +394,7 @@ const refreshContent = () => {
         const metric = props.metrics[id];
 
         return (
-            metric.plotMode === /**/'temporal'/**/
+            metric.plotMode === PLOT_MODE_TEMPORAL
             &&
             metric.divider === ++counterDict[id]
         );
@@ -594,7 +597,7 @@ onUnmounted(() => {
                             </div>
                             <div class="col-md-2">
                                 <label class="form-label" for="E9549BAB">Divider</label>
-                                <input class="form-control form-control-sm" type="number" min="1" step="1" id="E9549BAB" placeholder="Divider" v-model="state.divider" :disabled="state.plotMode !== 'temporal'" required="required" />
+                                <input class="form-control form-control-sm" type="number" min="1" step="1" id="E9549BAB" placeholder="Divider" v-model="state.divider" :disabled="state.plotMode !== PLOT_MODE_TEMPORAL" required="required" />
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
