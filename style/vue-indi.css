@@ -8,26 +8,34 @@
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-/* noinspection CssNonIntegerLengthInPixels */
 :root {
 
-    --ms-radius: 0.75rem;
-    --ms-tag-radius: 0.50rem;
+    --ms-px: calc(0.6rem - var(--bs-border-width));
+    --ms-tag-my: 0.125rem;
 
-    --ms-py: calc(0.175rem);
+    --ms-py: calc(0.25rem - var(--bs-border-width));
+    --ms-tag-py: 0.125rem;
 
-    --ms-ring-width: 0.25rem;
-    --ms-ring-color: rgba(13, 110, 253, 0.25);
+    --ms-font-size: 0.875rem;
+    --ms-tag-font-size: 0.875rem;
+
+    --ms-line-height: 1.5;
+    --ms-tag-line-height: 1.5;
 
     --ms-bg: var(--bs-body-bg);
     --ms-dropdown-bg: var(--bs-body-bg);
 
+    --ms-ring-color: rgba(13, 110, 253, 0.25);
     --ms-border-color: var(--bs-border-color);
     --ms-border-color-active: rgba(134, 183, 254, 1.0);
     --ms-dropdown-border-color: rgba(134, 183, 254, 1.0);
 
+    --ms-ring-width: 0.25rem;
     --ms-border-width: var(--bs-border-width);
     --ms-dropdown-border-width: var(--bs-border-width);
+
+    --ms-radius: var(--bs-border-radius-sm);
+    --ms-tag-radius: var(--bs-border-radius-lg);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
