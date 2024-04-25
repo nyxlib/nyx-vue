@@ -50,7 +50,7 @@ const _init_func = (mqtt) => {
 
         if(!clientId)
         {
-            clientId = uuid.v4().substring(0, 4);
+            clientId = uuid.v4().substring(0, 4).toUpperCase();
 
             localStorage.setItem('indi-client-id', clientId);
         }
