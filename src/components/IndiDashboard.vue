@@ -95,6 +95,8 @@ onMounted(() => {
         if(connected)
         {
             mqtt.subscribe('indi/json');
+            mqtt.subscribe('indi/ping/node');
+            mqtt.subscribe('indi/ping/client');
 
             mqtt.emit('indi/cmd/json', '{"<>": "getProperties", "@version": "1.7"}');
         }
@@ -108,16 +110,24 @@ onMounted(() => {
 
     mqtt.setMessageCallback((topic, json) => {
 
-        if(topic === 'indi/json')
+        try
         {
-            try
+            /**/ if(topic === 'indi/json')
             {
-                indi.processMessage(JSON.parse(json));
+                 indi.processMessage(JSON.parse(json));
             }
-            catch(e)
+            else if(topic === 'indi/ping/node')
             {
-                console.error(`Error parsing message: ${e}`);
+                indi.processPing(JSON.parse(json), true);
             }
+            else if(topic === 'indi/ping/client')
+            {
+                indi.processPing(JSON.parse(json), false);
+            }
+        }
+        catch(e)
+        {
+            console.error(`Error parsing message: ${e}`);
         }
     });
 
