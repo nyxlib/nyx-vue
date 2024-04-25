@@ -134,7 +134,7 @@ const updateNodes = () => {
         {
             case TYPE_CLIENT:
                 d.x = width - CIRCLE_DIAMETER;
-                d.y = height / 2.0;
+                d.y = 0.0;
                 break;
 
             case TYPE_BROKER:
@@ -144,7 +144,7 @@ const updateNodes = () => {
 
             case TYPE_NODE:
                 d.x = 0.000 + CIRCLE_DIAMETER;
-                d.y = height / 2.0;
+                d.y = 0.0;
                 break;
         }
 
