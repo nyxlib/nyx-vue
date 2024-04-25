@@ -130,20 +130,17 @@ onMounted(() => {
 
     if(props.mode === 'temporal' && props.type !== 'scatter')
     {
-        scale_x.type = 'time';
+        scale_x.ticks = {
+            callback: () => {
 
-        scale_x.time = {
-            displayFormats: {
-                millisecond: 'HH:mm:ss',
-                second: 'HH:mm:ss',
-                minute: 'HH:mm:ss',
-                hour: 'HH:mm:ss',
-                day: 'HH:mm:ss',
-                week: 'HH:mm:ss',
-                month: 'HH:mm:ss',
-                quarter: 'HH:mm:ss',
-                year: 'HH:mm:ss',
-            },
+                const now = new Date();
+
+                const hh = now.getHours().toString().padStart(2, '0');
+                const mm = now.getMinutes().toString().padStart(2, '0');
+                const ss = now.getSeconds().toString().padStart(2, '0');
+
+                return `${hh}:${mm}:${ss}`;
+            }
         };
     }
 

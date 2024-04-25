@@ -3,8 +3,6 @@
 import 'bootstrap/js/src/tab';
 import 'bootstrap/js/src/modal';
 
-import 'chartjs-adapter-date-fns';
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import indiPlugin from './plugins/indi';
