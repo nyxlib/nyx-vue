@@ -45,68 +45,75 @@ const _update_func = (endpoint, username, password) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    try
+    if(endpoint)
     {
-        /*------------------------------------------------------------------------------------------------------------*/
+        try
+        {
+            /*--------------------------------------------------------------------------------------------------------*/
 
-        const url = new URL(_endpoint = endpoint);
+            const url = new URL(_endpoint = endpoint);
 
-        _client = new paho.Client(url.hostname, parseInt(url.port || '443'), url.pathname, uuid.v4());
+            _client = new paho.Client(url.hostname, parseInt(url.port || '443'), url.pathname, uuid.v4());
 
-        /*------------------------------------------------------------------------------------------------------------*/
+            /*--------------------------------------------------------------------------------------------------------*/
 
-        _client.onConnected = () => {
+            _client.onConnected = () => {
 
-            _connected = true;
+                _connected = true;
 
-            useIndiStore(window.pinia).isConnected = true;
+                useIndiStore(window.pinia).isConnected = true;
 
-            if(_connectionCallback) {
-                _connectionCallback(true);
-            }
-        };
+                if(_connectionCallback) {
+                    _connectionCallback(true);
+                }
+            };
 
-        /*------------------------------------------------------------------------------------------------------------*/
+            /*--------------------------------------------------------------------------------------------------------*/
 
-        _client.onConnectionLost = () => {
+            _client.onConnectionLost = () => {
 
-            _connected = false;
+                _connected = false;
 
-            useIndiStore(window.pinia).isConnected = false;
+                useIndiStore(window.pinia).isConnected = false;
 
-            if(_connectionCallback) {
-                _connectionCallback(false);
-            }
-        };
+                if(_connectionCallback) {
+                    _connectionCallback(false);
+                }
+            };
 
-        /*------------------------------------------------------------------------------------------------------------*/
+            /*--------------------------------------------------------------------------------------------------------*/
 
-		_client.onMessageArrived = (message) => {
+            _client.onMessageArrived = (message) => {
 
-            if(_messageCallback)
-            {
-                _messageCallback(
-                    message.topic,
-                    message.payloadString
-                );
-            }
-        };
+                if(_messageCallback)
+                {
+                    _messageCallback(
+                        message.topic,
+                        message.payloadString
+                    );
+                }
+            };
 
-        /*------------------------------------------------------------------------------------------------------------*/
+            /*--------------------------------------------------------------------------------------------------------*/
 
-        _client.connect({
-            useSSL: url.protocol === 'wss:',
-            userName: username || '',
-            password: password || '',
-            reconnect: true,
-        });
+            _client.connect({
+                useSSL: url.protocol === 'wss:',
+                userName: username || '',
+                password: password || '',
+                reconnect: true,
+            });
 
-        /*------------------------------------------------------------------------------------------------------------*/
+            /*--------------------------------------------------------------------------------------------------------*/
+        }
+        catch(e)
+        {
+            console.error(e);
+
+            _client = null;
+        }
     }
-    catch(e)
+    else
     {
-        console.error(e);
-
         _client = null;
     }
 
@@ -181,6 +188,33 @@ export default {
 
     install(app)
     {
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        let clientIP;
+
+        fetch('https://api.ipify.org?format=json')
+            .then(response => response.json())
+            .then((data) => {
+
+                clientIP = data.ip;
+
+            })
+            .catch(() => {
+
+                clientIP = uuid.v4();
+            })
+        ;
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        setInterval(() => {
+
+            _emit_func('indi/ping/client', clientIP);
+
+        }, 5 * 1000);
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
         app.provide('mqtt', {
             connected            : _connected_func            ,
             update               : _update_func               ,
@@ -190,6 +224,8 @@ export default {
             unsubscribe          : _unsubscribe_func          ,
             emit                 : _emit_func                 ,
         });
+
+        /*------------------------------------------------------------------------------------------------------------*/
     }
 };
 

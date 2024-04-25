@@ -44,6 +44,9 @@ const useIndiStore = defineStore('indi', {
             /**/
             messageDict: {},
             defXXXVectorDict: {},
+            /**/
+            nodePingDict: {},
+            clientPingDict: {},
         };
 
         /*------------------------------------------------------------------------------------------------------------*/

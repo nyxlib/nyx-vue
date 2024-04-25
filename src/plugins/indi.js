@@ -8,6 +8,7 @@ import {WebLinksAddon} from '@xterm/addon-web-links';
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import useIndiStore from '../stores/indi';
+import * as uuid from "uuid";
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -246,6 +247,22 @@ const _buildNewSwitchVectorMessage_func = (defSwitchVector, index) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const _processPing_func = (message, isNode) => {
+
+    const indiStore = useIndiStore(window.pinia);
+
+    if(isNode)
+    {
+        indiStore.nodePingDict[message] = Date.now();
+    }
+    else
+    {
+        indiStore.clientPingDict[message] = Date.now();
+    }
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const _setupTerminal_func = (div, newDeviceName) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -313,6 +330,8 @@ export default {
             buildNewTextVectorMessage: _buildNewTextVectorMessage_func,
             buildNewNumberVectorMessage: _buildNewNumberVectorMessage_func,
             buildNewSwitchVectorMessage: _buildNewSwitchVectorMessage_func,
+            /* PINGS */
+            processPing: _processPing_func,
             /* TERMINAL */
             setupTerminal: _setupTerminal_func,
             clearTerminal: _clearTerminal_func,
