@@ -455,9 +455,16 @@ const refreshContent = () => {
     /* UPDATE CHARTS                                                                                                  */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(let id in Chart.instances)
+    for(const id in Chart.instances)
     {
-        Chart.instances[id].update();
+        try
+        {
+            Chart.instances[id].update();
+        }
+        catch(e)
+        {
+            /* IGNORE */
+        }
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/

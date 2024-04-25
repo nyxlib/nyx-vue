@@ -35,7 +35,7 @@ const svgEl = ref(null);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-let interval = null;
+let timer = null;
 
 let height = 0;
 let width = 0;
@@ -284,7 +284,7 @@ const update = (pingDict, type) => {
 
 onMounted(() => {
 
-    interval = setInterval(() => {
+    timer = setInterval(() => {
 
         update(indiStore.clientPingDict, TYPE_CLIENT);
 
@@ -299,10 +299,7 @@ onMounted(() => {
 
 onUnmounted(() => {
 
-    if(interval)
-    {
-        clearInterval(interval);
-    }
+    clearInterval(timer);
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
