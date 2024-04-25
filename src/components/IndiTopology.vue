@@ -33,6 +33,9 @@ const CIRCLE_DIAMETER = 20;
 
 const svgEl = ref(null);
 
+const linkLayerEl = ref(null);
+const nodeLayerEl = ref(null);
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 let timer = null;
@@ -40,15 +43,12 @@ let timer = null;
 let height = 0;
 let width = 0;
 
-let linkLayer = null;
-let nodeLayer = null;
-
 let colorScheme = null;
 let simulation = null;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const data = {
+const graph = {
     nodes: [],
     links: [],
 };
@@ -57,18 +57,15 @@ const data = {
 /* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const ticked = () => {
+const onTick = () => {
 
-    linkLayer.selectAll('line')
-             .attr('x1', (d) => d.source.x)
-             .attr('y1', (d) => d.source.y)
-             .attr('x2', (d) => d.target.x)
-             .attr('y2', (d) => d.target.y)
+    d3.select(linkLayerEl.value).selectAll('line').attr('x1', (d) => d.source.x)
+                                                  .attr('y1', (d) => d.source.y)
+                                                  .attr('x2', (d) => d.target.x)
+                                                  .attr('y2', (d) => d.target.y)
     ;
 
-    nodeLayer.selectAll('g')
-             .attr('transform', (d) => `translate(${d.x},${d.y})`)
-    ;
+    d3.select(nodeLayerEl.value).selectAll('g').attr('transform', (d) => `translate(${d.x},${d.y})`);
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -116,7 +113,7 @@ const getIconFromType = (type) => {
 
 const updateLinks = () => {
 
-    const links = linkLayer.selectAll('line').data(data.links);
+    const links = d3.select(linkLayerEl.value).selectAll('line').data(graph.links);
 
     const linksEnter = links.enter().append('line').attr('class', 'indi-topology-link');
 
@@ -129,7 +126,7 @@ const updateLinks = () => {
 
 const updateNodes = () => {
 
-    const nodes = nodeLayer.selectAll('g').data(data.nodes);
+    const nodes = d3.select(nodeLayerEl.value).selectAll('g').data(graph.nodes);
 
     const nodesEnter = nodes.enter().append('g').attr('transform', (d) => {
 
@@ -182,30 +179,23 @@ const init = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const svg = d3.select(svgEl.value);
-
-    linkLayer = svg.select('#links-layer');
-    nodeLayer = svg.select('#nodes-layer');
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
     colorScheme = d3.scaleOrdinal(d3.schemeCategory10);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    data.nodes.push({id: '0', type: TYPE_BROKER, name: 'Broker'});
+    graph.nodes.push({id: '0', type: TYPE_BROKER, name: 'Broker'});
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    simulation = d3.forceSimulation(data.nodes)
-        .force('link', d3.forceLink(data.links).id((d) => d.id).distance(0.25 * width))
+    simulation = d3.forceSimulation(graph.nodes)
+        .force('link', d3.forceLink(graph.links).id((d) => d.id).distance(0.25 * width))
         .force('charge', d3.forceManyBody().strength(CHARGE_STRENGTH))
         .force('collide', d3.forceCollide().radius(CIRCLE_DIAMETER))
         .force('x', d3.forceX((d) => d.type === TYPE_CLIENT ? 0.75 * width
                                                             : 0.33 * width
         ))
         .force('y', d3.forceY(height / 2.0))
-        .on('tick', ticked)
+        .on('tick', onTick)
     ;
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -225,7 +215,7 @@ const update = (pingDict, type) => {
     {
         let found = false;
 
-        for(const node of data.nodes)
+        for(const node of graph.nodes)
         {
             if(node.name === name)
             {
@@ -241,35 +231,43 @@ const update = (pingDict, type) => {
 
         if(!found)
         {
+            /*--------------------------------------------------------------------------------------------------------*/
+
             const id = uuid.v4();
 
-            data.nodes.push({
+            graph.nodes.push({
                 id: id,
                 type: type,
                 name: name,
                 timestamp: timestamp,
             });
 
-            data.links.push({
+            graph.links.push({
                 source: id,
                 target: '0',
             });
 
+            /*--------------------------------------------------------------------------------------------------------*/
+
             updateLinks();
             updateNodes();
 
-            simulation.nodes(data.nodes).force('link').links(data.links);
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            simulation.nodes(graph.nodes).force('link').links(graph.links);
 
             simulation.alpha(0.3).restart();
+
+            /*--------------------------------------------------------------------------------------------------------*/
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
 
         const now = Date.now();
 
-        nodeLayer.selectAll('g').select('circle')
-                                .filter((d) => d.type === type)
-                                .classed('indi-topology-dead', (d) => {
+        d3.select(nodeLayerEl.value).selectAll('g').select('circle')
+                                    .filter((d) => d.type === type)
+                                    .classed('indi-topology-dead', (d) => {
 
             return now - d.timestamp > 10 * 1000;
         });
@@ -284,6 +282,8 @@ const update = (pingDict, type) => {
 
 onMounted(() => {
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     timer = setInterval(() => {
 
         update(indiStore.clientPingDict, TYPE_CLIENT);
@@ -292,7 +292,11 @@ onMounted(() => {
 
     }, 1000);
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     init();
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -317,17 +321,18 @@ onUnmounted(() => {
         <div class="card-body px-0 py-0">
 
             <svg class="w-100" ref="svgEl">
-                <g id="links-layer"></g>
-                <g id="nodes-layer"></g>
+                <g ref="linkLayerEl"></g>
+                <g ref="nodeLayerEl"></g>
             </svg>
 
         </div>
     </div>
 
+    <!-- *********************************************************************************************************** -->
+
 </template>
 
 <style>
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 .indi-topology-link {
