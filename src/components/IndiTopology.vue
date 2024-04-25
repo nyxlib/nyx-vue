@@ -198,7 +198,7 @@ const init = () => {
     /*----------------------------------------------------------------------------------------------------------------*/
 
     simulation = d3.forceSimulation(data.nodes)
-        .force('link', d3.forceLink(data.links).id((d) => d.id).distance(0.33 * width))
+        .force('link', d3.forceLink(data.links).id((d) => d.id).distance(0.25 * width))
         .force('charge', d3.forceManyBody().strength(CHARGE_STRENGTH))
         .force('collide', d3.forceCollide().radius(CIRCLE_DIAMETER))
         .force('x', d3.forceX((d) => d.type === TYPE_CLIENT ? 0.75 * width
