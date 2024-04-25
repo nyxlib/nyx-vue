@@ -112,15 +112,15 @@ const _init_func = (mqtt) => {
         {
             /**/ if(topic === 'indi/json')
             {
-                _processMessage_func(JSON.parse(payload));
+                _processMessage(JSON.parse(payload));
             }
             else if(topic === 'indi/ping/node')
             {
-                _processPing_func(payload, true);
+                _processPing(payload, true);
             }
             else if(topic === 'indi/ping/client')
             {
-                _processPing_func(payload, false);
+                _processPing(payload, false);
             }
         }
         catch(e)
@@ -141,11 +141,27 @@ const _final_func = (mqtt) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const _processPing = (message, isNode) => {
+
+    const indiStore = useIndiStore(window.pinia);
+
+    if(isNode)
+    {
+        indiStore.nodePingDict[message] = Date.now();
+    }
+    else
+    {
+        indiStore.clientPingDict[message] = Date.now();
+    }
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const _buildKey = (message) => `${message['@device']}:${message['@name']}`;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const _processMessage_func = (message) => {
+const _processMessage = (message) => {
 
     const indiStore = useIndiStore(window.pinia);
 
@@ -359,22 +375,6 @@ const _buildNewSwitchVectorMessage_func = (defSwitchVector, index) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const _processPing_func = (message, isNode) => {
-
-    const indiStore = useIndiStore(window.pinia);
-
-    if(isNode)
-    {
-        indiStore.nodePingDict[message] = Date.now();
-    }
-    else
-    {
-        indiStore.clientPingDict[message] = Date.now();
-    }
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 const _setupTerminal_func = (div, newDeviceName) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -441,12 +441,9 @@ export default {
             init: _init_func,
             final: _final_func,
             /* MESSAGES */
-            processMessage: _processMessage_func,
             buildNewTextVectorMessage: _buildNewTextVectorMessage_func,
             buildNewNumberVectorMessage: _buildNewNumberVectorMessage_func,
             buildNewSwitchVectorMessage: _buildNewSwitchVectorMessage_func,
-            /* PINGS */
-            processPing: _processPing_func,
             /* TERMINAL */
             setupTerminal: _setupTerminal_func,
             clearTerminal: _clearTerminal_func,
