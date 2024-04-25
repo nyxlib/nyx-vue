@@ -23,8 +23,8 @@ import TabPane from './components/controls/TabPane.vue'
 
 const setup = (app) => {
 
-    app.use(indiPlugin);
     app.use(mqttPlugin);
+    app.use(indiPlugin);
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/

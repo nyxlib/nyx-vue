@@ -188,33 +188,6 @@ export default {
 
     install(app)
     {
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        let clientIP;
-
-        fetch('https://api.ipify.org?format=json')
-            .then(response => response.json())
-            .then((data) => {
-
-                clientIP = `${data.ip}-${uuid.v4().substring(0, 4)}`;
-
-            })
-            .catch(() => {
-
-                clientIP = `NOIP-${uuid.v4().substring(0, 4)}`;
-            })
-        ;
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        setInterval(() => {
-
-            _emit_func('indi/ping/client', clientIP);
-
-        }, 5 * 1000);
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
         app.provide('mqtt', {
             connected            : _connected_func            ,
             update               : _update_func               ,
@@ -224,8 +197,6 @@ export default {
             unsubscribe          : _unsubscribe_func          ,
             emit                 : _emit_func                 ,
         });
-
-        /*------------------------------------------------------------------------------------------------------------*/
     }
 };
 

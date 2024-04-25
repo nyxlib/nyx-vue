@@ -1,5 +1,7 @@
-// noinspection JSUnusedGlobalSymbols
+// noinspection JSUnresolvedReference
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+import * as uuid from 'uuid';
 
 import {Terminal} from '@xterm/xterm';
 
@@ -8,7 +10,6 @@ import {WebLinksAddon} from '@xterm/addon-web-links';
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import useIndiStore from '../stores/indi';
-import * as uuid from "uuid";
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -26,7 +27,118 @@ const TERMINAL = new Terminal({
 TERMINAL.loadAddon(new WebLinksAddon());
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+let timer = null;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const _init_func = (mqtt) => {
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* SETUP PING MECHANISM                                                                                           */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(!timer)
+    {
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        let clientId = localStorage.getItem('indi-client-id');
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        if(!clientId)
+        {
+            clientId = uuid.v4().substring(0, 4);
+
+            localStorage.setItem('indi-client-id', clientId);
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        let clientIP = null;
+
+        fetch('https://api.ipify.org?format=json')
+            .then(response => response.json())
+            .then((data) => {
+
+                clientIP = `${data.ip}-${clientId}`;
+
+            })
+            .catch(() => {
+
+                clientIP = `NOIP-${clientId}`;
+
+            })
+            .finally(() => {
+
+                timer = setInterval(() => {
+
+                    mqtt.emit('indi/ping/client', clientIP);
+
+                }, 5 * 1000);
+            })
+        ;
+
+        /*------------------------------------------------------------------------------------------------------------*/
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* SETUP MESSAGE MECHANISM                                                                                        */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const _getProperties = (connected) => {
+
+        if(connected)
+        {
+            mqtt.subscribe('indi/json');
+            mqtt.subscribe('indi/ping/node');
+            mqtt.subscribe('indi/ping/client');
+
+            mqtt.emit('indi/cmd/json', '{"<>": "getProperties", "@version": "1.7"}');
+        }
+    };
+
+    mqtt.setConnectionCallback(_getProperties);
+
+    _getProperties(mqtt.connected());
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    mqtt.setMessageCallback((topic, payload) => {
+
+        try
+        {
+            /**/ if(topic === 'indi/json')
+            {
+                _processMessage_func(JSON.parse(payload));
+            }
+            else if(topic === 'indi/ping/node')
+            {
+                _processPing_func(payload, true);
+            }
+            else if(topic === 'indi/ping/client')
+            {
+                _processPing_func(payload, false);
+            }
+        }
+        catch(e)
+        {
+            console.error(`Error parsing message: ${e}`);
+        }
+    });
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const _final_func = (mqtt) => {
+
+    mqtt.setConnectionCallback(null);
+};
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const _buildKey = (message) => `${message['@device']}:${message['@name']}`;
@@ -325,6 +437,9 @@ export default {
     install(app)
     {
         app.provide('indi', {
+            /* INITIALISATION */
+            init: _init_func,
+            final: _final_func,
             /* MESSAGES */
             processMessage: _processMessage_func,
             buildNewTextVectorMessage: _buildNewTextVectorMessage_func,
