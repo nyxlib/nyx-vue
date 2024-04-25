@@ -196,12 +196,12 @@ export default {
             .then(response => response.json())
             .then((data) => {
 
-                clientIP = `${data.ip}-${uuid.v4().substring(0, 8)}`;
+                clientIP = `${data.ip}-${uuid.v4().substring(0, 4)}`;
 
             })
             .catch(() => {
 
-                clientIP = `NOIP-${uuid.v4().substring(0, 8)}`;
+                clientIP = `NOIP-${uuid.v4().substring(0, 4)}`;
             })
         ;
 
