@@ -10,7 +10,7 @@ import * as d3 from 'd3';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import useIndiStore from "../stores/indi";
+import useIndiStore from '../stores/indi';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -250,6 +250,7 @@ const update = (pingDict, type) => {
             /*--------------------------------------------------------------------------------------------------------*/
 
             updateLinks();
+
             updateNodes();
 
             /*--------------------------------------------------------------------------------------------------------*/
@@ -265,12 +266,10 @@ const update = (pingDict, type) => {
 
         const now = Date.now();
 
-        d3.select(nodeLayerEl.value).selectAll('g').select('circle')
+        d3.select(nodeLayerEl.value).selectAll('circle')
                                     .filter((d) => d.type === type)
-                                    .classed('indi-topology-dead', (d) => {
-
-            return now - d.timestamp > 10 * 1000;
-        });
+                                    .classed('indi-topology-dead', (d) => (now - d.timestamp) > 10 * 1000)
+        ;
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
