@@ -403,7 +403,7 @@ onUnmounted(() => {
 
     fill: var(--bs-body-color);
 
-    font-size: var(--bs-body-font-size);
+    font-size: 0.7500000000000000rem;
     font-family: var(--bs-body-font-family);
 }
 
