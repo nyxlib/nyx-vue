@@ -39,7 +39,7 @@ const indiStore = useIndiStore(window.pinia);
 const devices = computed(() => {
 
     const result = {
-        'home': 'Home'
+        'Home': {}
     };
 
     Object.values(indiStore.defXXXVectorDict).forEach((defXXXVector) => {
