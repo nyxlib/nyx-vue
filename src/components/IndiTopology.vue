@@ -354,7 +354,7 @@ onUnmounted(() => {
 
     <!-- *********************************************************************************************************** -->
 
-    <div class="card mx-auto mb-3">
+    <div class="shadow card">
         <div class="card-header px-3 py-2">
             <i class="bi bi-diagram-3"></i>
             Network

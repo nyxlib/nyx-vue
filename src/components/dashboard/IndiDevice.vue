@@ -39,7 +39,7 @@ const indiStore = useIndiStore(window.pinia);
 
     <!-- *********************************************************************************************************** -->
 
-    <div class="card mb-3" style="width: 1200px;">
+    <div class="shadow card mb-3" style="width: 1200px;">
         <div class="card-header px-3 py-2">
             <i class="bi bi-command"></i>
             {{ deviceName }}

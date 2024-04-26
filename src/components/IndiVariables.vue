@@ -36,7 +36,7 @@ const filteredVariables = computed(() => {
 
     <!-- *********************************************************************************************************** -->
 
-    <div class="card mx-auto mb-3">
+    <div class="shadow-lg card mx-auto mb-3">
         <div class="card-header px-3 py-2">
             <i class="bi bi-braces"></i>
             Variables
