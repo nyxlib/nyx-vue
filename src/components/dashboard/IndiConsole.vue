@@ -1,9 +1,9 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {inject} from 'vue';
+import {inject, onMounted, onUnmounted} from 'vue';
 
-import {Modal} from 'bootstrap';
+import {Modal} from 'bootstrap/dist/js/bootstrap.esm';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -35,17 +35,40 @@ const props = defineProps({
 const openModal = () => {
 
     const modalEl = document.getElementById('indi_console');
-    const terminalEl = document.getElementById('indi_terminal');
-
-    modalEl.addEventListener('shown.bs.modal', () => {
-
-        indi.setupTerminal(terminalEl, props.deviceName);
-
-        indi.updateTerminal();
-    });
 
     Modal.getOrCreateInstance(modalEl).show();
 };
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const setupAndUpdateTerminal = () => {
+
+    const terminalEl = document.getElementById('indi_terminal');
+
+    indi.setupTerminal(terminalEl, props.deviceName);
+
+    indi.updateTerminal();
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* INITIALIZATION                                                                                                     */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+onMounted(() => {
+
+    const modalEl = document.getElementById('indi_console');
+
+    modalEl.addEventListener('shown.bs.modal', setupAndUpdateTerminal);
+});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+onUnmounted(() => {
+
+    const modalEl = document.getElementById('indi_console');
+
+    modalEl.removeEventListener('shown.bs.modal', setupAndUpdateTerminal);
+});
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 </script>

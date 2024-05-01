@@ -1,6 +1,10 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+@import "bootstrap-icons/font/bootstrap-icons.css";
+
 @import "@vueform/multiselect/themes/default.css";
+
+@import "bootstrap/dist/css/bootstrap.css";
 
 @import "gridstack/dist/gridstack.css";
 
