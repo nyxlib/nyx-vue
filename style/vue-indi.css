@@ -1,14 +1,14 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-@import "bootstrap-icons/font/bootstrap-icons.css";
+@import url("bootstrap-icons/font/bootstrap-icons.css");
 
-@import "@vueform/multiselect/themes/default.css";
+@import url("@vueform/multiselect/themes/default.css");
 
-@import "bootstrap/dist/css/bootstrap.css";
+@import url("bootstrap/dist/css/bootstrap.css");
 
-@import "gridstack/dist/gridstack.css";
+@import url("gridstack/dist/gridstack.css");
 
-@import "@xterm/xterm/css/xterm.css";
+@import url("@xterm/xterm/css/xterm.css");
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
