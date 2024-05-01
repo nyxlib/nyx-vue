@@ -1,10 +1,12 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+@import url("bootstrap/dist/css/bootstrap.css");
+
 @import url("bootstrap-icons/font/bootstrap-icons.css");
 
-@import url("@vueform/multiselect/themes/default.css");
+/*--------------------------------------------------------------------------------------------------------------------*/
 
-@import url("bootstrap/dist/css/bootstrap.css");
+@import url("@vueform/multiselect/themes/default.css");
 
 @import url("gridstack/dist/gridstack.css");
 

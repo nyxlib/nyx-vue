@@ -3,8 +3,6 @@
 
 import {inject, onMounted, onUnmounted} from 'vue';
 
-import {Modal} from 'bootstrap/dist/js/bootstrap.esm';
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import useIndiStore from '../../stores/indi';
@@ -29,21 +27,15 @@ const props = defineProps({
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+let modalEl = null;
+let terminalEl = null;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const openModal = () => {
-
-    const modalEl = document.getElementById('indi_console');
-
-    Modal.getOrCreateInstance(modalEl).show();
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 const setupAndUpdateTerminal = () => {
-
-    const terminalEl = document.getElementById('indi_terminal');
 
     indi.setupTerminal(terminalEl, props.deviceName);
 
@@ -56,7 +48,10 @@ const setupAndUpdateTerminal = () => {
 
 onMounted(() => {
 
-    const modalEl = document.getElementById('indi_console');
+    modalEl = document.getElementById('indi_console');
+    terminalEl = document.getElementById('indi_terminal');
+
+    /**/
 
     modalEl.addEventListener('shown.bs.modal', setupAndUpdateTerminal);
 });
@@ -64,8 +59,6 @@ onMounted(() => {
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 onUnmounted(() => {
-
-    const modalEl = document.getElementById('indi_console');
 
     modalEl.removeEventListener('shown.bs.modal', setupAndUpdateTerminal);
 });
@@ -77,7 +70,7 @@ onUnmounted(() => {
 
     <!-- *********************************************************************************************************** -->
 
-    <button class="btn btn-xs btn-secondary" type="button" @click="openModal">
+    <button class="btn btn-xs btn-secondary" type="button" data-bs-toggle="modal" data-bs-target="#indi_console">
         <i class="bi bi-card-text"></i>
         logs
         <span class="badge rounded-pill bg-danger">
