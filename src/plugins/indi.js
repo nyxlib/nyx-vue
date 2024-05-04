@@ -59,11 +59,7 @@ const _init_func = (mqtt) => {
 
         let clientIP = null;
 
-        fetch('https://api.ipify.org?format=json')
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            .then(response => response.json())
+        fetch('https://api.ipify.org?format=json').then(response => response.json())
 
             /*--------------------------------------------------------------------------------------------------------*/
 
