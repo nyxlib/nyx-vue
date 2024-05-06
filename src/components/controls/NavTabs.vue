@@ -8,7 +8,7 @@ import {ref, watch, provide, nextTick, onMounted} from 'vue';
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const props = defineProps({
+defineProps({
     margin: {
         type: String,
         default: 'mb-4',
@@ -17,7 +17,7 @@ const props = defineProps({
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const tabs = ref([]);
+const tabs = ref({});
 
 const tabListRef = ref(null);
 
@@ -25,19 +25,40 @@ const tabListRef = ref(null);
 /* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-provide('addTab', (tabId, tabName, tabIcon, onShow, onShown, onHide, onHidden) => {
+provide('addTab', (tabId, tabTitle, tabIcon, onShow, onShown, onHide, onHidden) => {
 
-    tabs.value.push({
+    tabs.value[tabId] = {
         tabId: tabId,
-        tabName: tabName,
+        tabTitle: tabTitle,
         tabIcon: tabIcon,
         onShow: onShow,
         onShown: onShown,
         onHide: onHide,
         onHidden: onHidden,
-    });
+    };
 
-   return tabs.value.length === 1;
+    return Object.keys(tabs.value).length === 1;
+});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+provide('delTab', (tabId) => {
+
+    delete tabs.value[tabId];
+});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+provide('updateTitle', (tabId, tabTitle) => {
+
+    tabs.value[tabId].tabTitle = tabTitle;
+});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+provide('updateIcon', (tabId, tabIcon) => {
+
+    tabs.value[tabId].tabIcon = tabIcon;
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -50,7 +71,7 @@ onMounted(() => {
 
         nextTick().then(() => {
 
-            tabs.value.forEach((tab) => {
+            Object.values(tabs.value).forEach((tab) => {
 
                 const el = tabListRef.value.querySelector(`button[data-bs-target="#${tab.tabId}"]`);
 
@@ -80,11 +101,11 @@ onMounted(() => {
 
         <!-- ******************************************************************************************************* -->
 
-        <button :class="['nav-link', 'px-3', 'py-2', {'active': idx === 0}]" type="button" data-bs-toggle="tab" :data-bs-target="`#${tab.tabId}`" role="tab" v-for="(tab, idx) in tabs" :key="idx">
+        <button :class="['nav-link', 'px-3', 'py-2', {'active': idx === 0}]" type="button" data-bs-toggle="tab" :data-bs-target="`#${tab.tabId}`" role="tab" v-for="(tab, _, idx) in tabs" :key="idx">
 
             <i :class="['bi', `bi-${tab.tabIcon}`]" v-if="tab.tabIcon"></i>
 
-            {{ tab.tabName }}
+            {{ tab.tabTitle }}
 
         </button>
 

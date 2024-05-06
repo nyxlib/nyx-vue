@@ -1,7 +1,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {ref, inject, onMounted} from 'vue';
+import {ref, inject, onMounted, onUnmounted, watch} from 'vue';
 
 import * as uuid from 'uuid';
 
@@ -10,6 +10,10 @@ import * as uuid from 'uuid';
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const addTab = inject('addTab');
+const delTab = inject('delTab');
+
+const updateTitle = inject('updateTitle');
+const updateIcon = inject('updateIcon');
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -32,8 +36,6 @@ const emit = defineEmits([
 ]);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-
-const bntRef = ref(null);
 
 const isFirst = ref(false);
 
@@ -72,6 +74,23 @@ const onHidden = (e) => {
 onMounted(() => {
 
     isFirst.value = addTab(tabId, props.title, props.icon, onShow, onShown, onHide, onHidden);
+
+    watch(() => props.title, (title) => {
+
+        updateTitle(tabId, title);
+    });
+
+    watch(() => props.icon, (icon) => {
+
+        updateIcon(tabId, icon);
+    });
+});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+onUnmounted(() => {
+
+    delTab(tabId);
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
