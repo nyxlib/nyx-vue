@@ -2,7 +2,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {ref, watch, provide, nextTick, onMounted} from 'vue';
+import {ref, watch, provide, onMounted} from 'vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -69,7 +69,7 @@ onMounted(() => {
 
     watch(tabs, () => {
 
-        nextTick().then(() => {
+        setTimeout(() => {
 
             Object.values(tabs.value).forEach((tab) => {
 
@@ -83,7 +83,8 @@ onMounted(() => {
                     el.addEventListener('hidden.bs.tab', tab.onHidden);
                 }
             });
-        });
+
+        }, 500);
 
     }, {immediate: true});
 });

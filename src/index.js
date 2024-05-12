@@ -24,6 +24,9 @@ const setup = (app) => {
 
     app.use(mqttPlugin);
     app.use(indiPlugin);
+
+    app.component('NavTabs', NavTabs);
+    app.component('TabPane', TabPane);
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -35,9 +38,7 @@ export {
     IndiTopology,
     IndiVariables,
     IndiDashboard,
-    IndiMonitoring,
-    NavTabs,
-    TabPane,
+    IndiMonitoring
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
