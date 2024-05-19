@@ -2,7 +2,9 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {ref, watch, provide, onMounted} from 'vue';
+import {ref, provide} from 'vue';
+
+import {Tab} from 'bootstrap';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -31,11 +33,23 @@ provide('addTab', (tabId, tabTitle, tabIcon, onShow, onShown, onHide, onHidden) 
         tabId: tabId,
         tabTitle: tabTitle,
         tabIcon: tabIcon,
-        onShow: onShow,
-        onShown: onShown,
-        onHide: onHide,
-        onHidden: onHidden,
     };
+
+    setTimeout(() => {
+
+        const el = tabListRef.value.querySelector(`button[data-bs-target="#${tabId}"]`);
+
+        if(el)
+        {
+            Tab.getOrCreateInstance(el);
+
+            el.addEventListener('show.bs.tab', onShow);
+            el.addEventListener('shown.bs.tab', onShown);
+            el.addEventListener('hide.bs.tab', onHide);
+            el.addEventListener('hidden.bs.tab', onHidden);
+        }
+
+    }, 500);
 
     return Object.keys(tabs.value).length === 1;
 });
@@ -59,34 +73,6 @@ provide('updateTitle', (tabId, tabTitle) => {
 provide('updateIcon', (tabId, tabIcon) => {
 
     tabs.value[tabId].tabIcon = tabIcon;
-});
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-/* INITIALIZATION                                                                                                     */
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-onMounted(() => {
-
-    watch(tabs, () => {
-
-        setTimeout(() => {
-
-            Object.values(tabs.value).forEach((tab) => {
-
-                const el = tabListRef.value.querySelector(`button[data-bs-target="#${tab.tabId}"]`);
-
-                if(el)
-                {
-                    el.addEventListener('show.bs.tab', tab.onShow);
-                    el.addEventListener('shown.bs.tab', tab.onShown);
-                    el.addEventListener('hide.bs.tab', tab.onHide);
-                    el.addEventListener('hidden.bs.tab', tab.onHidden);
-                }
-            });
-
-        }, 500);
-
-    }, {immediate: true});
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
