@@ -23,13 +23,6 @@ const props = defineProps({
         default: 'horizontal',
         validator: (x) => ['horizontal', 'vertical'].includes(x),
     },
-    scroll: {
-        type: Array,
-        default: () => [
-            true,
-            true,
-        ],
-    },
     gutterSize: {
         type: Number,
         default: 3,
@@ -76,11 +69,11 @@ onMounted(async () => {
 
     <div :class="`d-flex ${direction === 'vertical' ? 'flex-column' : 'flex-row'} h-100 w-100`">
 
-        <div :class="['h-100', 'overflow-x-hidden', {'overflow-y-scroll': scroll[0], 'overflow-y--hidden': !scroll[0]}]" id="A63A8EE3">
+        <div class="h-100 overflow-x-hidden overflow-y-auto" id="A63A8EE3">
             <slot name="left"></slot>
         </div>
 
-        <div :class="['h-100', 'overflow-x-hidden', {'overflow-y-scroll': scroll[1], 'overflow-y-hidden': !scroll[1]}]" id="DE938E40">
+        <div class="h-100 overflow-x-hidden overflow-y-auto" id="DE938E40">
             <slot name="right"></slot>
         </div>
 
