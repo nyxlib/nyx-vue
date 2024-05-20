@@ -18,9 +18,9 @@ import * as uuid from 'uuid';
 
 import useIndiStore from '../stores/indi';
 
-import NavTabs from './controls/NavTabs.vue';
-import TabPane from './controls/TabPane.vue';
-import XXXChart from './controls/XXXChart.vue';
+import NavTabs from './ui/NavTabs.vue';
+import TabPane from './ui/TabPane.vue';
+import XXXChart from './chart/XXXChart.vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */

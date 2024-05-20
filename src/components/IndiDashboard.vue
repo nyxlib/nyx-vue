@@ -11,8 +11,8 @@ import useIndiStore from '../stores/indi';
 import IndiHome from "./dashboard/IndiHome.vue";
 import IndiDevice from './dashboard/IndiDevice.vue';
 
-import NavTabs from "./controls/NavTabs.vue";
-import TabPane from "./controls/TabPane.vue";
+import NavTabs from "./ui/NavTabs.vue";
+import TabPane from "./ui/TabPane.vue";
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */

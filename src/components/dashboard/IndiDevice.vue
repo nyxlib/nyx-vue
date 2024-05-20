@@ -6,8 +6,8 @@ import useIndiStore from '../../stores/indi';
 import IndiPanel from './IndiGroup.vue';
 import IndiConsole from './IndiConsole.vue';
 
-import NavTabs from '../controls/NavTabs.vue';
-import TabPane from '../controls/TabPane.vue';
+import NavTabs from '../ui/NavTabs.vue';
+import TabPane from '../ui/TabPane.vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -53,7 +53,7 @@ const indiStore = useIndiStore(window.pinia);
 
             <nav-tabs margin="mb-4" v-if="indiStore.isConnected">
 
-                <tab-pane :title="groupName" v-for="(groupInfo, groupName, groupIndex) in deviceInfo" :key="groupName">
+                <tab-pane :title="groupName" v-for="(groupInfo, groupName) in deviceInfo" :key="groupName">
 
                     <indi-panel :group-info="groupInfo" />
 

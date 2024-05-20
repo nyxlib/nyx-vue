@@ -1,4 +1,4 @@
-// noinspection JSUnresolvedReference
+// noinspection JSUnusedGlobalSymbols,JSUnresolvedReference
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import * as paho from 'paho-mqtt';
