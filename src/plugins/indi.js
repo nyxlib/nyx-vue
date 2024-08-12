@@ -77,7 +77,7 @@ const _init_func = (mqtt) => {
 
             .finally(() => {
 
-                timer = setInterval(() => mqtt.emit('indi/ping/client', clientIP), 5 * 1000);
+                timer = setInterval(() => mqtt.emit('nyx/ping/client', clientIP), 5 * 1000);
             })
 
             /*--------------------------------------------------------------------------------------------------------*/
@@ -94,11 +94,11 @@ const _init_func = (mqtt) => {
 
         if(connected)
         {
-            mqtt.subscribe('indi/json');
-            mqtt.subscribe('indi/ping/node');
-            mqtt.subscribe('indi/ping/client');
+            mqtt.subscribe('nyx/json');
+            mqtt.subscribe('nyx/ping/node');
+            mqtt.subscribe('nyx/ping/client');
 
-            mqtt.emit('indi/cmd/json', '{"<>": "getProperties", "@version": "1.7"}');
+            mqtt.emit('nyx/cmd/json', '{"<>": "getProperties", "@version": "1.7"}');
         }
     };
 

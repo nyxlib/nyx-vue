@@ -38,7 +38,7 @@ const sendMessage = () => {
 
     if(message)
     {
-        mqtt.emit('indi/cmd/json', message);
+        mqtt.emit('nyx/cmd/json', message);
     }
 };
 
