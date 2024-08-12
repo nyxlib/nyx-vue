@@ -7,19 +7,19 @@
         "lint": "./node_modules/eslint/bin/eslint.js ./src/"
     },
     "dependencies": {
-        "@vueform/multiselect": "^2.6.7",
+        "@vueform/multiselect": "^2.6.9",
         "@xterm/addon-web-links": "^0.11.0",
         "@xterm/xterm": "^5.5.0",
         "bootstrap": "^5.3.3",
         "bootstrap-icons": "^1.11.3",
         "chart.js": "^4.4.3",
         "d3": "^7.9.0",
-        "gridstack": "^10.1.2",
+        "gridstack": "^10.3.1",
         "split.js": "^1.6.5",
         "paho-mqtt": "^1.1.0",
-        "pinia": "^2.1.7",
-        "uuid": "^9.0.1",
-        "vue": "^3.4.27"
+        "pinia": "^2.2.1",
+        "uuid": "^10.0.0",
+        "vue": "^3.4.37"
     },
     "devDependencies": {},
     "author": "Jérôme Odier",
