@@ -26,6 +26,6 @@
     "license": "CeCILL",
     "repository": {
         "type": "git",
-        "url": "https://gitlab.in2p3.fr/lpsc-kid/indi-vue"
+        "url": "https://gitlab.in2p3.fr/lpsc-kid/nyx-vue"
     }
 }
