@@ -6,10 +6,10 @@ import {inject, computed, onMounted, onUnmounted} from 'vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import useIndiStore from '../stores/indi';
+import useNyxStore from '../stores/nyx';
 
-import IndiHome from "./dashboard/IndiHome.vue";
-import IndiDevice from './dashboard/IndiDevice.vue';
+import NyxHome from "./dashboard/NyxHome.vue";
+import NyxDevice from './dashboard/NyxDevice.vue';
 
 import NavTabs from "./ui/NavTabs.vue";
 import TabPane from "./ui/TabPane.vue";
@@ -25,12 +25,12 @@ const emit = defineEmits([
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const indi = inject('indi');
+const nyx = inject('nyx');
 const mqtt = inject('mqtt');
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const indiStore = useIndiStore(window.pinia);
+const nyxStore = useNyxStore(window.pinia);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
@@ -42,7 +42,7 @@ const devices = computed(() => {
         'Home': {}
     };
 
-    Object.values(indiStore.defXXXVectorDict).forEach((defXXXVector) => {
+    Object.values(nyxStore.defXXXVectorDict).forEach((defXXXVector) => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -89,14 +89,14 @@ const devices = computed(() => {
 
 onMounted(() => {
 
-    indi.init(mqtt);
+    nyx.init(mqtt);
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 onUnmounted(() => {
 
-    indi.final(mqtt);
+    nyx.final(mqtt);
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -114,9 +114,9 @@ onUnmounted(() => {
 
             <tab-pane class="align-items-center justify-content-center" :title="deviceName" icon="command" v-for="(deviceInfo, deviceName, deviceIndex) in devices" :key="deviceName">
 
-                <indi-home @connect="emit('connect')" @disconnect="emit('disconnect')" v-if="deviceIndex === 0" />
+                <nyx-home @connect="emit('connect')" @disconnect="emit('disconnect')" v-if="deviceIndex === 0" />
 
-                <indi-device :device-name="deviceName" :device-info="deviceInfo" :device-index="deviceIndex" v-else />
+                <nyx-device :device-name="deviceName" :device-info="deviceInfo" :device-index="deviceIndex" v-else />
 
             </tab-pane>
 
@@ -130,20 +130,20 @@ onUnmounted(() => {
 
     <teleport to="body">
 
-        <div class="modal" tabindex="-1" id="indi_console">
+        <div class="modal" tabindex="-1" id="nyx_console">
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
 
                     <div class="modal-header px-3 py-2">
                         <h5 class="modal-title">
                             <i class="bi bi-card-text"></i>
-                            {{ indiStore.curDeviceName }}
+                            {{ nyxStore.curDeviceName }}
                             [
-                                <button class="btn btn-xs btn-secondary" type="button" @click="indi.clearTerminal">
+                                <button class="btn btn-xs btn-secondary" type="button" @click="nyx.clearTerminal">
                                     <i class="bi bi-trash"></i>
                                     empty
                                     <span class="badge rounded-pill bg-danger">
-                                        {{ indiStore.numberOfMessages(indiStore.curDeviceName) }}
+                                        {{ nyxStore.numberOfMessages(nyxStore.curDeviceName) }}
                                     </span>
                                 </button>
                             ]
@@ -151,7 +151,7 @@ onUnmounted(() => {
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
 
-                    <div class="modal-body bg-black px-3 py-2" id="indi_terminal"></div>
+                    <div class="modal-body bg-black px-3 py-2" id="nyx_terminal"></div>
 
                 </div>
             </div>

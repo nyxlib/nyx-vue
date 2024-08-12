@@ -7,7 +7,7 @@ import {inject} from 'vue';
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const indi = inject('indi');
+const nyx = inject('nyx');
 const mqtt = inject('mqtt');
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -34,7 +34,7 @@ const COLORS = {
 
 const sendMessage = () => {
 
-    const message = indi.buildNewNumberVectorMessage(props.defNumberVector);
+    const message = nyx.buildNewNumberVectorMessage(props.defNumberVector);
 
     if(message)
     {

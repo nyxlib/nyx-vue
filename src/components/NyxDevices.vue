@@ -9,13 +9,13 @@ import * as uuid from 'uuid';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import useIndiStore from '../stores/indi';
+import useNyxStore from '../stores/nyx';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const indiStore = useIndiStore();
+const nyxStore = useNyxStore();
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -162,7 +162,7 @@ const deviceUp = (device1) => {
                                 :searchable="true"
                                 :create-option="false"
                                 :close-on-select="true"
-                                :options="indiStore.categoryDefs" v-model="device.category" />
+                                :options="nyxStore.categoryDefs" v-model="device.category" />
                         </td>
                         <td class="text-center">
                             <multiselect
@@ -171,7 +171,7 @@ const deviceUp = (device1) => {
                                 :searchable="true"
                                 :create-option="false"
                                 :close-on-select="true"
-                                :options="indiStore.deviceDefs" v-model="device.device" />
+                                :options="nyxStore.deviceDefs" v-model="device.device" />
                         </td>
                     </tr>
                 </tbody>

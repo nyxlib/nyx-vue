@@ -10,13 +10,13 @@ import * as d3 from 'd3';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import useIndiStore from '../stores/indi';
+import useNyxStore from '../stores/nyx';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const indiStore = useIndiStore(window.pinia);
+const nyxStore = useNyxStore(window.pinia);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -130,7 +130,7 @@ const updateLinks = () => {
 
     const links = d3.select(linkLayerEl.value).selectAll('line').data(graph.links);
 
-    const linksEnter = links.enter().append('line').attr('class', 'indi-topology-link');
+    const linksEnter = links.enter().append('line').attr('class', 'nyx-topology-link');
 
     linksEnter.merge(links);
 
@@ -168,9 +168,9 @@ const updateNodes = () => {
 
     nodesEnter.append('circle').attr('r', CIRCLE_DIAMETER).attr('fill', (d) => getColorFromType(d.type));
 
-    nodesEnter.append('text').attr('text-anchor', 'middle').attr('dominant-baseline', 'central').attr('class', 'indi-topology-icon').text((d) => getIconFromType(d.type));
+    nodesEnter.append('text').attr('text-anchor', 'middle').attr('dominant-baseline', 'central').attr('class', 'nyx-topology-icon').text((d) => getIconFromType(d.type));
 
-    nodesEnter.append('text').attr('text-anchor', 'right').attr('dominant-baseline', 'central').attr('class', 'indi-topology-label').attr('x', CIRCLE_DIAMETER + 5).text((d) => d.name);
+    nodesEnter.append('text').attr('text-anchor', 'right').attr('dominant-baseline', 'central').attr('class', 'nyx-topology-label').attr('x', CIRCLE_DIAMETER + 5).text((d) => d.name);
 
     nodesEnter.merge(nodes).call(d3.drag()
         .on('start', onDragStart)
@@ -189,9 +189,9 @@ const init = () => {
 
     timer = setInterval(() => {
 
-        update(indiStore.clientPingDict, TYPE_CLIENT);
+        update(nyxStore.clientPingDict, TYPE_CLIENT);
 
-        update(indiStore.nodePingDict, TYPE_NODE);
+        update(nyxStore.nodePingDict, TYPE_NODE);
 
     }, 1000);
 
@@ -324,7 +324,7 @@ const update = (pingDict, type) => {
 
         d3.select(nodeLayerEl.value).selectAll('circle')
                                     .filter((d) => d.type === type)
-                                    .classed('indi-topology-dead', (d) => (now - d.timestamp) > 10 * 1000)
+                                    .classed('nyx-topology-dead', (d) => (now - d.timestamp) > 10 * 1000)
         ;
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -376,7 +376,7 @@ onUnmounted(() => {
 <style>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-.indi-topology-link {
+.nyx-topology-link {
 
     stroke: #999;
     stroke-width: 2px;
@@ -386,7 +386,7 @@ onUnmounted(() => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-.indi-topology-dead {
+.nyx-topology-dead {
 
     fill: #999;
     stroke: #333;
@@ -396,7 +396,7 @@ onUnmounted(() => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-.indi-topology-icon {
+.nyx-topology-icon {
 
     fill: var(--bs-body-color);
     font-size: 1.75000000000rem;
@@ -405,7 +405,7 @@ onUnmounted(() => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-.indi-topology-label {
+.nyx-topology-label {
 
     fill: var(--bs-body-color);
     font-size: 0.7500000000000000rem;

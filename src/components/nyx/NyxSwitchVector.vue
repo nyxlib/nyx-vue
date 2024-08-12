@@ -7,13 +7,13 @@ import {inject} from 'vue';
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const indi = inject('indi');
+const nyx = inject('nyx');
 const mqtt = inject('mqtt');
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const props = defineProps({
-    defTextVector: {
+    defSwitchVector: {
         type: Object,
         default: {},
     },
@@ -32,9 +32,9 @@ const COLORS = {
 /* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const sendMessage = () => {
+const sendMessage = (index) => {
 
-    const message = indi.buildNewTextVectorMessage(props.defTextVector);
+    const message = nyx.buildNewSwitchVectorMessage(props.defSwitchVector, index);
 
     if(message)
     {
@@ -53,41 +53,23 @@ const sendMessage = () => {
 
         <!-- ******************************************************************************************************* -->
 
-        <label class="col-sm-2">
-            <span :class="`text-${COLORS[defTextVector['@state']]}`">
+        <label class="col-sm-2 text-start">
+            <span :class="`text-${COLORS[defSwitchVector['@state']]}`">
                 <i class="bi bi-circle-fill"></i>
             </span>
-            {{ defTextVector['@label'] || defTextVector['@name'] }}
+            {{ defSwitchVector['@label'] || defSwitchVector['@name'] }}
         </label>
 
         <!-- ******************************************************************************************************* -->
 
-        <div :class="{'col-sm-10': defTextVector['@perm'] === 'ro', 'col-sm-9': defTextVector['@perm'] !== 'ro'}">
+        <div class="col-sm-10 text-center">
+            <div class="btn-group btn-group-sm mb-1 w-50" role="group">
 
-            <template v-for="defText in defTextVector['children']">
+                <button class="btn" :class="{'btn-primary': defSwitch['$'] === 'On', 'btn-outline-secondary': defSwitch['$'] === 'Off', 'disabled': defSwitchVector['@perm'] === 'wo'}" :style="{'width': `${100.0 / props.defSwitchVector['children'].length}%`}" v-for="(defSwitch, index) in defSwitchVector['children']" :key="index" @click="sendMessage(index)">
+                    {{ defSwitch['@label'] || defSwitch['@name'] }}
+                </button>
 
-                <div class="input-group input-group-sm mb-1">
-
-                    <span class="input-group-text" style="min-width: 175px;">
-                        {{ defText['@label'] || defText['@name'] }}
-                    </span>
-
-                    <input class="form-control" type="text" :readonly="defTextVector['@perm'] === 'ro'" v-model="defText['$']" />
-
-                </div>
-
-            </template>
-
-        </div>
-
-        <!-- ******************************************************************************************************* -->
-
-        <div class="col-sm-1 pb-1" v-if="defTextVector['@perm'] !== 'ro'">
-
-            <button class="btn btn-xs btn-outline-primary h-100 w-100" @click="sendMessage">
-                Apply
-            </button>
-
+            </div>
         </div>
 
         <!-- ******************************************************************************************************* -->

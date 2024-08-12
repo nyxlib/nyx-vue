@@ -5,13 +5,13 @@ import {ref, computed} from 'vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import useIndiStore from '../stores/indi';
+import useNyxStore from '../stores/nyx';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const indiStore = useIndiStore(window.pinia);
+const nyxStore = useNyxStore(window.pinia);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -23,7 +23,7 @@ const filter = ref('');
 
 const filteredVariables = computed(() => {
 
-    return Object.fromEntries(Object.entries(indiStore.variables)
+    return Object.fromEntries(Object.entries(nyxStore.variables)
         .sort(([name1], [name2]) => name1.localeCompare(name2))
         .filter(([name]) => !filter.value || name.toLowerCase().includes(filter.value.toLowerCase())
     ));

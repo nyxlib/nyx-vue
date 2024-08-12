@@ -1,10 +1,10 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import useIndiStore from '../../stores/indi';
+import useNyxStore from '../../stores/nyx';
 
-import IndiPanel from './IndiGroup.vue';
-import IndiConsole from './IndiConsole.vue';
+import NyxPanel from './NyxGroup.vue';
+import NyxConsole from './NyxConsole.vue';
 
 import NavTabs from '../ui/NavTabs.vue';
 import TabPane from '../ui/TabPane.vue';
@@ -30,7 +30,7 @@ defineProps({
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const indiStore = useIndiStore(window.pinia);
+const nyxStore = useNyxStore(window.pinia);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 </script>
@@ -44,18 +44,18 @@ const indiStore = useIndiStore(window.pinia);
             <i class="bi bi-command"></i>
             {{ deviceName }}
             [
-                <indi-console :device-name="deviceName" />
+                <nyx-console :device-name="deviceName" />
             ]
         </div>
         <div class="card-body px-3 py-2">
 
             <!-- *************************************************************************************************** -->
 
-            <nav-tabs margin="mb-4" v-if="indiStore.isConnected">
+            <nav-tabs margin="mb-4" v-if="nyxStore.isConnected">
 
                 <tab-pane :title="groupName" v-for="(groupInfo, groupName) in deviceInfo" :key="groupName">
 
-                    <indi-panel :group-info="groupInfo" />
+                    <nyx-panel :group-info="groupInfo" />
 
                 </tab-pane>
 

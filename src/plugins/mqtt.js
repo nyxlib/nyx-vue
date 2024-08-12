@@ -7,7 +7,7 @@ import * as uuid from 'uuid';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import useIndiStore from '../stores/indi';
+import useNyxStore from '../stores/nyx';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -61,7 +61,7 @@ const _update_func = (endpoint, username, password) => {
 
                 _connected = true;
 
-                useIndiStore(window.pinia).isConnected = true;
+                useNyxStore(window.pinia).isConnected = true;
 
                 if(_connectionCallback) {
                     _connectionCallback(true);
@@ -74,7 +74,7 @@ const _update_func = (endpoint, username, password) => {
 
                 _connected = false;
 
-                useIndiStore(window.pinia).isConnected = false;
+                useNyxStore(window.pinia).isConnected = false;
 
                 if(_connectionCallback) {
                     _connectionCallback(false);

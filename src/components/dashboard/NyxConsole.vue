@@ -5,17 +5,17 @@ import {inject, onMounted, onUnmounted} from 'vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import useIndiStore from '../../stores/indi';
+import useNyxStore from '../../stores/nyx';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const indi = inject('indi');
+const nyx = inject('nyx');
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const indiStore = useIndiStore(window.pinia);
+const nyxStore = useNyxStore(window.pinia);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -37,9 +37,9 @@ let terminalEl = null;
 
 const setupAndUpdateTerminal = () => {
 
-    indi.setupTerminal(terminalEl, props.deviceName);
+    nyx.setupTerminal(terminalEl, props.deviceName);
 
-    indi.updateTerminal();
+    nyx.updateTerminal();
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -48,8 +48,8 @@ const setupAndUpdateTerminal = () => {
 
 onMounted(() => {
 
-    modalEl = document.getElementById('indi_console');
-    terminalEl = document.getElementById('indi_terminal');
+    modalEl = document.getElementById('nyx_console');
+    terminalEl = document.getElementById('nyx_terminal');
 
     /**/
 
@@ -70,11 +70,11 @@ onUnmounted(() => {
 
     <!-- *********************************************************************************************************** -->
 
-    <button class="btn btn-xs btn-secondary" type="button" data-bs-toggle="modal" data-bs-target="#indi_console">
+    <button class="btn btn-xs btn-secondary" type="button" data-bs-toggle="modal" data-bs-target="#nyx_console">
         <i class="bi bi-card-text"></i>
         logs
         <span class="badge rounded-pill bg-danger">
-            {{ indiStore.numberOfMessages(props.deviceName) }}
+            {{ nyxStore.numberOfMessages(props.deviceName) }}
             <span class="visually-hidden">available messages</span>
         </span>
     </button>

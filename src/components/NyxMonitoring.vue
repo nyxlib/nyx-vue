@@ -16,7 +16,7 @@ import * as uuid from 'uuid';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import useIndiStore from '../stores/indi';
+import useNyxStore from '../stores/nyx';
 
 import NavTabs from './ui/NavTabs.vue';
 import TabPane from './ui/TabPane.vue';
@@ -26,11 +26,11 @@ import XXXChart from './chart/XXXChart.vue';
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const indi = inject('indi');
+const nyx = inject('nyx');
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const indiStore = useIndiStore(window.pinia);
+const nyxStore = useNyxStore(window.pinia);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -145,7 +145,7 @@ const newWidgetStep1 = (id) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    Modal.getOrCreateInstance(document.getElementById('indi_metrics')).show();
+    Modal.getOrCreateInstance(document.getElementById('nyx_metrics')).show();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -187,7 +187,7 @@ const newWidgetStep2 = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    Modal.getOrCreateInstance(document.getElementById('indi_metrics')).hide();
+    Modal.getOrCreateInstance(document.getElementById('nyx_metrics')).hide();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -415,8 +415,8 @@ const refreshContent = () => {
 
             for(let i = 0; i < dataset.length; i++)
             {
-                const def1 = indiStore.resolve(metric.metric1[i]);
-                const def2 = indiStore.resolve(metric.metric2[i]);
+                const def1 = nyxStore.resolve(metric.metric1[i]);
+                const def2 = nyxStore.resolve(metric.metric2[i]);
 
                 if(def1 && def2)
                 {
@@ -437,7 +437,7 @@ const refreshContent = () => {
 
             for(let i = 0; i < dataset.length; i++)
             {
-                const def = indiStore.resolve(metric.metric1[i]);
+                const def = nyxStore.resolve(metric.metric1[i]);
 
                 if(def)
                 {
@@ -477,7 +477,7 @@ onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(indiStore.isConnected)
+    if(nyxStore.isConnected)
     {
         GridStack.initAll({removable: '#AAE7F472'}).forEach((grid) => {
 
@@ -536,7 +536,7 @@ onUnmounted(() => {
 
             <template v-slot:button>
 
-                <slot v-if="indiStore.isConnected"></slot>
+                <slot v-if="nyxStore.isConnected"></slot>
 
             </template>
 
@@ -548,11 +548,11 @@ onUnmounted(() => {
 
     <div class="position-absolute" style="right: 1rem; bottom: 1rem;">
 
-        <button class="btn btn-primary ms-0" type="button" data-bs-placement="top" data-bs-title="Add a new widget" :disabled="!indiStore.isConnected" @click="newWidgetStep1(null)">
+        <button class="btn btn-primary ms-0" type="button" data-bs-placement="top" data-bs-title="Add a new widget" :disabled="!nyxStore.isConnected" @click="newWidgetStep1(null)">
             <i class="bi bi-plus-lg"></i>
         </button>
 
-        <button class="btn btn-danger ms-1" type="button" data-bs-placement="top" data-bs-title="Drop here to remove" :disabled="!indiStore.isConnected" id="AAE7F472">
+        <button class="btn btn-danger ms-1" type="button" data-bs-placement="top" data-bs-title="Drop here to remove" :disabled="!nyxStore.isConnected" id="AAE7F472">
             <i class="bi bi-trash2"></i>
         </button>
 
@@ -564,7 +564,7 @@ onUnmounted(() => {
 
     <teleport to="body">
 
-        <div class="modal" tabindex="-1" id="indi_metrics">
+        <div class="modal" tabindex="-1" id="nyx_metrics">
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
 
@@ -693,7 +693,7 @@ onUnmounted(() => {
                                 :searchable="true"
                                 :create-option="false"
                                 :close-on-select="true"
-                                :options="Object.keys(indiStore.variables || {}).map((x) => ({value: x, label: x}))" v-model="state.metric1" />
+                                :options="Object.keys(nyxStore.variables || {}).map((x) => ({value: x, label: x}))" v-model="state.metric1" />
                         </div>
 
                         <div class="mb-3" v-if="state.plotType === 'scatter'">
@@ -705,7 +705,7 @@ onUnmounted(() => {
                                 :searchable="true"
                                 :create-option="false"
                                 :close-on-select="true"
-                                :options="Object.keys(indiStore.variables || {}).map((x) => ({value: x, label: x}))" v-model="state.metric2" />
+                                :options="Object.keys(nyxStore.variables || {}).map((x) => ({value: x, label: x}))" v-model="state.metric2" />
                         </div>
 
                         <!-- *************************************************************************************** -->

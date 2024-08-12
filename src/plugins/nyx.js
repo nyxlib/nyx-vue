@@ -9,7 +9,7 @@ import {WebLinksAddon} from '@xterm/addon-web-links';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import useIndiStore from '../stores/indi';
+import useNyxStore from '../stores/nyx';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -44,7 +44,7 @@ const _init_func = (mqtt) => {
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        let clientId = localStorage.getItem('indi-client-id');
+        let clientId = localStorage.getItem('nyx-client-id');
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -52,7 +52,7 @@ const _init_func = (mqtt) => {
         {
             clientId = uuid.v4().substring(0, 4).toUpperCase();
 
-            localStorage.setItem('indi-client-id', clientId);
+            localStorage.setItem('nyx-client-id', clientId);
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -145,15 +145,15 @@ const _final_func = (mqtt) => {
 
 const _processPing = (message, isNode) => {
 
-    const indiStore = useIndiStore(window.pinia);
+    const nyxStore = useNyxStore(window.pinia);
 
     if(isNode)
     {
-        indiStore.nodePingDict[message] = Date.now();
+        nyxStore.nodePingDict[message] = Date.now();
     }
     else
     {
-        indiStore.clientPingDict[message] = Date.now();
+        nyxStore.clientPingDict[message] = Date.now();
     }
 };
 
@@ -165,7 +165,7 @@ const _buildKey = (message) => `${message['@device']}:${message['@name']}`;
 
 const _processMessage = (message) => {
 
-    const indiStore = useIndiStore(window.pinia);
+    const nyxStore = useNyxStore(window.pinia);
 
     if('<>' in message)
     {
@@ -175,7 +175,7 @@ const _processMessage = (message) => {
 
         /**/ if(message['<>'].startsWith('def') && '@device' in message && '@name' in message && 'children' in message)
         {
-            indiStore.defXXXVectorDict[_buildKey(message)] = message;
+            nyxStore.defXXXVectorDict[_buildKey(message)] = message;
 
             message['children'].forEach((defXXX) => {
 
@@ -199,7 +199,7 @@ const _processMessage = (message) => {
 
         else if(message['<>'].startsWith('set') && '@device' in message && '@name' in message && 'children' in message)
         {
-            const vector = indiStore.defXXXVectorDict[_buildKey(message)];
+            const vector = nyxStore.defXXXVectorDict[_buildKey(message)];
 
             if(!vector)
             {
@@ -236,7 +236,7 @@ const _processMessage = (message) => {
 
         else if(message['<>'] === 'delProperty' && '@device' in message && '@name' in message)
         {
-            delete indiStore.defXXXVectorDict[_buildKey(message)];
+            delete nyxStore.defXXXVectorDict[_buildKey(message)];
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -247,13 +247,13 @@ const _processMessage = (message) => {
         {
             let list;
 
-            if(message['@device'] in indiStore.messageDict)
+            if(message['@device'] in nyxStore.messageDict)
             {
-                list = indiStore.messageDict[message['@device']] ; //;
+                list = nyxStore.messageDict[message['@device']] ; //;
             }
             else
             {
-                list = indiStore.messageDict[message['@device']] = [];
+                list = nyxStore.messageDict[message['@device']] = [];
             }
 
             list.unshift({
@@ -385,7 +385,7 @@ const _setupTerminal_func = (div, newDeviceName) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    useIndiStore(window.pinia).curDeviceName = newDeviceName;
+    useNyxStore(window.pinia).curDeviceName = newDeviceName;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -400,11 +400,11 @@ const _clearTerminal_func = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const indiStore = useIndiStore(window.pinia);
+    const nyxStore = useNyxStore(window.pinia);
 
-    if(indiStore.curDeviceName in indiStore.messageDict)
+    if(nyxStore.curDeviceName in nyxStore.messageDict)
     {
-        indiStore.messageDict[indiStore.curDeviceName].length = 0;
+        nyxStore.messageDict[nyxStore.curDeviceName].length = 0;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -420,11 +420,11 @@ const _updateTerminal_func = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const indiStore = useIndiStore(window.pinia);
+    const nyxStore = useNyxStore(window.pinia);
 
-    if(indiStore.curDeviceName in indiStore.messageDict)
+    if(nyxStore.curDeviceName in nyxStore.messageDict)
     {
-        indiStore.messageDict[indiStore.curDeviceName].map((x) => `${x.timestamp.replace('T', ' ')} - ${x.message}`).forEach((line) => TERMINAL.writeln(line));
+        nyxStore.messageDict[nyxStore.curDeviceName].map((x) => `${x.timestamp.replace('T', ' ')} - ${x.message}`).forEach((line) => TERMINAL.writeln(line));
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -436,7 +436,7 @@ export default {
 
     install(app)
     {
-        app.provide('indi', {
+        app.provide('nyx', {
             /* INITIALISATION */
             init: _init_func,
             final: _final_func,
