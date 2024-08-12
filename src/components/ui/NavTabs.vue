@@ -98,7 +98,7 @@ provide('updateIcon', (tabId, tabIcon) => {
 
         <!-- ******************************************************************************************************* -->
 
-        <div class="ms-auto">
+        <div class="ms-auto pb-2">
 
             <slot name="button"></slot>
 

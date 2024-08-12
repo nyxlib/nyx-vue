@@ -130,6 +130,7 @@ onMounted(() => {
 
     if(props.mode === 'temporal' && props.type !== 'scatter')
     {
+        // noinspection JSUnusedGlobalSymbols
         scale_x.ticks = {
             callback: () => {
 

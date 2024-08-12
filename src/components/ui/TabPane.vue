@@ -1,7 +1,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {ref, inject, onMounted, onUnmounted, watch} from 'vue';
+import {ref, watch, inject, onMounted, onUnmounted} from 'vue';
 
 import * as uuid from 'uuid';
 

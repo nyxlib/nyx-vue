@@ -112,15 +112,15 @@ const _init_func = (mqtt) => {
 
         try
         {
-            /**/ if(topic === 'indi/json')
+            /**/ if(topic === 'nyx/json')
             {
                 _processMessage(JSON.parse(payload));
             }
-            else if(topic === 'indi/ping/node')
+            else if(topic === 'nyx/ping/node')
             {
                 _processPing(payload, true);
             }
-            else if(topic === 'indi/ping/client')
+            else if(topic === 'nyx/ping/client')
             {
                 _processPing(payload, false);
             }
