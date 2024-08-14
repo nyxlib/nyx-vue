@@ -2,7 +2,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {onMounted} from 'vue';
+import {ref, nextTick, onMounted, onUnmounted} from 'vue';
 
 import Split from 'split.js';
 
@@ -21,11 +21,19 @@ const props = defineProps({
     direction: {
         type: String,
         default: 'horizontal',
-        validator: (x) => ['horizontal', 'vertical'].includes(x),
+        validator: (x) => ['horizontal', 'vertical', 'none'].includes(x),
     },
     gutterSize: {
         type: Number,
         default: 3,
+    },
+    leftId: {
+        type: String,
+        default: 'A63A8EE3',
+    },
+    rightId: {
+        type: String,
+        default: 'DE938E40',
     },
 });
 
@@ -36,28 +44,111 @@ const emit = defineEmits([
 ]);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+const currDirection = ref('none');
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+let splitter = null;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* FUNCTIONS                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const destroySplitter = () => {
+
+    if(splitter)
+    {
+        splitter.destroy();
+
+        splitter = null;
+    }
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const updateSplitter = () => {
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    let direction = (props.direction === 'horizontal') ? (window.innerWidth >= 768 ? 'horizontal' : 'none')
+                                                       : props.direction
+    ;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(currDirection.value !== direction)
+    {
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        destroySplitter();
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        currDirection.value = direction;
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        if(direction !== 'none')
+        {
+            nextTick(() => {
+
+                splitter = Split([
+                    `#${props.leftId}`,
+                    `#${props.rightId}`,
+                ], {
+                    sizes: props.sizes,
+                    direction: direction,
+                    gutterSize: props.gutterSize,
+                    onDragEnd: () => {
+
+                        emit('resize', {sizes: splitter.getSizes()});
+                    },
+                });
+
+                emit('resize', {sizes: splitter.getSizes()});
+            });
+        }
+        else
+        {
+            emit('resize', {sizes: [100, 100]});
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+    }
+    else
+    {
+        if(splitter)
+        {
+            emit('resize', {sizes: splitter.getSizes()});
+        }
+        else
+        {
+            emit('resize', {sizes: [100, 100]});
+        }
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* INITIALIZATION                                                                                                     */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 onMounted(async () => {
 
-    const splitter = Split([
-        '#A63A8EE3',
-        '#DE938E40',
-    ], {
-        sizes: props.sizes,
-        direction: props.direction,
-        gutterSize: props.gutterSize,
-        onDragEnd: () => {
+    window.addEventListener('resize', updateSplitter);
 
-            emit('resize', {sizes: splitter.getSizes()});
-        },
-    });
+    updateSplitter();
+});
 
-    window.addEventListener('resize', () => {
+/*--------------------------------------------------------------------------------------------------------------------*/
 
-        emit('resize', {sizes: splitter.getSizes()});
-    });
+onUnmounted(() => {
+
+    window.removeEventListener('resize', updateSplitter);
+
+    destroySplitter();
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -67,13 +158,13 @@ onMounted(async () => {
 
     <!-- *********************************************************************************************************** -->
 
-    <div :class="`d-flex ${direction === 'vertical' ? 'flex-column' : 'flex-row'} h-100 w-100`">
+    <div :class="currDirection !== 'none' ? ['d-flex', currDirection !== 'horizontal' ? 'flex-column' : 'flex-row', 'h-100', 'w-100'] : ['overflow-x-hidden', 'overflow-y-auto', 'h-100', 'w-100']">
 
-        <div class="h-100 overflow-x-hidden overflow-y-auto" id="A63A8EE3">
+        <div :class="currDirection !== 'none' ? ['overflow-x-hidden', 'overflow-y-auto', 'h-100'] : []" :id="leftId">
             <slot name="left"></slot>
         </div>
 
-        <div class="h-100 overflow-x-hidden overflow-y-auto" id="DE938E40">
+        <div :class="currDirection !== 'none' ? ['overflow-x-hidden', 'overflow-y-auto', 'h-100'] : []" :id="rightId">
             <slot name="right"></slot>
         </div>
 
