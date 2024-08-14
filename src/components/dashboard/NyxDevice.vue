@@ -6,9 +6,6 @@ import useNyxStore from '../../stores/nyx';
 import NyxPanel from './NyxGroup.vue';
 import NyxConsole from './NyxConsole.vue';
 
-import NavTabs from '../ui/NavTabs.vue';
-import TabPane from '../ui/TabPane.vue';
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
