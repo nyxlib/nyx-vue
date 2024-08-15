@@ -1,10 +1,6 @@
 // noinspection JSUnusedGlobalSymbols
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import 'bootstrap/dist/js/bootstrap.esm';
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 import nyxPlugin from './plugins/nyx';
 import mqttPlugin from './plugins/mqtt';
 
