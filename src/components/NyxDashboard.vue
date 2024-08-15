@@ -105,15 +105,23 @@ onUnmounted(() => {
     <!-- DASHBOARD                                                                                                  -->
     <!-- *********************************************************************************************************** -->
 
-    <div class="h-100 d-flex flex-column">
+    <div class="d-flex flex-column h-100">
 
         <nav-tabs margin="mb-4">
 
             <tab-pane class="align-items-center justify-content-center" :title="deviceName" icon="command" v-for="(deviceInfo, deviceName, deviceIndex) in devices" :key="deviceName">
 
-                <nyx-home @connect="emit('connect')" @disconnect="emit('disconnect')" v-if="deviceIndex === 0" />
+                <div class="d-flex align-items-center justify-content-center h-100">
 
-                <nyx-device :device-name="deviceName" :device-info="deviceInfo" :device-index="deviceIndex" v-else />
+                    <nyx-home @connect="emit('connect')" @disconnect="emit('disconnect')" v-if="deviceIndex === 0" />
+
+                    <nyx-device :device-name="deviceName"
+                                :device-info="deviceInfo"
+                                :device-index="deviceIndex"
+                                v-else
+                    />
+
+                </div>
 
             </tab-pane>
 
@@ -161,14 +169,6 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-.tab-content,
-.tab-pane.show {
-    display: flex;
-    width: 100%;
-}
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 .modal-body {
