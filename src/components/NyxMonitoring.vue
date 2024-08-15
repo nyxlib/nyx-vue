@@ -2,7 +2,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {h, inject, render, computed, reactive, onMounted, onUnmounted} from 'vue';
+import {h, render, computed, reactive, onMounted, onUnmounted} from 'vue';
 
 import {Modal, Tooltip} from 'bootstrap/dist/js/bootstrap.esm';
 
@@ -24,10 +24,6 @@ import XXXChart from './chart/XXXChart.vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const nyx = inject('nyx');
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const nyxStore = useNyxStore(window.pinia);
@@ -326,7 +322,7 @@ const clearWidget = (id) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const updateWidget = (e, widget) => {
+const updateWidget = (_, widget) => {
 
     widget.metric.x = widget.gridstackNode.x;
     widget.metric.y = widget.gridstackNode.y;
@@ -336,7 +332,7 @@ const updateWidget = (e, widget) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const removeWidget = (e, widget) => {
+const removeWidget = (_, widget) => {
 
     delete props.metrics[widget.metric.id];
 

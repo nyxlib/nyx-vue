@@ -64,7 +64,7 @@ const sendMessage = () => {
 
         <div :class="{'col-lg-10': defNumberVector['@perm'] === 'ro', 'col-lg-9': defNumberVector['@perm'] !== 'ro'}">
 
-            <template v-for="defNumber in defNumberVector['children']">
+            <template v-for="defNumber in defNumberVector['children']" :key="defNumber">
 
                 <div class="input-group input-group-sm mb-1">
 

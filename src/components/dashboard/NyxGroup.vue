@@ -24,7 +24,7 @@ defineProps({
 
     <!-- *********************************************************************************************************** -->
 
-    <div v-for="defXXXVector in Object.values(groupInfo)">
+    <div v-for="defXXXVector in Object.values(groupInfo)" :key="defXXXVector">
 
         <nyx-text-vector :def-text-vector="defXXXVector" v-if="defXXXVector['<>'] === 'defTextVector'" />
 

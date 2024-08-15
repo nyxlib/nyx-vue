@@ -64,7 +64,7 @@ const sendMessage = () => {
 
         <div :class="{'col-sm-10': defTextVector['@perm'] === 'ro', 'col-sm-9': defTextVector['@perm'] !== 'ro'}">
 
-            <template v-for="defText in defTextVector['children']">
+            <template v-for="defText in defTextVector['children']" :key="defText">
 
                 <div class="input-group input-group-sm mb-1">
 

@@ -143,7 +143,7 @@ const deviceUp = (device1) => {
                 <!-- *********************************************************************************************** -->
 
                 <tbody>
-                    <tr v-for="device in devices">
+                    <tr v-for="device in devices" :key="device">
                         <td class="text-center">
                             <button class="btn btn-sm btn-link" type="button" @click="deviceDw(device)">
                                 <i class="bi bi-caret-up-fill"></i>
