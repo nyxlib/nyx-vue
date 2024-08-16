@@ -5,7 +5,7 @@ import {createPinia} from 'pinia';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import * as Bootstrap from 'bootstrap/dist/js/bootstrap.esm';
+import * as Bootstrap from 'bootstrap';
 
 import ChartJS from 'chart.js/auto';
 

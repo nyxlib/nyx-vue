@@ -4,9 +4,9 @@
 
 import {h, render, computed, reactive, onMounted, onUnmounted} from 'vue';
 
-import {Modal, Tooltip} from 'bootstrap/dist/js/bootstrap.esm.js';
-
 import Multiselect from '@vueform/multiselect';
+
+import {Modal, Tooltip} from 'bootstrap';
 
 import {GridStack} from 'gridstack';
 

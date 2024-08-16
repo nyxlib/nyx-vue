@@ -4,7 +4,7 @@
 
 import {ref, provide} from 'vue';
 
-import {Tab} from 'bootstrap/dist/js/bootstrap.esm.js';
+import {Tab} from 'bootstrap';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
