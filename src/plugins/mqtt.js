@@ -61,7 +61,7 @@ const _update_func = (endpoint, username, password) => {
 
                 _connected = true;
 
-                useNyxStore(window.pinia).isConnected = true;
+                useNyxStore().isConnected = true;
 
                 if(_connectionCallback) {
                     _connectionCallback(true);
@@ -74,7 +74,7 @@ const _update_func = (endpoint, username, password) => {
 
                 _connected = false;
 
-                useNyxStore(window.pinia).isConnected = false;
+                useNyxStore().isConnected = false;
 
                 if(_connectionCallback) {
                     _connectionCallback(false);

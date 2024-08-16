@@ -145,7 +145,7 @@ const _final_func = (mqtt) => {
 
 const _processPing = (message, isNode) => {
 
-    const nyxStore = useNyxStore(window.pinia);
+    const nyxStore = useNyxStore();
 
     if(isNode)
     {
@@ -165,7 +165,7 @@ const _buildKey = (message) => `${message['@device']}:${message['@name']}`;
 
 const _processMessage = (message) => {
 
-    const nyxStore = useNyxStore(window.pinia);
+    const nyxStore = useNyxStore();
 
     if('<>' in message)
     {
@@ -385,7 +385,7 @@ const _setupTerminal_func = (div, newDeviceName) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    useNyxStore(window.pinia).curDeviceName = newDeviceName;
+    useNyxStore().curDeviceName = newDeviceName;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -400,7 +400,7 @@ const _clearTerminal_func = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const nyxStore = useNyxStore(window.pinia);
+    const nyxStore = useNyxStore();
 
     if(nyxStore.curDeviceName in nyxStore.messageDict)
     {
@@ -420,7 +420,7 @@ const _updateTerminal_func = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const nyxStore = useNyxStore(window.pinia);
+    const nyxStore = useNyxStore();
 
     if(nyxStore.curDeviceName in nyxStore.messageDict)
     {
