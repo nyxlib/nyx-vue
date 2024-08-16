@@ -139,7 +139,7 @@ const newWidgetStep1 = (id) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    __BOOTSTRAP__.Modal.getOrCreateInstance(document.getElementById('nyx_metrics')).show();
+    __NYX_BOOTSTRAP__.Modal.getOrCreateInstance(document.getElementById('nyx_metrics')).show();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -181,7 +181,7 @@ const newWidgetStep2 = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    __BOOTSTRAP__.Modal.getOrCreateInstance(document.getElementById('nyx_metrics')).hide();
+    __NYX_BOOTSTRAP__.Modal.getOrCreateInstance(document.getElementById('nyx_metrics')).hide();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -465,7 +465,7 @@ onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    new __BOOTSTRAP__.Tooltip(document.body, {
+    new __NYX_BOOTSTRAP__.Tooltip(document.body, {
         selector: '[data-bs-title]'
     });
 
