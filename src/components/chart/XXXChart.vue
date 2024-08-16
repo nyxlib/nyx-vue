@@ -145,7 +145,7 @@ onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    chart = new window.__NYX_CHARTJS__(canvas.value, {
+    chart = new __NYX_CHARTJS__(canvas.value, {
         type: props.type,
         data: {
             labels: props_labelset,
