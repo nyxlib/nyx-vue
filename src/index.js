@@ -1,6 +1,10 @@
 // noinspection JSUnusedGlobalSymbols
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+import * as Bootstrap from 'bootstrap/dist/js/bootstrap.esm';
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 import nyxPlugin from './plugins/nyx';
 import mqttPlugin from './plugins/mqtt';
 
@@ -19,6 +23,8 @@ import NyxMonitoring from './components/NyxMonitoring.vue'
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const setup = (app) => {
+
+    window.__BOOTSTRAP__ = Bootstrap;
 
     app.use(mqttPlugin);
     app.use(nyxPlugin);

@@ -4,8 +4,6 @@
 
 import {ref, provide} from 'vue';
 
-import {Tab} from 'bootstrap/dist/js/bootstrap.esm';
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -41,7 +39,7 @@ provide('addTab', (tabId, tabTitle, tabIcon, onShow, onShown, onHide, onHidden) 
 
         if(el)
         {
-            Tab.getOrCreateInstance(el);
+            __BOOTSTRAP__.Tab.getOrCreateInstance(el);
 
             el.addEventListener('show.bs.tab', onShow);
             el.addEventListener('shown.bs.tab', onShown);
