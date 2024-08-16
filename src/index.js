@@ -5,6 +5,10 @@ import * as Bootstrap from 'bootstrap/dist/js/bootstrap.esm';
 
 import ChartJS from 'chart.js/auto';
 
+import * as uuid from 'uuid';
+
+import * as d3 from 'd3';
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import nyxPlugin from './plugins/nyx';
@@ -30,6 +34,8 @@ const setup = (app) => {
 
     window.__NYX_BOOTSTRAP__ = Bootstrap;
     window.__NYX_CHARTJS__ = ChartJS;
+    window.__NYX_UUID__ = uuid;
+    window.__NYX_D3__ = d3;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
