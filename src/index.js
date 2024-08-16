@@ -3,6 +3,8 @@
 
 import * as Bootstrap from 'bootstrap/dist/js/bootstrap.esm';
 
+import ChartJS from 'chart.js/auto';
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import nyxPlugin from './plugins/nyx';
@@ -24,10 +26,17 @@ import NyxMonitoring from './components/NyxMonitoring.vue'
 
 const setup = (app) => {
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     window.__BOOTSTRAP__ = Bootstrap;
+    window.__CHARTJS__ = ChartJS;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     app.use(mqttPlugin);
     app.use(nyxPlugin);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     app.component('Splitter', Splitter);
     app.component('NavTabs', NavTabs);
@@ -38,6 +47,8 @@ const setup = (app) => {
     app.component('NyxVariables', NyxVariables);
     app.component('NyxDashboard', NyxDashboard);
     app.component('NyxMonitoring', NyxMonitoring);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
