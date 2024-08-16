@@ -4,6 +4,8 @@
 
 import {h, render, computed, reactive, onMounted, onUnmounted} from 'vue';
 
+import {Modal, Tooltip} from 'bootstrap/dist/js/bootstrap.esm.js';
+
 import Multiselect from '@vueform/multiselect';
 
 import {GridStack} from 'gridstack';
@@ -139,7 +141,7 @@ const newWidgetStep1 = (id) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    __NYX_BOOTSTRAP__.Modal.getOrCreateInstance(document.getElementById('nyx_metrics')).show();
+    Modal.getOrCreateInstance(document.getElementById('nyx_metrics')).show();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -181,7 +183,7 @@ const newWidgetStep2 = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    __NYX_BOOTSTRAP__.Modal.getOrCreateInstance(document.getElementById('nyx_metrics')).hide();
+    Modal.getOrCreateInstance(document.getElementById('nyx_metrics')).hide();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -465,7 +467,7 @@ onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    new __NYX_BOOTSTRAP__.Tooltip(document.body, {
+    Tooltip.getOrCreateInstance(document.body, {
         selector: '[data-bs-title]'
     });
 
