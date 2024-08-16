@@ -145,7 +145,7 @@ onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    chart = new __CHARTJS__(canvas.value, {
+    chart = new window.__CHARTJS__(canvas.value, {
         type: props.type,
         data: {
             labels: props_labelset,
