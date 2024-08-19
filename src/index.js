@@ -66,21 +66,6 @@ const setup = (app, pinia = null) => {
     app.component('NyxMonitoring', NyxMonitoring);
 
     /*----------------------------------------------------------------------------------------------------------------*/
-
-    document.addEventListener('click', (event) => {
-
-        if(event.target && event.target.getAttribute('data-bs-dismiss') === 'card')
-        {
-            const card = event.target.closest('.card');
-
-            if(card)
-            {
-                card.remove();
-            }
-        }
-    });
-
-    /*----------------------------------------------------------------------------------------------------------------*/
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
