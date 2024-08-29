@@ -1,8 +1,8 @@
-<!--suppress JSUnusedLocalSymbols, JSUnresolvedReference -->
+<!--suppress JSUnresolvedReference -->
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {ref, provide} from 'vue';
+import {ref, provide, nextTick, computed} from 'vue';
 
 import {Tab} from 'bootstrap';
 
@@ -24,18 +24,23 @@ const tabs = ref({});
 const tabListRef = ref(null);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+const sortedTabs = computed(() => [...Object.values(tabs.value)].sort((x, y) => x.tabRank - y.tabRank));
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-provide('addTab', (tabId, tabTitle, tabIcon, onShow, onShown, onHide, onHidden) => {
+provide('addTab', (tabId, tabRank, tabTitle, tabIcon, onShow, onShown, onHide, onHidden) => {
 
     tabs.value[tabId] = {
         tabId: tabId,
+        tabRank: tabRank,
         tabTitle: tabTitle,
         tabIcon: tabIcon,
     };
 
-    setTimeout(() => {
+    nextTick(() => {
 
         const el = tabListRef.value.querySelector(`button[data-bs-target="#${tabId}"]`);
 
@@ -48,8 +53,7 @@ provide('addTab', (tabId, tabTitle, tabIcon, onShow, onShown, onHide, onHidden) 
             el.addEventListener('hide.bs.tab', onHide);
             el.addEventListener('hidden.bs.tab', onHidden);
         }
-
-    }, 500);
+    });
 
     return Object.keys(tabs.value).length === 1;
 });
@@ -88,7 +92,7 @@ provide('updateIcon', (tabId, tabIcon) => {
 
         <!-- ******************************************************************************************************* -->
 
-        <button :class="['nav-link', 'px-3', 'py-2', {'active': idx === 0}]" type="button" data-bs-toggle="tab" :data-bs-target="`#${tab.tabId}`" role="tab" v-for="(tab, _, idx) in tabs" :key="idx">
+        <button :class="['nav-link', 'px-3', 'py-2', {'active': idx === 0}]" type="button" data-bs-toggle="tab" :data-bs-target="`#${tab.tabId}`" role="tab" v-for="(tab, idx) in sortedTabs" :key="tab.tabId">
 
             <i :class="['bi', `bi-${tab.tabIcon}`]" v-if="tab.tabIcon"></i>
 

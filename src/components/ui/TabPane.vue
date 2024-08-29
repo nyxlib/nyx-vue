@@ -24,8 +24,12 @@ const props = defineProps({
     },
     icon: {
         type: String,
-        default: ''
+        default: '',
     },
+    rank: {
+        type: Number,
+        default: -1,
+    }
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -73,7 +77,7 @@ const onHidden = (e) => {
 
 onMounted(() => {
 
-    isFirst.value = addTab(tabId, props.title, props.icon, onShow, onShown, onHide, onHidden);
+    isFirst.value = addTab(tabId, props.rank, props.title, props.icon, onShow, onShown, onHide, onHidden);
 
     watch(() => props.title, (title) => {
 
