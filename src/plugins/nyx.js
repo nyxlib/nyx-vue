@@ -331,7 +331,7 @@ const _buildNewSwitchVectorMessage_func = (defSwitchVector, index) => {
                 result['children'].push({
                     '<>': 'oneSwitch',
                     '@name': def['@name'],
-                    '$': def['$'] !== 'Off' ? 'Off' : 'On',
+                    '$': 'On',
                 });
             }
 
