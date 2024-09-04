@@ -316,60 +316,15 @@ const _buildNewSwitchVectorMessage_func = (defSwitchVector, index) => {
 
     const result = {'<>': 'newSwitchVector', '@device': defSwitchVector['@device'], '@name': defSwitchVector['@name'], 'children': []};
 
-    switch(defSwitchVector['@rule'])
+    const def = defSwitchVector['children'][index];
+
+    if(def)
     {
-        /*------------------------------------------------------------------------------------------------------------*/
-        /* OneOfMany                                                                                                  */
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        case 'OneOfMany':
-
-            defSwitchVector['children'].forEach((def, INDEX) => {
-
-                result['children'].push({
-                    '<>': 'oneSwitch',
-                    '@name': def['@name'],
-                    '$': index === INDEX ? 'On' : 'Off',
-                });
-            });
-
-            break;
-
-        /*------------------------------------------------------------------------------------------------------------*/
-        /* AtMostOne                                                                                                  */
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        case 'AtMostOne':
-
-            defSwitchVector['children'].forEach((def, INDEX) => {
-
-                result['children'].push({
-                    '<>': 'oneSwitch',
-                    '@name': def['@name'],
-                    '$': index === INDEX ? (def['$'] === 'On' ? 'Off' : 'On') : 'Off',
-                });
-            });
-
-            break;
-
-        /*------------------------------------------------------------------------------------------------------------*/
-        /* AnyOfMany                                                                                                  */
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        case 'AnyOfMany':
-
-            defSwitchVector['children'].forEach((def, INDEX) => {
-
-                result['children'].push({
-                    '<>': 'oneSwitch',
-                    '@name': def['@name'],
-                    '$': index === INDEX ? (def['$'] === 'On' ? 'Off' : 'On') : def['$'],
-                });
-            });
-
-            break;
-
-        /*------------------------------------------------------------------------------------------------------------*/
+        result['children'].push({
+            '<>': 'oneSwitch',
+            '@name': def['@name'],
+            '$': (defSwitchVector['@rule'] !== 'OneOfMany') ? (def['$'] !== 'Off' ? 'Off' : 'On') : 'On',
+        });
     }
 
     return JSON.stringify(result);

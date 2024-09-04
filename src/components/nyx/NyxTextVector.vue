@@ -38,6 +38,8 @@ const sendMessage = () => {
 
     if(message)
     {
+        props.defTextVector['@state'] = 'Busy';
+
         mqtt.emit('nyx/cmd/json', message);
     }
 };
@@ -53,12 +55,13 @@ const sendMessage = () => {
 
         <!-- ******************************************************************************************************* -->
 
-        <label class="col-sm-2">
-            <span :class="`text-${COLORS[defTextVector['@state']]}`">
-                <i class="bi bi-circle-fill"></i>
-            </span>
+        <div class="col-sm-2">
+
+            <i :class="['bi', 'bi-circle-fill', `text-${COLORS[defTextVector['@state']]}`]"></i>
+
             {{ defTextVector['@label'] || defTextVector['@name'] }}
-        </label>
+
+        </div>
 
         <!-- ******************************************************************************************************* -->
 
