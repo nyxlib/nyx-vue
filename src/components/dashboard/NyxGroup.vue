@@ -13,7 +13,7 @@ import NyxLightVector from '../nyx/NyxLightVector.vue';
 defineProps({
     groupInfo: {
         type: Object,
-        default: {},
+        default: () => {},
     },
 });
 

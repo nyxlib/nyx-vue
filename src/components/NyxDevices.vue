@@ -74,7 +74,7 @@ const deviceDw = (device1) => {
 
     const index = array.findIndex((device2) => device2.id === device1.id);
 
-    if(index > 0x0000000000)
+    if(index > 0x00000000000000)
     {
         const device2 = array[index - 1];
 
@@ -91,7 +91,7 @@ const deviceUp = (device1) => {
 
     const index = array.findIndex(device2 => device2.id === device1.id);
 
-    if(index < array.length)
+    if(index < array.length - 1)
     {
         const device2 = array[index + 1];
 

@@ -1,7 +1,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {inject} from 'vue';
+import {inject, computed} from 'vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -15,7 +15,7 @@ const mqtt = inject('mqtt');
 const props = defineProps({
     defSwitchVector: {
         type: Object,
-        default: {},
+        default: () => {},
     },
 });
 

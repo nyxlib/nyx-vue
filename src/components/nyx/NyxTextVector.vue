@@ -15,7 +15,7 @@ const mqtt = inject('mqtt');
 const props = defineProps({
     defTextVector: {
         type: Object,
-        default: {},
+        default: () => {},
     },
 });
 

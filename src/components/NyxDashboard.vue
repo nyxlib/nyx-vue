@@ -2,7 +2,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {inject, computed, onMounted, onUnmounted} from 'vue';
+import {inject, computed, reactive, onMounted, onUnmounted} from 'vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -77,7 +77,7 @@ const devices = computed(() => {
         /*------------------------------------------------------------------------------------------------------------*/
     });
 
-    return result;
+    return reactive(result);
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -117,7 +117,6 @@ onUnmounted(() => {
 
                     <nyx-device :device-name="deviceName"
                                 :device-info="deviceInfo"
-                                :device-index="deviceIndex"
                                 v-else
                     />
 
