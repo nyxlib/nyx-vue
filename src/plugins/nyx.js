@@ -44,9 +44,11 @@ const _init_func = (mqtt) => {
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
-        let clientId = localStorage.getItem('nyx-client-id');
+        const nyxStore = useNyxStore();
 
         /*------------------------------------------------------------------------------------------------------------*/
+
+        let clientId = localStorage.getItem('nyx-client-id');
 
         if(!clientId)
         {
@@ -57,7 +59,7 @@ const _init_func = (mqtt) => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        let clientIP = null;
+        let clientIPId = null;
 
         fetch('https://api.ipify.org?format=json').then(response => response.json())
 
@@ -65,19 +67,22 @@ const _init_func = (mqtt) => {
 
             .then((data) => {
 
-                clientIP = `${data.ip}-${clientId}`;
+                clientIPId = `${data.ip}-${clientId}`;
             })
 
             .catch(() => {
 
-                clientIP = `NOIP-${clientId}`;
+
+                clientIPId = `NOIP-${clientId}`;
             })
 
             /*--------------------------------------------------------------------------------------------------------*/
 
             .finally(() => {
 
-                timer = setInterval(() => mqtt.emit('nyx/ping/client', clientIP), 5 * 1000);
+                nyxStore.clientId = clientIPId;
+
+                timer = setInterval(() => mqtt.emit('nyx/ping/client', clientIPId), 5 * 1000);
             })
 
             /*--------------------------------------------------------------------------------------------------------*/
@@ -272,7 +277,7 @@ const _processMessage = (message) => {
 
 const _buildNewTextVectorMessage_func = (defTextVector) => {
 
-    const result = {'<>': 'newTextVector', '@device': defTextVector['@device'], '@name': defTextVector['@name'], 'children': []};
+    const result = {'<>': 'newTextVector', '@client': useNyxStore().clientId, '@device': defTextVector['@device'], '@name': defTextVector['@name'], 'children': []};
 
     defTextVector['children'].forEach((defText) => {
 
@@ -293,7 +298,7 @@ const _buildNewTextVectorMessage_func = (defTextVector) => {
 
 const _buildNewNumberVectorMessage_func = (defNumberVector) => {
 
-    const result = {'<>': 'newNumberVector', '@device': defNumberVector['@device'], '@name': defNumberVector['@name'], 'children': []};
+    const result = {'<>': 'newNumberVector', '@client': useNyxStore().clientId, '@device': defNumberVector['@device'], '@name': defNumberVector['@name'], 'children': []};
 
     defNumberVector['children'].forEach((defNumber) => {
 
@@ -314,7 +319,7 @@ const _buildNewNumberVectorMessage_func = (defNumberVector) => {
 
 const _buildNewSwitchVectorMessage_func = (defSwitchVector, index) => {
 
-    const result = {'<>': 'newSwitchVector', '@device': defSwitchVector['@device'], '@name': defSwitchVector['@name'], 'children': []};
+    const result = {'<>': 'newSwitchVector', '@client': useNyxStore().clientId, '@device': defSwitchVector['@device'], '@name': defSwitchVector['@name'], 'children': []};
 
     switch(defSwitchVector['@rule'])
     {

@@ -35,6 +35,7 @@ const useNyxStore = defineStore('nyx', {
         /*------------------------------------------------------------------------------------------------------------*/
 
         return {
+            clientId: '',
             isConnected: false,
             curDeviceName: '---',
             /**/
