@@ -19,8 +19,9 @@ import * as d3GeoProjection from 'd3-geo-projection';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import nyxPlugin from './plugins/nyx';
 import mqttPlugin from './plugins/mqtt';
+import nssPlugin from './plugins/nss';
+import nyxPlugin from './plugins/nyx';
 
 import useNyxStore from './stores/nyx';
 
@@ -60,6 +61,7 @@ const setup = (app, pinia = null) => {
     /*----------------------------------------------------------------------------------------------------------------*/
 
     app.use(mqttPlugin);
+    app.use(nssPlugin);
     app.use(nyxPlugin);
 
     /*----------------------------------------------------------------------------------------------------------------*/

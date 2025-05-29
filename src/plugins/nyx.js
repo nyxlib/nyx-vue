@@ -29,12 +29,14 @@ TERMINAL.loadAddon(new WebLinksAddon());
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 let timer = null;
+let mqtt = null;
+let nss = null;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const _init_func = (mqtt) => {
+const _init_func = (_mqtt, _nss) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* SETUP PING MECHANISM                                                                                           */
@@ -82,7 +84,7 @@ const _init_func = (mqtt) => {
 
                 nyxStore.clientId = clientIPId;
 
-                timer = setInterval(() => mqtt.emit('nyx/ping/client', clientIPId), 5 * 1000);
+                timer = setInterval(() => _mqtt.emit('nyx/ping/client', clientIPId), 5 * 1000);
             })
 
             /*--------------------------------------------------------------------------------------------------------*/
@@ -99,21 +101,21 @@ const _init_func = (mqtt) => {
 
         if(connected)
         {
-            mqtt.subscribe('nyx/json');
-            mqtt.subscribe('nyx/ping/node');
-            mqtt.subscribe('nyx/ping/client');
+            _mqtt.subscribe('nyx/json');
+            _mqtt.subscribe('nyx/ping/node');
+            _mqtt.subscribe('nyx/ping/client');
 
-            mqtt.emit('nyx/cmd/json', '{"<>": "getProperties", "@version": "1.7"}');
+            _mqtt.emit('nyx/cmd/json', '{"<>": "getProperties", "@version": "1.7"}');
         }
     };
 
-    mqtt.setConnectionCallback(_getProperties);
+    _mqtt.setConnectionCallback(_getProperties);
 
-    _getProperties(mqtt.connected());
+    _getProperties(_mqtt.connected());
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    mqtt.setMessageCallback((topic, payload) => {
+    _mqtt.setMessageCallback((topic, payload) => {
 
         try
         {
@@ -137,13 +139,27 @@ const _init_func = (mqtt) => {
     });
 
     /*----------------------------------------------------------------------------------------------------------------*/
+
+    mqtt = _mqtt;
+    nss = _nss;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const _final_func = (mqtt) => {
+const _final_func = () => {
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     mqtt.setConnectionCallback(null);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    mqtt = null;
+    nss = null;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -178,11 +194,9 @@ const _processMessage = (message) => {
         /* DEF* VECTORS                                                                                               */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        /**/ if(message['<>'].startsWith('def') && '@device' in message && '@name' in message)
+        /**/ if(message['<>'].startsWith('def') && '@device' in message && '@name' in message && 'children' in message)
         {
             nyxStore.defXXXVectorDict[_buildKey(message)] = message;
-
-            message['children'] = message['children'] || [];
 
             message['children'].forEach((defXXX) => {
 
@@ -196,7 +210,16 @@ const _processMessage = (message) => {
                     ;
                 }
 
-                defXXX['@orig'] = defXXX['$'];
+                if(message['<>'] === 'defStreamVector')
+                {
+                    defXXX['$'] = nss.endpoint() ? new URL(`streams/${message['@device']}/${message['@name']}`, nss.endpoint()).toString()
+                                                 : ''
+                    ;
+                }
+                else
+                {
+                    defXXX['@orig'] = defXXX['$'];
+                }
             });
         }
 
@@ -204,7 +227,7 @@ const _processMessage = (message) => {
         /* SET* VECTORS                                                                                               */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        else if(message['<>'].startsWith('set') && '@device' in message && '@name' in message)
+        else if(message['<>'].startsWith('set') && '@device' in message && '@name' in message && 'children' in message)
         {
             const vector = nyxStore.defXXXVectorDict[_buildKey(message)];
 
@@ -213,19 +236,16 @@ const _processMessage = (message) => {
                 return;
             }
 
-            if('children' in message)
+            const children1 = message['children'];
+            const children2 = vector['children'];
+
+            for(let i = 0, j = Math.min(children1.length, children2.length); i < j; i++)
             {
-                const children1 = message['children'];
-                const children2 = vector['children'];
-
-                for(let i = 0, j = Math.min(children1.length, children2.length); i < j; i++)
+                if('$' in children1[i] && children2[i]['$'] !== children1[i]['$'])
                 {
-                    if('$' in children1[i] && children2[i]['$'] !== children1[i]['$'])
-                    {
-                        children2[i]['@orig'] = children1[i]['$'];
+                    children2[i]['@orig'] = children1[i]['$'];
 
-                        children2[i]['$'] = children1[i]['$'];
-                    }
+                    children2[i]['$'] = children1[i]['$'];
                 }
             }
 

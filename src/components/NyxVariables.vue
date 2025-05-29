@@ -94,8 +94,8 @@ const filteredStreams = computed(() => {
                         </thead>
                         <tbody>
                             <tr v-for="(value, name) in filteredVariables" :key="name">
-                                <td><i>{{name}}</i></td>
-                                <td>{{value['$']}}</td>
+                                <td class="user-select-all"><i>{{name}}</i></td>
+                                <td class="user-select-all">{{value['$']}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -122,16 +122,16 @@ const filteredStreams = computed(() => {
 
                     <table class="table table-sm table-striped">
                         <thead>
-                        <tr>
-                            <th style="width: 66.66%;">BLOB</th>
-                            <th style="width: 33.33%;">Value</th>
-                        </tr>
+                            <tr>
+                                <th style="width: 66.66%;">BLOB</th>
+                                <th style="width: 33.33%;">Value</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="(value, name) in filteredBLOBs" :key="name">
-                            <td><i>{{name}}</i></td>
-                            <td>...</td>
-                        </tr>
+                            <tr v-for="(value, name) in filteredBLOBs" :key="name">
+                                <td class="user-select-all"><i>{{name}}</i></td>
+                                <td class="user-select-all">...</td>
+                            </tr>
                         </tbody>
                     </table>
 
@@ -157,16 +157,16 @@ const filteredStreams = computed(() => {
 
                     <table class="table table-sm table-striped">
                         <thead>
-                        <tr>
-                            <th style="width: 66.66%;">Stream</th>
-                            <th style="width: 33.33%;">URL</th>
-                        </tr>
+                            <tr>
+                                <th style="width: 33.33%;">Stream</th>
+                                <th style="width: 66.66%;">URL</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="(value, name) in filteredStreams" :key="name">
-                            <td><i>{{name}}</i></td>
-                            <td>{{value['$']}}</td>
-                        </tr>
+                            <tr v-for="(value, name) in filteredStreams" :key="name">
+                                <td class="user-select-all"><i>{{name}}</i></td>
+                                <td class="user-select-all">{{value['$']}}</td>
+                            </tr>
                         </tbody>
                     </table>
 
