@@ -7,11 +7,15 @@ import {createPinia} from 'pinia';
 
 import * as Bootstrap from 'bootstrap';
 
+import flatpickr from 'flatpickr';
+
 import ChartJS from 'chart.js/auto';
 
 import * as uuid from 'uuid';
 
 import * as d3 from 'd3';
+
+import * as d3GeoProjection from 'd3-geo-projection';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -37,9 +41,14 @@ const setup = (app, pinia = null) => {
     /*----------------------------------------------------------------------------------------------------------------*/
 
     window.__NYX_BOOTSTRAP__ = Bootstrap;
+	window.__NYX_FLATPICKR__ = flatpickr;
     window.__NYX_CHARTJS__ = ChartJS;
     window.__NYX_UUID__ = uuid;
-    window.__NYX_D3__ = d3;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    window.__NYX_D3__                = d3             ;
+    window.__NYX_D3_GEO_PROJECTION__ = d3GeoProjection;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 

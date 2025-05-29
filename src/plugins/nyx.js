@@ -178,9 +178,11 @@ const _processMessage = (message) => {
         /* DEF* VECTORS                                                                                               */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        /**/ if(message['<>'].startsWith('def') && '@device' in message && '@name' in message && 'children' in message)
+        /**/ if(message['<>'].startsWith('def') && '@device' in message && '@name' in message)
         {
             nyxStore.defXXXVectorDict[_buildKey(message)] = message;
+
+            message['children'] = message['children'] || [];
 
             message['children'].forEach((defXXX) => {
 
@@ -202,7 +204,7 @@ const _processMessage = (message) => {
         /* SET* VECTORS                                                                                               */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        else if(message['<>'].startsWith('set') && '@device' in message && '@name' in message && 'children' in message)
+        else if(message['<>'].startsWith('set') && '@device' in message && '@name' in message)
         {
             const vector = nyxStore.defXXXVectorDict[_buildKey(message)];
 
@@ -211,16 +213,19 @@ const _processMessage = (message) => {
                 return;
             }
 
-            const children1 = message['children'];
-            const children2 = vector['children'];
-
-            for(let i = 0, j = Math.min(children1.length, children2.length); i < j; i++)
+            if('children' in message)
             {
-                if('$' in children1[i] && children2[i]['$'] !== children1[i]['$'])
-                {
-                    children2[i]['@orig'] = children1[i]['$'];
+                const children1 = message['children'];
+                const children2 = vector['children'];
 
-                    children2[i]['$'] = children1[i]['$'];
+                for(let i = 0, j = Math.min(children1.length, children2.length); i < j; i++)
+                {
+                    if('$' in children1[i] && children2[i]['$'] !== children1[i]['$'])
+                    {
+                        children2[i]['@orig'] = children1[i]['$'];
+
+                        children2[i]['$'] = children1[i]['$'];
+                    }
                 }
             }
 
