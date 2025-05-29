@@ -198,29 +198,48 @@ const _processMessage = (message) => {
         {
             nyxStore.defXXXVectorDict[_buildKey(message)] = message;
 
-            message['children'].forEach((defXXX) => {
+            if(message['<>'] === 'defStreamVector')
+            {
+                /*----------------------------------------------------------------------------------------------------*/
+                /* STREAMS                                                                                            */
+                /*----------------------------------------------------------------------------------------------------*/
 
-                if('@format' in defXXX)
-                {
-                    const m = /%\d*(?:\.(\d+))?f/.exec(defXXX['@format'].toString());
+                const url = nss.endpoint() ? new URL(`streams/${message['@device']}/${message['@name']}`, nss.endpoint()).toString()
+                                           : ''
+                ;
 
-                    defXXX['$'] = (m && typeof m[1] !== 'undefined') ? defXXX['$']
-                                                                            = parseFloat(defXXX['$'].toString()).toFixed(parseInt(m[1])).toString()
-                                                                     : defXXX['$']
-                    ;
-                }
+                message['children'].forEach((defXXX) => {
 
-                if(message['<>'] === 'defStreamVector')
-                {
-                    defXXX['$'] = nss.endpoint() ? new URL(`streams/${message['@device']}/${message['@name']}`, nss.endpoint()).toString()
-                                                 : ''
-                    ;
-                }
-                else
-                {
+                    defXXX['$'] = url;
+                });
+
+                message['url'] = url;
+
+                /*----------------------------------------------------------------------------------------------------*/
+            }
+            else
+            {
+                /*----------------------------------------------------------------------------------------------------*/
+                /* OTHERS                                                                                             */
+                /*----------------------------------------------------------------------------------------------------*/
+
+                message['children'].forEach((defXXX) => {
+
+                    if('@format' in defXXX)
+                    {
+                        const m = /%\d*(?:\.(\d+))?f/.exec(defXXX['@format'].toString());
+
+                        defXXX['$'] = (m && typeof m[1] !== 'undefined') ? defXXX['$']
+                                                                             = parseFloat(defXXX['$'].toString()).toFixed(parseInt(m[1])).toString()
+                                                                         : defXXX['$']
+                        ;
+                    }
+
                     defXXX['@orig'] = defXXX['$'];
-                }
-            });
+                });
+
+                /*----------------------------------------------------------------------------------------------------*/
+            }
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
