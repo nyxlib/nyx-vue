@@ -49,10 +49,12 @@ const props = defineProps({
 
 const PLOT_MODE_TEMPORAL = 'temporal';
 const PLOT_MODE_BLOB = 'blob';
+const PLOT_MODE_STREAM = 'stream';
 
 const PLOT_MODES = [
     {value: PLOT_MODE_TEMPORAL, label: 'Temporal'},
     {value: PLOT_MODE_BLOB, label: 'BLOB'},
+    {value: PLOT_MODE_STREAM, label: 'Stream'},
 ];
 
 /*--------------------------------------------------------------------------------------------------------------------*/
