@@ -50,14 +50,14 @@ const _init_func = (_mqtt, _nss) => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        let clientId = localStorage.getItem('nyx-client-id');
+        const clientId = localStorage.getItem('nyx-client-id') ?? (() => {
 
-        if(!clientId)
-        {
-            clientId = uuid.v4().substring(0, 4).toUpperCase();
+            const clientId = uuid.v4().substring(0, 4).toUpperCase();
 
             localStorage.setItem('nyx-client-id', clientId);
-        }
+
+            return clientId;
+        })();
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -191,69 +191,77 @@ const _processMessage = (message) => {
     if('<>' in message)
     {
         /*------------------------------------------------------------------------------------------------------------*/
-        /* DEF* VECTORS                                                                                               */
+        /* DEF STREAM VECTORS                                                                                         */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        /**/ if(message['<>'].startsWith('def') && '@device' in message && '@name' in message && 'children' in message)
+        if(message['<>'] === 'defStreamVector' && '@device' in message && '@name' in message && 'children' in message)
         {
+            /*--------------------------------------------------------------------------------------------------------*/
+
             nyxStore.defXXXVectorDict[_buildKey(message)] = message;
 
-            if(message['<>'] === 'defStreamVector')
-            {
-                /*----------------------------------------------------------------------------------------------------*/
-                /* STREAMS                                                                                            */
-                /*----------------------------------------------------------------------------------------------------*/
+            /*--------------------------------------------------------------------------------------------------------*/
 
-                const url = nss.endpoint() ? new URL(`streams/${message['@device']}/${message['@name']}`, nss.endpoint()).toString()
-                                           : ''
-                ;
+            const url = nss.endpoint() ? new URL(`streams/${message['@device']}/${message['@name']}`, nss.endpoint()).toString()
+                                       : ''
+            ;
 
-                message['children'].forEach((defXXX) => {
+            message['children'].forEach((defXXX) => {
 
-                    defXXX['$'] = url;
-                });
+                defXXX['$'] = url;
+            });
 
-                message['url'] = url;
+            message['url'] = url;
 
-                /*----------------------------------------------------------------------------------------------------*/
-            }
-            else
-            {
-                /*----------------------------------------------------------------------------------------------------*/
-                /* OTHERS                                                                                             */
-                /*----------------------------------------------------------------------------------------------------*/
-
-                message['children'].forEach((defXXX) => {
-
-                    if('@format' in defXXX)
-                    {
-                        const m = /%\d*(?:\.(\d+))?f/.exec(defXXX['@format'].toString());
-
-                        defXXX['$'] = (m && typeof m[1] !== 'undefined') ? defXXX['$']
-                                                                             = parseFloat(defXXX['$'].toString()).toFixed(parseInt(m[1])).toString()
-                                                                         : defXXX['$']
-                        ;
-                    }
-
-                    defXXX['@orig'] = defXXX['$'];
-                });
-
-                /*----------------------------------------------------------------------------------------------------*/
-            }
+            /*--------------------------------------------------------------------------------------------------------*/
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
-        /* SET* VECTORS                                                                                               */
+        /* DEF * VECTORS                                                                                              */
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        else if(message['<>'].startsWith('def') && '@device' in message && '@name' in message && 'children' in message)
+        {
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            nyxStore.defXXXVectorDict[_buildKey(message)] = message;
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            message['children'].forEach((defXXX) => {
+
+                if('@format' in defXXX)
+                {
+                    const m = /%\d*(?:\.(\d+))?f/.exec(defXXX['@format'].toString());
+
+                    defXXX['$'] = (m && typeof m[1] !== 'undefined') ? defXXX['$']
+                                                                         = parseFloat(defXXX['$'].toString()).toFixed(parseInt(m[1])).toString()
+                                                                     : defXXX['$']
+                    ;
+                }
+
+                defXXX['@orig'] = defXXX['$'];
+            });
+
+            /*--------------------------------------------------------------------------------------------------------*/
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+        /* SET * VECTORS                                                                                              */
         /*------------------------------------------------------------------------------------------------------------*/
 
         else if(message['<>'].startsWith('set') && '@device' in message && '@name' in message && 'children' in message)
         {
+            /*--------------------------------------------------------------------------------------------------------*/
+
             const vector = nyxStore.defXXXVectorDict[_buildKey(message)];
 
             if(!vector)
             {
                 return;
             }
+
+            /*--------------------------------------------------------------------------------------------------------*/
 
             const children1 = message['children'];
             const children2 = vector['children'];
@@ -277,10 +285,12 @@ const _processMessage = (message) => {
             {
                 vector['@perm'] = message['@perm'];
             }
+
+            /*--------------------------------------------------------------------------------------------------------*/
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
-        /* DEL* VECTORS                                                                                               */
+        /* DEL * VECTORS                                                                                              */
         /*------------------------------------------------------------------------------------------------------------*/
 
         else if(message['<>'] === 'delProperty' && '@device' in message && '@name' in message)
