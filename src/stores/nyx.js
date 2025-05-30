@@ -197,7 +197,7 @@ const useNyxStore = defineStore('nyx', {
 
         numberOfMessages(deviceName)
         {
-            return (deviceName in this.messageDict) ? this.messageDict[deviceName].length : 0;
+            return this.messageDict[deviceName]?.length ?? 0;
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
