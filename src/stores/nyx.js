@@ -1,4 +1,4 @@
-// noinspection JSUnresolvedReference
+// noinspection JSUnresolvedReference, JSUnusedGlobalSymbols
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import {defineStore} from 'pinia';
@@ -61,7 +61,7 @@ const useNyxStore = defineStore('nyx', {
 
         deviceDefs()
         {
-            return [...new Set(Object.values(this.defXXXVectorDict).map(x => x['@device']))].map(device => ({
+            return [...new Set(Object.values(this.defXXXVectorDict).map(x => x['@device']))].map((device) => ({
                 value: device,
                 label: device,
             }));
@@ -69,16 +69,12 @@ const useNyxStore = defineStore('nyx', {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        all()
+        streamDefs()
         {
-            const result = {};
-
-            Object.values(this.defXXXVectorDict).forEach((defXXXVector) => defXXXVector['children'].forEach((defXXX) => {
-
-                result[`${defXXXVector['@device']}:${defXXXVector['@name']}:${defXXX['@name']}`] = defXXX;
+            return [...new Set(Object.values(this.defXXXVectorDict).filter((x) => x['<>'] === 'defStreamVector').map(x => `${x['@device']}:${x['@name']}`))].map((stream) => ({
+                value: stream,
+                label: stream,
             }));
-
-            return result;
         },
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -153,15 +149,15 @@ const useNyxStore = defineStore('nyx', {
 
                 if(composedName)
                 {
-                    return options.startsWith ? Object.entries(this.all).filter((x) => x[0].startsWith(composedName)).map((x) => x[1])///
-                                              : Object.entries(this.all).filter((x) => x[0]    ===    (composedName)).map((x) => x[1])[0]
+                    return options.startsWith ? Object.entries(this.variables).filter((x) => x[0].startsWith(composedName)).map((x) => x[1])///
+                                              : Object.entries(this.variables).filter((x) => x[0]    ===    (composedName)).map((x) => x[1])[0]
                     ;
                 }
             }
             else
             {
-                return options.startsWith ? Object.entries(this.all).filter((x) => x[0].startsWith(variableName)).map((x) => x[1])///
-                                          : Object.entries(this.all).filter((x) => x[0]    ===    (variableName)).map((x) => x[1])[0]
+                return options.startsWith ? Object.entries(this.variables).filter((x) => x[0].startsWith(variableName)).map((x) => x[1])///
+                                          : Object.entries(this.variables).filter((x) => x[0]    ===    (variableName)).map((x) => x[1])[0]
                 ;
 
             }
