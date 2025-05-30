@@ -73,7 +73,7 @@ const useNyxStore = defineStore('nyx', {
 
         variableDefs()
         {
-            Object.keys(this.variables).map((name) => ({
+            return Object.keys(this.variables).map((name) => ({
                 value: name,
                 label: name,
             }));
@@ -83,7 +83,7 @@ const useNyxStore = defineStore('nyx', {
 
         blobDefs()
         {
-            Object.keys(this.blobs).map((name) => ({
+            return Object.keys(this.blobs).map((name) => ({
                 value: name,
                 label: name,
             }));
