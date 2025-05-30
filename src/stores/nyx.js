@@ -51,6 +51,8 @@ const useNyxStore = defineStore('nyx', {
     getters: {
 
         /*------------------------------------------------------------------------------------------------------------*/
+        /* DEFS                                                                                                       */
+        /*------------------------------------------------------------------------------------------------------------*/
 
         categoryDefs()
         {
@@ -61,9 +63,29 @@ const useNyxStore = defineStore('nyx', {
 
         deviceDefs()
         {
-            return [...new Set(Object.values(this.defXXXVectorDict).map(x => x['@device']))].map((device) => ({
-                value: device,
-                label: device,
+            return [...new Set(Object.values(this.defXXXVectorDict).map(x => x['@device']))].map((name) => ({
+                value: name,
+                label: name,
+            }));
+        },
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        variableDefs()
+        {
+            Object.keys(this.variables).map((name) => ({
+                value: name,
+                label: name,
+            }));
+        },
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        blobDefs()
+        {
+            Object.keys(this.blobs).map((name) => ({
+                value: name,
+                label: name,
             }));
         },
 
@@ -71,12 +93,14 @@ const useNyxStore = defineStore('nyx', {
 
         streamDefs()
         {
-            return [...new Set(Object.values(this.defXXXVectorDict).filter((x) => x['<>'] === 'defStreamVector').map(x => `${x['@device']}:${x['@name']}`))].map((stream) => ({
-                value: stream,
-                label: stream,
+            return [...new Set(Object.values(this.defXXXVectorDict).filter((x) => x['<>'] === 'defStreamVector').map(x => `${x['@device']}:${x['@name']}`))].map((name) => ({
+                value: name,
+                label: name,
             }));
         },
 
+        /*------------------------------------------------------------------------------------------------------------*/
+        /* VALUES                                                                                                     */
         /*------------------------------------------------------------------------------------------------------------*/
 
         variables()
