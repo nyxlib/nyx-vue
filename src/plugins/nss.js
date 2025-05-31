@@ -2,35 +2,35 @@
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-let endpoint = '';
+let _endpoint = '';
 
-const streamMap = new Map();
+const _streamMap = new Map();
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const _endpoint_func = () => endpoint;
+const _endpoint_func = () => _endpoint;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const _update_func = (_endpoint) => {
+const _update_func = (endpoint) => {
 
-    endpoint = _endpoint;
+    _endpoint = endpoint;
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const _register_func = (stream, callback) => {
 
-    if(!stream || !endpoint || typeof callback !== 'function')
+    if(!stream || !_endpoint || typeof callback !== 'function')
     {
         return;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    let entry = streamMap.get(stream);
+    let entry = _streamMap.get(stream);
 
     if(!entry)
     {
@@ -43,7 +43,7 @@ const _register_func = (stream, callback) => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        entry.socket = new WebSocket(new URL(`/streams/${stream}`, endpoint));
+        entry.socket = new WebSocket(new URL(`/streams/${stream}`, _endpoint));
 
         entry.socket.addEventListener('message', (e) => {
 
@@ -62,12 +62,12 @@ const _register_func = (stream, callback) => {
 
         entry.socket.addEventListener('close', () => {
 
-            streamMap.delete(stream);
+            _streamMap.delete(stream);
         });
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        streamMap.set(stream, entry);
+        _streamMap.set(stream, entry);
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
@@ -81,14 +81,14 @@ const _register_func = (stream, callback) => {
 
 const _unregister_func = (stream, callback) => {
 
-    if(!stream || !endpoint || typeof(callback) !== 'function')
+    if(!stream || !_endpoint || typeof(callback) !== 'function')
     {
         return;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const entry = streamMap.get(stream);
+    const entry = _streamMap.get(stream);
 
     if(entry)
     {
@@ -100,7 +100,7 @@ const _unregister_func = (stream, callback) => {
 
         if(entry.callbacks.size === 0)
         {
-            streamMap.delete(stream);
+            _streamMap.delete(stream);
 
             entry.socket.close();
         }

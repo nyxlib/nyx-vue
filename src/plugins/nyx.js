@@ -28,9 +28,9 @@ TERMINAL.loadAddon(new WebLinksAddon());
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-let timer = null;
-let mqtt = null;
-let nss = null;
+let _timer = null;
+let _mqtt = null;
+let _nss = null;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
@@ -42,7 +42,7 @@ const _init_func = (_mqtt, _nss) => {
     /* SETUP PING MECHANISM                                                                                           */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(!timer)
+    if(!_timer)
     {
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -84,7 +84,7 @@ const _init_func = (_mqtt, _nss) => {
 
                 nyxStore.clientId = clientIPId;
 
-                timer = setInterval(() => _mqtt.emit('nyx/ping/client', clientIPId), 5 * 1000);
+                _timer = setInterval(() => _mqtt.emit('nyx/ping/client', clientIPId), 5 * 1000);
             })
 
             /*--------------------------------------------------------------------------------------------------------*/
@@ -140,8 +140,8 @@ const _init_func = (_mqtt, _nss) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    mqtt = _mqtt;
-    nss = _nss;
+    _mqtt = _mqtt;
+    _nss = _nss;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -152,12 +152,12 @@ const _final_func = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    mqtt.setConnectionCallback(null);
+    _mqtt.setConnectionCallback(null);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    mqtt = null;
-    nss = null;
+    _mqtt = null;
+    _nss = null;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
@@ -202,7 +202,7 @@ const _processMessage = (message) => {
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            const url = nss.endpoint() ? new URL(`streams/${message['@device']}/${message['@name']}`, nss.endpoint()).toString()
+            const url = _nss.endpoint() ? new URL(`streams/${message['@device']}/${message['@name']}`, _nss.endpoint()).toString()
                                        : ''
             ;
 
@@ -509,6 +509,13 @@ export default {
             setupTerminal: _setupTerminal_func,
             clearTerminal: _clearTerminal_func,
             updateTerminal: _updateTerminal_func,
+            /* STREAMS */
+            stream_register: (stream, callback) => {
+                _nss.register(stream, callback);
+            },
+            stream_unregister: (stream, callback) => {
+                _nss.unregister(stream, callback);
+            },
         });
     }
 };
