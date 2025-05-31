@@ -46,7 +46,7 @@ const devices = computed(() => {
 
         if(!('@group' in defXXXVector) || !defXXXVector['@group'])
         {
-            defXXXVector['@group'] = 'Main Control';
+            defXXXVector['@group'] = 'Main';
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
