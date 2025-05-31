@@ -118,9 +118,9 @@ export default {
     install(app)
     {
         app.provide('nss', {
-            endpoint: _endpoint_func,
-            update: _update_func,
-            register: _register_func,
+            endpoint  : _endpoint_func  ,
+            update    : _update_func    ,
+            register  : _register_func  ,
             unregister: _unregister_func,
         });
     }
