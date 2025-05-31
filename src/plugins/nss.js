@@ -4,7 +4,7 @@
 
 let endpoint = '';
 
-const streams = new Map();
+const streamMap = new Map();
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
@@ -30,7 +30,7 @@ const _register_func = (stream, callback) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    let entry = streams.get(stream);
+    let entry = streamMap.get(stream);
 
     if(!entry)
     {
@@ -62,12 +62,12 @@ const _register_func = (stream, callback) => {
 
         entry.socket.addEventListener('close', () => {
 
-            streams.delete(stream);
+            streamMap.delete(stream);
         });
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        streams.set(stream, entry);
+        streamMap.set(stream, entry);
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
@@ -88,7 +88,7 @@ const _unregister_func = (stream, callback) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const entry = streams.get(stream);
+    const entry = streamMap.get(stream);
 
     if(entry)
     {
@@ -100,7 +100,7 @@ const _unregister_func = (stream, callback) => {
 
         if(entry.callbacks.size === 0)
         {
-            streams.delete(stream);
+            streamMap.delete(stream);
 
             entry.socket.close();
         }
