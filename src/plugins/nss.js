@@ -16,7 +16,7 @@ const _endpoint_func = () => endpoint;
 
 const _update_func = (_endpoint) => {
 
-    endpoint = (_endpoint || '').trim();
+    endpoint = _endpoint;
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
