@@ -21,6 +21,103 @@ const _update_func = (endpoint) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const _parseInt = (s) => {
+
+    const result = parseInt(s);
+
+    if(!Number.isFinite(result))
+    {
+        throw new Error('Invalid length');
+    }
+
+    return result;
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const _parseNyxRESP = (buffer) => {
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const textDecoder = new TextDecoder('utf-8');
+
+    const map = new Map();
+
+    let offset = 0;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const readLine = () => {
+
+        const s = offset;
+        while(offset < buffer.length && buffer[offset] !== 0x0D) offset++; // look for '\r'
+        const e = offset;
+
+        if(buffer[offset++] !== 0x0D
+           ||
+           buffer[offset++] !== 0x0A
+        ) {
+            throw new Error('Expected CRLF after line');
+        }
+
+        return buffer.subarray(s, e);
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const readLengthLine = (expectedPrefix) => {
+
+        if(buffer[offset++] !== expectedPrefix)
+        {
+            throw new Error('Expected prefix ' + String.fromCharCode(expectedPrefix));
+        }
+
+        return _parseInt(textDecoder.decode(readLine()));
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const readBlock = (len) => {
+
+        const result = buffer.subarray(offset, offset += len);
+
+        if(buffer[offset++] !== 0x0D
+           ||
+           buffer[offset++] !== 0x0A
+        ) {
+            throw new Error('Expected CRLF after data block');
+        }
+
+        return result;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const match = textDecoder.decode(readLine()).match(/^nyx-stream\[(\d+)]$/);
+
+    if(!match)
+    {
+        throw new Error('Invalid stream header');
+    }
+
+    for(let i = 0; i < parseInt(match[1]); i++)
+    {
+        const keyLen = readLengthLine(0x24); // '$'
+        const key = textDecoder.decode(readBlock(keyLen));
+
+        const valLen = readLengthLine(0x24); // '$'
+        const val = /*--------------*/(readBlock(valLen));
+
+        map.set(key, val);
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    return map;
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const _register_func = (stream, callback) => {
 
     if(!stream || !_endpoint || typeof callback !== 'function')
@@ -51,11 +148,11 @@ const _register_func = (stream, callback) => {
             {
                 try
                 {
-                    callback(e.data)
+                    callback(_parseNyxRESP(e.data))
                 }
-                catch(_)
+                catch(e)
                 {
-                    /* IGNORE */
+                    console.error(e);
                 }
             }
         });
