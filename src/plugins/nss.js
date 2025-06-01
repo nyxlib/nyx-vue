@@ -43,7 +43,7 @@ const _register_func = (stream, callback) => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        entry.socket = new WebSocket(new URL(`/streams/${stream}`, _endpoint));
+        entry.socket = new WebSocket(new URL(`/streams/${stream.replace(':', '/')}`, _endpoint));
 
         entry.socket.addEventListener('message', (e) => {
 
