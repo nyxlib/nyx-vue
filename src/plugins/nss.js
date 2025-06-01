@@ -79,7 +79,7 @@ const _parseNyxRESP = (buffer) => {
 
     const readBlock = (len) => {
 
-        const result = buffer.subarray(offset, offset += len);
+        const result = buffer.subarray(offset, offset + len); offset += len;
 
         if(buffer[offset++] !== 0x0D
            ||
