@@ -100,7 +100,7 @@ const _parseNyxRESP = (buffer) => {
         throw new Error('Invalid stream header');
     }
 
-    for(let i = 0; i < parseInt(match[1]); i++)
+    for(let i = 0; i < _parseInt(match[1]); i++)
     {
         const keyLen = readLengthLine(0x24); // '$'
         const key = textDecoder.decode(readBlock(keyLen));
@@ -142,13 +142,22 @@ const _register_func = (stream, callback) => {
 
         entry.socket = new WebSocket(new URL(`/streams/${stream.replace(':', '/')}`, _endpoint));
 
+        entry.socket.binaryType = 'arraybuffer';
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
         entry.socket.addEventListener('message', (e) => {
 
-            for(const callback of entry.callbacks)
+            if(e.data instanceof ArrayBuffer)
             {
                 try
                 {
-                    callback(_parseNyxRESP(e.data))
+                    const data = _parseNyxRESP(new Uint8Array(e.data));
+
+                    for(const callback of entry.callbacks)
+                    {
+                        callback(data);
+                    }
                 }
                 catch(e)
                 {
@@ -156,6 +165,8 @@ const _register_func = (stream, callback) => {
                 }
             }
         });
+
+        /*------------------------------------------------------------------------------------------------------------*/
 
         entry.socket.addEventListener('close', () => {
 
