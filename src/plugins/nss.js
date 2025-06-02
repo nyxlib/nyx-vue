@@ -41,7 +41,7 @@ const _parseNyxRESP = (buffer) => {
 
     const textDecoder = new TextDecoder('utf-8');
 
-    const map = new Map();
+    const result = {};
 
     let offset = 0;
 
@@ -108,12 +108,12 @@ const _parseNyxRESP = (buffer) => {
         const valLen = readLengthLine(0x24); // '$'
         const val = /*--------------*/(readBlock(valLen));
 
-        map.set(key, val);
+        result[key] = val;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    return map;
+    return result;
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
