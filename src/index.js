@@ -6,14 +6,11 @@ import {createPinia} from 'pinia';
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import * as bootstrap from 'bootstrap';
+import * as uuid      from 'uuid'     ;
 
 import draggable from 'vuedraggable';
-
 import flatpickr from 'flatpickr';
-
-import ChartJS from 'chart.js/auto';
-
-import * as uuid from 'uuid';
+import chartjs from 'chart.js/auto';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -46,7 +43,7 @@ const setup = (app, pinia = null) => {
     window.__NYX_BOOTSTRAP__ = bootstrap;
     window.__NYX_DRAGGABLE__ = draggable;
 	window.__NYX_FLATPICKR__ = flatpickr;
-    window.__NYX_CHARTJS__ = ChartJS;
+    window.__NYX_CHARTJS__ = chartjs;
     window.__NYX_UUID__ = uuid;
 
     /*----------------------------------------------------------------------------------------------------------------*/
