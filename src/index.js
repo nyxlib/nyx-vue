@@ -6,11 +6,10 @@ import {createPinia} from 'pinia';
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import * as bootstrap from 'bootstrap';
-import * as uuid      from 'uuid'     ;
-
 import draggable from 'vuedraggable';
 import flatpickr from 'flatpickr';
 import chartjs from 'chart.js/auto';
+import * as uuid from 'uuid';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
