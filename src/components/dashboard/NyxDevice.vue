@@ -46,11 +46,15 @@ const nyxStore = useNyxStore();
 
             <nav-tabs margin="mb-4" v-if="nyxStore.isConnected">
 
-                <tab-pane :title="groupName" v-for="(groupInfo, groupName) in deviceInfo" :key="groupName">
+                <template v-for="(groupInfo, groupName) in deviceInfo" :key="groupName">
 
-                    <nyx-panel :group-info="groupInfo" />
+                    <tab-pane :title="groupName" v-if="Object.values(groupInfo).some((x) => !['defBLOBVector', 'defStreamVector'].includes(x['<>']))">
 
-                </tab-pane>
+                        <nyx-panel :group-info="groupInfo" />
+
+                    </tab-pane>
+
+                </template>
 
             </nav-tabs>
 
