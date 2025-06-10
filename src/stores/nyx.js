@@ -63,7 +63,27 @@ const useNyxStore = defineStore('nyx', {
 
         deviceDefs()
         {
-            return [...new Set(Object.values(this.defXXXVectorDict).map(x => x['@device']))].map((name) => ({
+            return [...new Set(Object.values(this.defXXXVectorDict).map((defXXXVector) => defXXXVector['@device']))].map((name) => ({
+                value: name,
+                label: name,
+            }));
+        },
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        vectorDefs()
+        {
+            return [...new Set(Object.values(this.defXXXVectorDict).map((defXXXVector) => `${defXXXVector['@device']}:${defXXXVector['@name']}`))].map((name) => ({
+                value: name,
+                label: name,
+            }));
+        },
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        streamDefs()
+        {
+            return [...new Set(Object.values(this.defXXXVectorDict).filter((defXXXVector) => defXXXVector['<>'] === 'defStreamVector').map((defXXXVector) => `${defXXXVector['@device']}:${defXXXVector['@name']}`))].map((name) => ({
                 value: name,
                 label: name,
             }));
@@ -84,16 +104,6 @@ const useNyxStore = defineStore('nyx', {
         blobDefs()
         {
             return Object.keys(this.blobs).map((name) => ({
-                value: name,
-                label: name,
-            }));
-        },
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        streamDefs()
-        {
-            return [...new Set(Object.values(this.defXXXVectorDict).filter((x) => x['<>'] === 'defStreamVector').map(x => `${x['@device']}:${x['@name']}`))].map((name) => ({
                 value: name,
                 label: name,
             }));

@@ -30,6 +30,7 @@
 
     --ms-bg: var(--bs-body-bg);
     --ms-dropdown-bg: var(--bs-body-bg);
+    --ms-bg-disabled: var(--bs-secondary-bg);
 
     --ms-ring-color: rgba(13, 110, 253, 0.25);
     --ms-border-color: var(--bs-border-color);
