@@ -1,7 +1,10 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import NyxVector from './NyxVector.vue';
+import NyxSwitchVector from "../nyx/NyxSwitchVector.vue";
+import NyxLightVector from "../nyx/NyxLightVector.vue";
+import NyxTextVector from "../nyx/NyxTextVector.vue";
+import NyxNumberVector from "../nyx/NyxNumberVector.vue";
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -10,7 +13,7 @@ import NyxVector from './NyxVector.vue';
 defineProps({
     groupInfo: {
         type: Object,
-        default: () => {},
+        default: () => [],
     },
 });
 
@@ -21,9 +24,15 @@ defineProps({
 
     <!-- *********************************************************************************************************** -->
 
-    <div v-for="defXXXVector in Object.values(groupInfo)" :key="defXXXVector">
+    <div v-for="defXXXVector in Object.prototype.toString.call(groupInfo) === '[object Object]' ? Object.values(groupInfo) : groupInfo" :key="defXXXVector">
 
-        <nyx-vector :def-x-x-x-vector="defXXXVector" />
+        <nyx-text-vector :def-text-vector="defXXXVector" v-if="defXXXVector['<>'] === 'defTextVector'" />
+
+        <nyx-number-vector :def-number-vector="defXXXVector" v-else-if="defXXXVector['<>'] === 'defNumberVector'" />
+
+        <nyx-switch-vector :def-switch-vector="defXXXVector" v-else-if="defXXXVector['<>'] === 'defSwitchVector'" />
+
+        <nyx-light-vector :def-light-vector="defXXXVector" v-else-if="defXXXVector['<>'] === 'defLightVector'" />
 
     </div>
 

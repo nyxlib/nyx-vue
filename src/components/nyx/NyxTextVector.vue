@@ -51,11 +51,11 @@ const sendMessage = () => {
 
     <!-- *********************************************************************************************************** -->
 
-    <div class="row w-100">
+    <div class="row mx-0 w-100">
 
         <!-- ******************************************************************************************************* -->
 
-        <div class="col-sm-2">
+        <div class="col-lg-3">
 
             <i :class="['bi', 'bi-circle-fill', `text-${COLORS[defTextVector['@state']]}`]"></i>
 
@@ -65,7 +65,7 @@ const sendMessage = () => {
 
         <!-- ******************************************************************************************************* -->
 
-        <div :class="{'col-sm-10': defTextVector['@perm'] === 'ro', 'col-sm-9': defTextVector['@perm'] !== 'ro'}">
+        <div :class="{'col-lg-9': defTextVector['@perm'] === 'ro', 'col-lg-7': defTextVector['@perm'] !== 'ro'}">
 
             <template v-for="defText in defTextVector['children']" :key="defText">
 
@@ -85,7 +85,7 @@ const sendMessage = () => {
 
         <!-- ******************************************************************************************************* -->
 
-        <div class="col-sm-1 pb-1" v-if="defTextVector['@perm'] !== 'ro'">
+        <div class="col-lg-2 mb-1" v-if="defTextVector['@perm'] !== 'ro'">
 
             <button class="btn btn-xs btn-outline-primary h-100 w-100" @click="sendMessage">
                 Apply

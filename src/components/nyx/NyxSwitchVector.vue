@@ -51,11 +51,11 @@ const sendMessage = (index) => {
 
     <!-- *********************************************************************************************************** -->
 
-    <div class="row w-100">
+    <div class="row mx-0 w-100">
 
         <!-- ******************************************************************************************************* -->
 
-        <div class="col-sm-2 text-start">
+        <div class="col-lg-2 text-start">
 
             <i :class="['bi', 'bi-circle-fill', `text-${COLORS[defSwitchVector['@state']]}`]"></i>
 
@@ -65,7 +65,7 @@ const sendMessage = (index) => {
 
         <!-- ******************************************************************************************************* -->
 
-        <div class="col-sm-10 text-center">
+        <div class="col-lg-10 text-center">
             <div class="btn-group btn-group-sm mb-1 w-50" role="group">
 
                 <button class="btn" :class="{'btn-primary': defSwitch['$'] === 'On', 'btn-outline-secondary': defSwitch['$'] === 'Off', 'disabled': defSwitchVector['@perm'] === 'wo'}" :style="{'width': `${100.0 / props.defSwitchVector['children'].length}%`}" v-for="(defSwitch, index) in defSwitchVector['children']" :key="index" @click="sendMessage(index)">

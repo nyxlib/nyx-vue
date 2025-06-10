@@ -33,7 +33,7 @@ import NyxTopology from './components/NyxTopology.vue';
 import NyxVariables from './components/NyxVariables.vue';
 import NyxDashboard from './components/NyxDashboard.vue';
 
-import NyxVector from './components/dashboard/NyxVector.vue';
+import NyxGroup from './components/dashboard/NyxGroup.vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -84,7 +84,7 @@ const setup = (app, pinia = null) => {
 export {
     setup,
     useNyxStore,
-    NyxVector,
+    NyxGroup,
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
