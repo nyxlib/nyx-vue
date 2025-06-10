@@ -110,14 +110,14 @@ onUnmounted(() => {
 
         <nav-tabs margin="mb-4">
 
-            <tab-pane class="align-items-center justify-content-center" :title="deviceName" icon="command" v-for="(deviceInfo, deviceName, deviceIndex) in devices" :key="deviceName">
+            <tab-pane class="align-items-center justify-content-center" :title="deviceName" icon="command" v-for="(deviceDescr, deviceName, deviceIndex) in devices" :key="deviceName">
 
                 <div class="d-flex align-items-center justify-content-center h-100">
 
                     <nyx-home @connect="emit('connect')" @disconnect="emit('disconnect')" v-if="deviceIndex === 0" />
 
                     <nyx-device :device-name="deviceName"
-                                :device-info="deviceInfo"
+                                :device-descr="deviceDescr"
                                 v-else
                     />
 

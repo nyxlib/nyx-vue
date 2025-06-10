@@ -15,7 +15,7 @@ defineProps({
         type: String,
         default: '',
     },
-    deviceInfo: {
+    deviceDescr: {
         type: Object,
         default: () => {},
     },
@@ -46,11 +46,11 @@ const nyxStore = useNyxStore();
 
             <nav-tabs margin="mb-4" v-if="nyxStore.isConnected">
 
-                <template v-for="(groupInfo, groupName) in deviceInfo" :key="groupName">
+                <template v-for="(groupDescr, groupName) in deviceDescr" :key="groupName">
 
-                    <tab-pane :title="groupName" v-if="Object.values(groupInfo).some((x) => !['defBLOBVector', 'defStreamVector'].includes(x['<>']))">
+                    <tab-pane :title="groupName" v-if="Object.values(groupDescr).some((x) => !['defBLOBVector', 'defStreamVector'].includes(x['<>']))">
 
-                        <nyx-panel :group-info="groupInfo" />
+                        <nyx-panel :group-descr="groupDescr" />
 
                     </tab-pane>
 

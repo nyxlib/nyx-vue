@@ -11,7 +11,7 @@ import NyxNumberVector from '../nyx/NyxNumberVector.vue';
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 defineProps({
-    groupInfo: {
+    groupDescr: {
         type: Object,
         default: () => [],
     },
@@ -24,7 +24,7 @@ defineProps({
 
     <!-- *********************************************************************************************************** -->
 
-    <div v-for="defXXXVector in Object.prototype.toString.call(groupInfo) === '[object Object]' ? Object.values(groupInfo) : groupInfo" :key="defXXXVector">
+    <div v-for="defXXXVector in Object.prototype.toString.call(groupDescr) === '[object Object]' ? Object.values(groupDescr) : groupDescr" :key="defXXXVector">
 
         <nyx-text-vector :def-text-vector="defXXXVector" v-if="defXXXVector['<>'] === 'defTextVector'" />
 
