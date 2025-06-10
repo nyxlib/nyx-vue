@@ -40,7 +40,7 @@ const filteredBLOBs = computed(() => {
     return Object.fromEntries(Object.entries(nyxStore.blobs)
         .sort(([name1], [name2]) => name1.localeCompare(name2))
         .filter(([name]) => !blobFilter.value || name.toLowerCase().includes(blobFilter.value.toLowerCase())
-        ));
+    ));
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/

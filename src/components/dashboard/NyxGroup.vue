@@ -1,10 +1,10 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import NyxSwitchVector from "../nyx/NyxSwitchVector.vue";
-import NyxLightVector from "../nyx/NyxLightVector.vue";
-import NyxTextVector from "../nyx/NyxTextVector.vue";
-import NyxNumberVector from "../nyx/NyxNumberVector.vue";
+import NyxSwitchVector from '../nyx/NyxSwitchVector.vue';
+import NyxLightVector from '../nyx/NyxLightVector.vue';
+import NyxTextVector from '../nyx/NyxTextVector.vue';
+import NyxNumberVector from '../nyx/NyxNumberVector.vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
