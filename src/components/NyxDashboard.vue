@@ -172,8 +172,8 @@ onUnmounted(() => {
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 .modal-body {
-    border-bottom-right-radius: var(--bs-border-radius);
-    border-bottom-left-radius: var(--bs-border-radius);
+    border-bottom-right-radius: var(--bs-modal-border-radius);
+    border-bottom-left-radius: var(--bs-modal-border-radius);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
