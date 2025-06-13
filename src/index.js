@@ -28,7 +28,6 @@ import Splitter from './components/ui/Splitter.vue';
 import NavTabs from './components/ui/NavTabs.vue';
 import TabPane from './components/ui/TabPane.vue';
 
-import NyxDevices from './components/NyxDevices.vue';
 import NyxTopology from './components/NyxTopology.vue';
 import NyxVariables from './components/NyxVariables.vue';
 import NyxDashboard from './components/NyxDashboard.vue';
@@ -71,7 +70,6 @@ const setup = (app, pinia = null) => {
     app.component('NavTabs', NavTabs);
     app.component('TabPane', TabPane);
 
-    app.component('NyxDevices', NyxDevices);
     app.component('NyxTopology', NyxTopology);
     app.component('NyxVariables', NyxVariables);
     app.component('NyxDashboard', NyxDashboard);
