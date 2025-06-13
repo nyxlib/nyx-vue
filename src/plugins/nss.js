@@ -28,7 +28,9 @@ const _update_func = (endpoint, username, password) => {
     {
         crypto.subtle.digest('SHA-256', new TextEncoder().encode(`${username}:${password}`)).then((buff) => {
 
-            _token = Array.from(new Uint8Array(buff).slice(0, 8)).map((b) => b.toString(16).padStart(2, '0')).join('');
+            _token = Array.from(new Uint8Array(buff).slice(0, 8)).map((b) => b.toString(16).padStart(2, '0'))
+                                                                 .join('')
+            ;
         });
     }
 
@@ -122,9 +124,7 @@ const _parseNyxRESP = (buffer) => {
         const key = textDecoder.decode(readBlock(keyLen));
 
         const valLen = readLengthLine(0x24); // '$'
-        const val = /*--------------*/(readBlock(valLen));
-
-        result[key] = val;
+        result[key] = /*------------*/(readBlock(valLen));
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
