@@ -1,11 +1,11 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {computed} from 'vue';
+import {ref, watchEffect} from 'vue';
+
+import draggable from 'vuedraggable';
 
 import Multiselect from '@vueform/multiselect';
-
-import * as uuid from 'uuid';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -27,27 +27,37 @@ const props = defineProps({
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* FUNCTIONS                                                                                                          */
-/*--------------------------------------------------------------------------------------------------------------------*/
 
-const devices = computed(() => {
+const sortedDevices = ref([]);
 
-    const result = Object.values(props.devices);
+watchEffect(() => {
 
-    result.sort((x, y) => x.rank - y.rank);
-
-    return result;
+    sortedDevices.value = Object.values(props.devices).sort((a, b) => a.rank - b.rank);
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+/* FUNCTIONS                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
 
-let rank = 0;
+const onDragEnd = () => {
+
+    for(let i = 0; i < sortedDevices.value.length; i++)
+    {
+        const device = sortedDevices.value[i];
+
+        props.devices[device.id].rank = i;
+    }
+};
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const deviceAppend = () => {
 
-    const id = uuid.v4();
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const id = __NYX_UUID__.v4();
+
+    const rank = Date.now();
 
     props.devices[id] = {
         id: id,
@@ -56,7 +66,7 @@ const deviceAppend = () => {
         device: '',
     };
 
-    rank++;
+    /*----------------------------------------------------------------------------------------------------------------*/
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -64,40 +74,6 @@ const deviceAppend = () => {
 const deviceRm = (device) => {
 
     delete props.devices[device.id];
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const deviceDw = (device1) => {
-
-    const array = devices.value;
-
-    const index = array.findIndex((device2) => device2.id === device1.id);
-
-    if(index > 0x00000000000000)
-    {
-        const device2 = array[index - 1];
-
-        device1.rank--;
-        device2.rank++;
-    }
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const deviceUp = (device1) => {
-
-    const array = devices.value;
-
-    const index = array.findIndex(device2 => device2.id === device1.id);
-
-    if(index < array.length - 1)
-    {
-        const device2 = array[index + 1];
-
-        device1.rank++;
-        device2.rank--;
-    }
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -142,39 +118,36 @@ const deviceUp = (device1) => {
 
                 <!-- *********************************************************************************************** -->
 
-                <tbody>
-                    <tr v-for="device in devices" :key="device">
-                        <td class="text-center">
-                            <button class="btn btn-sm btn-link" type="button" @click="deviceDw(device)">
-                                <i class="bi bi-caret-up-fill"></i>
-                            </button>
-                            <button class="btn btn-sm btn-link" type="button" @click="deviceUp(device)">
-                                <i class="bi bi-caret-down-fill"></i>
-                            </button>
-                            <button class="btn btn-sm btn-link" type="button" @click="deviceRm(device)">
-                                <i class="bi bi-trash2 text-danger"></i>
-                            </button>
-                        </td>
-                        <td class="text-center">
-                            <multiselect
-                                mode="single"
-                                :can-clear="false"
-                                :searchable="true"
-                                :create-option="false"
-                                :close-on-select="true"
-                                :options="nyxStore.categoryDefs" v-model="device.category" />
-                        </td>
-                        <td class="text-center">
-                            <multiselect
-                                mode="single"
-                                :can-clear="false"
-                                :searchable="true"
-                                :create-option="false"
-                                :close-on-select="true"
-                                :options="nyxStore.deviceDefs" v-model="device.device" />
-                        </td>
-                    </tr>
-                </tbody>
+                <draggable tag="tbody" handle=".drag-handle" v-model="sortedDevices" item-key="id" @end="onDragEnd">
+                    <template #item="{element: device}">
+                        <tr :key="device.id">
+                            <td class="text-center">
+                                <i class="bi bi-list drag-handle" style="cursor: grab;"></i>
+                                <button class="btn btn-sm btn-link" type="button" @click="deviceRm(device)">
+                                    <i class="bi bi-trash2 text-danger"></i>
+                                </button>
+                            </td>
+                            <td class="text-center">
+                                <multiselect
+                                    mode="single"
+                                    :can-clear="false"
+                                    :searchable="true"
+                                    :create-option="false"
+                                    :close-on-select="true"
+                                    :options="nyxStore.categoryDefs" v-model="device.category" />
+                            </td>
+                            <td class="text-center">
+                                <multiselect
+                                    mode="single"
+                                    :can-clear="false"
+                                    :searchable="true"
+                                    :create-option="false"
+                                    :close-on-select="true"
+                                    :options="nyxStore.deviceDefs" v-model="device.device" />
+                            </td>
+                        </tr>
+                    </template>
+                </draggable>
 
                 <!-- *********************************************************************************************** -->
 
