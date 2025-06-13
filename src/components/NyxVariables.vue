@@ -247,7 +247,7 @@ const deviceRm = (device) => {
                             [
                             <button class="btn btn-xs btn-primary" type="button" @click="deviceAppend">
                                 <i class="bi bi-plus-lg"></i>
-                                Add device
+                                Add
                             </button>
                             ]
                         </div>
@@ -260,17 +260,17 @@ const deviceRm = (device) => {
                                 <!-- ******************************************************************************* -->
 
                                 <thead>
-                                <tr>
-                                    <th class="text-center" style="width: 105px;">
-                                        Tools
-                                    </th>
-                                    <th class="text-center" style="width: auto;">
-                                        Category
-                                    </th>
-                                    <th class="text-center" style="width: auto;">
-                                        Device
-                                    </th>
-                                </tr>
+                                    <tr>
+                                        <th class="text-center" style="width: 105px;">
+                                            Tools
+                                        </th>
+                                        <th class="text-center" style="width: auto;">
+                                            Category
+                                        </th>
+                                        <th class="text-center" style="width: auto;">
+                                            Device
+                                        </th>
+                                    </tr>
                                 </thead>
 
                                 <!-- ******************************************************************************* -->
