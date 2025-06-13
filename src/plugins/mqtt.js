@@ -3,8 +3,6 @@
 
 import * as paho from 'paho-mqtt';
 
-import * as uuid from 'uuid';
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import useNyxStore from '../stores/nyx';
@@ -53,7 +51,7 @@ const _update_func = (endpoint, username, password) => {
 
             const url = new URL(_endpoint = endpoint);
 
-            _client = new paho.Client(url.hostname, parseInt(url.port || '443'), url.pathname, uuid.v4());
+            _client = new paho.Client(url.hostname, parseInt(url.port || '443'), url.pathname, __NYX_UUID__.v4());
 
             /*--------------------------------------------------------------------------------------------------------*/
 
