@@ -261,64 +261,62 @@ const deviceRm = (device) => {
 
                             <!-- *********************************************************************************** -->
 
-                            <div class="table-responsive">
-                                <table class="table table-sm table-striped">
+                            <table class="table table-sm table-striped">
 
-                                    <!-- *************************************************************************** -->
+                                <!-- ******************************************************************************* -->
 
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center" style="width: 105px;">
-                                                Tools
-                                            </th>
-                                            <th class="text-center" style="width: auto;">
-                                                Category
-                                            </th>
-                                            <th class="text-center" style="width: auto;">
-                                                Device
-                                            </th>
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" style="width: 105px;">
+                                            Tools
+                                        </th>
+                                        <th class="text-center" style="width: auto;">
+                                            Category
+                                        </th>
+                                        <th class="text-center" style="width: auto;">
+                                            Device
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <!-- ******************************************************************************* -->
+
+                                <draggable tag="tbody" handle=".drag-handle" v-model="sortedDevices" item-key="id" @end="onDragEnd">
+                                    <template #item="{element: device}">
+                                        <tr :key="device.id">
+                                            <td class="text-center">
+                                                <i class="bi bi-list drag-handle" style="cursor: grab;"></i>
+                                                <button class="btn btn-sm btn-link" type="button" @click="deviceRm(device)">
+                                                    <i class="bi bi-trash2 text-danger"></i>
+                                                </button>
+                                            </td>
+                                            <td class="text-center">
+                                                <multiselect
+                                                    mode="single"
+                                                    :can-clear="false"
+                                                    :searchable="true"
+                                                    :create-option="false"
+                                                    :close-on-select="true"
+                                                    :disabled="!nyxStore.isConnected"
+                                                    :options="nyxStore.categoryDefs" v-model="device.category" />
+                                            </td>
+                                            <td class="text-center">
+                                                <multiselect
+                                                    mode="single"
+                                                    :can-clear="false"
+                                                    :searchable="true"
+                                                    :create-option="false"
+                                                    :close-on-select="true"
+                                                    :disabled="!nyxStore.isConnected"
+                                                    :options="nyxStore.deviceDefs" v-model="device.device" />
+                                            </td>
                                         </tr>
-                                    </thead>
+                                    </template>
+                                </draggable>
 
-                                    <!-- *************************************************************************** -->
+                                <!-- ******************************************************************************* -->
 
-                                    <draggable tag="tbody" handle=".drag-handle" v-model="sortedDevices" item-key="id" @end="onDragEnd">
-                                        <template #item="{element: device}">
-                                            <tr :key="device.id">
-                                                <td class="text-center">
-                                                    <i class="bi bi-list drag-handle" style="cursor: grab;"></i>
-                                                    <button class="btn btn-sm btn-link" type="button" @click="deviceRm(device)">
-                                                        <i class="bi bi-trash2 text-danger"></i>
-                                                    </button>
-                                                </td>
-                                                <td class="text-center">
-                                                    <multiselect
-                                                        mode="single"
-                                                        :can-clear="false"
-                                                        :searchable="true"
-                                                        :create-option="false"
-                                                        :close-on-select="true"
-                                                        :disabled="!nyxStore.isConnected"
-                                                        :options="nyxStore.categoryDefs" v-model="device.category" />
-                                                </td>
-                                                <td class="text-center">
-                                                    <multiselect
-                                                        mode="single"
-                                                        :can-clear="false"
-                                                        :searchable="true"
-                                                        :create-option="false"
-                                                        :close-on-select="true"
-                                                        :disabled="!nyxStore.isConnected"
-                                                        :options="nyxStore.deviceDefs" v-model="device.device" />
-                                                </td>
-                                            </tr>
-                                        </template>
-                                    </draggable>
-
-                                    <!-- *************************************************************************** -->
-
-                                </table>
-                            </div>
+                            </table>
 
                             <!-- *********************************************************************************** -->
 
