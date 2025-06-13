@@ -163,8 +163,6 @@ const _register_func = (stream, callback) => {
             url.searchParams.set('token', _token);
         }
 
-        alert(_token);
-
         /*------------------------------------------------------------------------------------------------------------*/
 
         entry.socket = new WebSocket(url);
