@@ -26,7 +26,10 @@ const _update_func = (endpoint, username, password) => {
 
     if(username && password)
     {
-        _token = btoa(`${username}:${password}`);
+        crypto.subtle.digest('SHA-256', new TextEncoder().encode(`${username}:${password}`)).then((buff) => {
+
+            _token = Array.from(new Uint8Array(buff).slice(0, 8)).map((b) => b.toString(16).padStart(2, '0')).join('');
+        });
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -159,6 +162,8 @@ const _register_func = (stream, callback) => {
         {
             url.searchParams.set('token', _token);
         }
+
+        alert(_token);
 
         /*------------------------------------------------------------------------------------------------------------*/
 
