@@ -298,6 +298,7 @@ const deviceRm = (device) => {
                                                         :searchable="true"
                                                         :create-option="false"
                                                         :close-on-select="true"
+                                                        :disabled="!nyxStore.isConnected"
                                                         :options="nyxStore.categoryDefs" v-model="device.category" />
                                                 </td>
                                                 <td class="text-center">
@@ -307,6 +308,7 @@ const deviceRm = (device) => {
                                                         :searchable="true"
                                                         :create-option="false"
                                                         :close-on-select="true"
+                                                        :disabled="!nyxStore.isConnected"
                                                         :options="nyxStore.deviceDefs" v-model="device.device" />
                                                 </td>
                                             </tr>
