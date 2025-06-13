@@ -237,7 +237,7 @@ const deviceRm = (device) => {
 
                 </tab-pane>
 
-                <tab-pane title="INDI">
+                <tab-pane title="INDI" tab-class="ms-auto">
 
                     <!-- ******************************************************************************************* -->
 

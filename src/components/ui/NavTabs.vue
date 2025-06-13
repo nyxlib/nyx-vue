@@ -31,13 +31,14 @@ const sortedTabs = computed(() => [...Object.values(tabs.value)].sort((x, y) => 
 /* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-provide('addTab', (tabId, tabRank, tabTitle, tabIcon, onShow, onShown, onHide, onHidden) => {
+provide('addTab', (tabId, tabRank, tabTitle, tabIcon, tabClass, onShow, onShown, onHide, onHidden) => {
 
     tabs.value[tabId] = {
         tabId: tabId,
         tabRank: tabRank,
         tabTitle: tabTitle,
         tabIcon: tabIcon,
+        tabClass: tabClass,
     };
 
     nextTick(() => {
@@ -92,7 +93,7 @@ provide('updateIcon', (tabId, tabIcon) => {
 
         <!-- ******************************************************************************************************* -->
 
-        <button :class="['nav-link', 'px-3', 'py-2', {'active': idx === 0}]" type="button" data-bs-toggle="tab" :data-bs-target="`#${tab.tabId}`" role="tab" v-for="(tab, idx) in sortedTabs" :key="tab.tabId">
+        <button :class="['nav-link', 'px-3', 'py-2', tab.tabClass, {'active': idx === 0}]" type="button" data-bs-toggle="tab" :data-bs-target="`#${tab.tabId}`" role="tab" v-for="(tab, idx) in sortedTabs" :key="tab.tabId">
 
             <i :class="['bi', `bi-${tab.tabIcon}`]" v-if="tab.tabIcon"></i>
 
@@ -102,7 +103,7 @@ provide('updateIcon', (tabId, tabIcon) => {
 
         <!-- ******************************************************************************************************* -->
 
-        <div class="ms-auto pb-2">
+        <div :class="['pb-2', {'ms-auto': !sortedTabs.some((tab) => tab.tabClass?.includes('ms-auto') || tab.tabClass?.includes('me-auto'))}]">
 
             <slot name="button"></slot>
 
