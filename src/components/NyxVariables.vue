@@ -148,20 +148,22 @@ const deviceRm = (device) => {
 
                     <!-- ******************************************************************************************* -->
 
-                    <table class="table table-sm table-striped">
-                        <thead>
-                            <tr>
-                                <th style="width: 66.66%;">Variable</th>
-                                <th style="width: 33.33%;">Value</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(value, name) in filteredVariables" :key="name">
-                                <td class="user-select-all"><i>{{name}}</i></td>
-                                <td class="user-select-all">{{value['$']}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width: 66.66%;">Variable</th>
+                                    <th style="width: 33.33%;">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(value, name) in filteredVariables" :key="name">
+                                    <td class="user-select-all"><i>{{name}}</i></td>
+                                    <td class="user-select-all">{{value['$']}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
                     <!-- ******************************************************************************************* -->
 
@@ -183,20 +185,22 @@ const deviceRm = (device) => {
 
                     <!-- ******************************************************************************************* -->
 
-                    <table class="table table-sm table-striped">
-                        <thead>
-                            <tr>
-                                <th style="width: 66.66%;">BLOB</th>
-                                <th style="width: 33.33%;">Value</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(value, name) in filteredBLOBs" :key="name">
-                                <td class="user-select-all"><i>{{name}}</i></td>
-                                <td class="user-select-all">...</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width: 66.66%;">BLOB</th>
+                                    <th style="width: 33.33%;">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(value, name) in filteredBLOBs" :key="name">
+                                    <td class="user-select-all"><i>{{name}}</i></td>
+                                    <td class="user-select-all">...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
                     <!-- ******************************************************************************************* -->
 
@@ -218,26 +222,28 @@ const deviceRm = (device) => {
 
                     <!-- ******************************************************************************************* -->
 
-                    <table class="table table-sm table-striped">
-                        <thead>
-                            <tr>
-                                <th style="width: 33.33%;">Stream</th>
-                                <th style="width: 66.66%;">URL</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(value, name) in filteredStreams" :key="name">
-                                <td class="user-select-all"><i>{{name}}</i></td>
-                                <td class="user-select-all">{{value['$']}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width: 33.33%;">Stream</th>
+                                    <th style="width: 66.66%;">URL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(value, name) in filteredStreams" :key="name">
+                                    <td class="user-select-all"><i>{{name}}</i></td>
+                                    <td class="user-select-all">{{value['$']}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
                     <!-- ******************************************************************************************* -->
 
                 </tab-pane>
 
-                <tab-pane title="INDI" tab-class="ms-auto">
+                <tab-pane title="INDI" icon="command" tab-class="ms-auto">
 
                     <!-- ******************************************************************************************* -->
 
@@ -255,60 +261,62 @@ const deviceRm = (device) => {
 
                             <!-- *********************************************************************************** -->
 
-                            <table class="table table-sm table-striped">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-striped">
 
-                                <!-- ******************************************************************************* -->
+                                    <!-- *************************************************************************** -->
 
-                                <thead>
-                                    <tr>
-                                        <th class="text-center" style="width: 105px;">
-                                            Tools
-                                        </th>
-                                        <th class="text-center" style="width: auto;">
-                                            Category
-                                        </th>
-                                        <th class="text-center" style="width: auto;">
-                                            Device
-                                        </th>
-                                    </tr>
-                                </thead>
-
-                                <!-- ******************************************************************************* -->
-
-                                <draggable tag="tbody" handle=".drag-handle" v-model="sortedDevices" item-key="id" @end="onDragEnd">
-                                    <template #item="{element: device}">
-                                        <tr :key="device.id">
-                                            <td class="text-center">
-                                                <i class="bi bi-list drag-handle" style="cursor: grab;"></i>
-                                                <button class="btn btn-sm btn-link" type="button" @click="deviceRm(device)">
-                                                    <i class="bi bi-trash2 text-danger"></i>
-                                                </button>
-                                            </td>
-                                            <td class="text-center">
-                                                <multiselect
-                                                    mode="single"
-                                                    :can-clear="false"
-                                                    :searchable="true"
-                                                    :create-option="false"
-                                                    :close-on-select="true"
-                                                    :options="nyxStore.categoryDefs" v-model="device.category" />
-                                            </td>
-                                            <td class="text-center">
-                                                <multiselect
-                                                    mode="single"
-                                                    :can-clear="false"
-                                                    :searchable="true"
-                                                    :create-option="false"
-                                                    :close-on-select="true"
-                                                    :options="nyxStore.deviceDefs" v-model="device.device" />
-                                            </td>
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center" style="width: 105px;">
+                                                Tools
+                                            </th>
+                                            <th class="text-center" style="width: auto;">
+                                                Category
+                                            </th>
+                                            <th class="text-center" style="width: auto;">
+                                                Device
+                                            </th>
                                         </tr>
-                                    </template>
-                                </draggable>
+                                    </thead>
 
-                                <!-- ******************************************************************************* -->
+                                    <!-- *************************************************************************** -->
 
-                            </table>
+                                    <draggable tag="tbody" handle=".drag-handle" v-model="sortedDevices" item-key="id" @end="onDragEnd">
+                                        <template #item="{element: device}">
+                                            <tr :key="device.id">
+                                                <td class="text-center">
+                                                    <i class="bi bi-list drag-handle" style="cursor: grab;"></i>
+                                                    <button class="btn btn-sm btn-link" type="button" @click="deviceRm(device)">
+                                                        <i class="bi bi-trash2 text-danger"></i>
+                                                    </button>
+                                                </td>
+                                                <td class="text-center">
+                                                    <multiselect
+                                                        mode="single"
+                                                        :can-clear="false"
+                                                        :searchable="true"
+                                                        :create-option="false"
+                                                        :close-on-select="true"
+                                                        :options="nyxStore.categoryDefs" v-model="device.category" />
+                                                </td>
+                                                <td class="text-center">
+                                                    <multiselect
+                                                        mode="single"
+                                                        :can-clear="false"
+                                                        :searchable="true"
+                                                        :create-option="false"
+                                                        :close-on-select="true"
+                                                        :options="nyxStore.deviceDefs" v-model="device.device" />
+                                                </td>
+                                            </tr>
+                                        </template>
+                                    </draggable>
+
+                                    <!-- *************************************************************************** -->
+
+                                </table>
+                            </div>
 
                             <!-- *********************************************************************************** -->
 
