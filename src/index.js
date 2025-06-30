@@ -15,6 +15,7 @@ import * as uuid from 'uuid';
 
 import * as d3              from 'd3'               ;
 import * as d3Zoom          from 'd3-zoom'          ;
+import * as d3Selection     from 'd3-selection'     ;
 import * as d3GeoProjection from 'd3-geo-projection';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -51,6 +52,7 @@ const setup = (app, pinia = null) => {
 
     window.__NYX_D3__                = d3             ;
     window.__NYX_D3_ZOOM__           = d3Zoom         ;
+    window.__NYX_D3_SELECTION__      = d3Selection    ;
     window.__NYX_D3_GEO_PROJECTION__ = d3GeoProjection;
 
     /*----------------------------------------------------------------------------------------------------------------*/
