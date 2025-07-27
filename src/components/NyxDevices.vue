@@ -117,6 +117,8 @@ const deviceRm = (device) => {
 
                 <!-- *********************************************************************************************** -->
 
+                {{sortedDevices}}
+
                 <draggable tag="tbody" handle=".drag-handle" v-model="sortedDevices" item-key="id" @end="onDragEnd">
                     <template #item="{element: device}">
                         <tr :key="device.id">
