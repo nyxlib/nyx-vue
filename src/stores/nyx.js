@@ -13,6 +13,7 @@ const CATEGORY_DEFS = [
     {value: 'mount', label: 'Mount'},
     {value: 'imaging_camera', label: 'Imaging camera'},
     {value: 'guiding_camera', label: 'Guiding camera'},
+    {value: 'rotator', label: 'Rotator'},
     {value: 'focuser', label: 'Focuser'},
     {value: 'filters', label: 'Filters'},
 ];
