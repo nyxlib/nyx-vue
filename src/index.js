@@ -34,6 +34,7 @@ import Gauge from './components/ui/Gauge.vue';
 import NyxTopology from './components/NyxTopology.vue';
 import NyxVariables from './components/NyxVariables.vue';
 import NyxDashboard from './components/NyxDashboard.vue';
+import NyxDevices from './components/NyxDevices.vue';
 
 import NyxGroup from './components/dashboard/NyxGroup.vue';
 
@@ -79,6 +80,7 @@ const setup = (app, pinia = null) => {
     app.component('NyxTopology', NyxTopology);
     app.component('NyxVariables', NyxVariables);
     app.component('NyxDashboard', NyxDashboard);
+    app.component('NyxDevices', NyxDevices);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 };
