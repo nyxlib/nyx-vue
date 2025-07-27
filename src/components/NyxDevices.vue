@@ -102,22 +102,20 @@ const deviceRm = (device) => {
                 <!-- *********************************************************************************************** -->
 
                 <thead>
-                <tr>
-                    <th class="text-center" style="width: 105px;">
-                        Tools
-                    </th>
-                    <th class="text-center" style="width: auto;">
-                        Category
-                    </th>
-                    <th class="text-center" style="width: auto;">
-                        Device
-                    </th>
-                </tr>
+                    <tr>
+                        <th class="text-center" style="width: 105px;">
+                            Tools
+                        </th>
+                        <th class="text-center" style="width: auto;">
+                            Category
+                        </th>
+                        <th class="text-center" style="width: auto;">
+                            Device
+                        </th>
+                    </tr>
                 </thead>
 
                 <!-- *********************************************************************************************** -->
-
-                {{sortedDevices}}
 
                 <draggable tag="tbody" handle=".drag-handle" v-model="sortedDevices" item-key="id" @end="onDragEnd">
                     <template #item="{element: device}">
