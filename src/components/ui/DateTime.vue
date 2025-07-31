@@ -29,7 +29,7 @@ const props = defineProps({
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue', 'date-change']);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -58,9 +58,9 @@ onMounted(() => {
 
             if(dates.length > 0)
             {
-                inputRef.value.value = dates[0];
-
                 emit('update:modelValue', dates[0]);
+
+                emit('date-change', dates[0]);
             }
         },
     });
