@@ -47,6 +47,7 @@ onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    // noinspection JSValidateTypes
     flatpickrInstance = flatpickr(inputRef.value, {
         dateFormat: 'Z',
         time_24hr: true,
