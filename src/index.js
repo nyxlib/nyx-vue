@@ -26,6 +26,7 @@ import nyxPlugin from './plugins/nyx';
 
 import useNyxStore from './stores/nyx';
 
+import DateTime from './components/ui/DateTime.vue';
 import Splitter from './components/ui/Splitter.vue';
 import NavTabs from './components/ui/NavTabs.vue';
 import TabPane from './components/ui/TabPane.vue';
@@ -72,6 +73,7 @@ const setup = (app, pinia = null) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    app.component('DateTime', DateTime);
     app.component('Splitter', Splitter);
     app.component('NavTabs', NavTabs);
     app.component('TabPane', TabPane);
