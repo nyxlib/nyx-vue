@@ -59,11 +59,7 @@ onMounted(() => {
 
             emit('update:modelValue', date);
 
-            setTimeout(() => {
-
-                emit('date-change', date);
-
-            }, 100);
+            emit('date-change', date);
         }
     };
 
@@ -86,7 +82,7 @@ onMounted(() => {
 
         if(flatpickrInstance.selectedDates?.[0]?.getTime() !== value.getTime() && value instanceof Date)
         {
-            flatpickrInstance.setDate(value, false);
+            //flatpickrInstance.setDate(value, false);
         }
     });
 
