@@ -59,7 +59,11 @@ onMounted(() => {
 
             emit('update:modelValue', date);
 
-            emit('date-change', date);
+            setTimeout(() => {
+
+                emit('date-change', date);
+
+            }, 100);
         }
     };
 
