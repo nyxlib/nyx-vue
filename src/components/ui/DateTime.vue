@@ -29,7 +29,7 @@ const props = defineProps({
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue', 'date-change']);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -47,20 +47,19 @@ onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    if(!(props.modelValue instanceof Date))
-    {
-        props.modelValue = new Date();
-    }
+    const defaultDate = props.modelValue ?? new Date();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const update = (dates) => {
+    const onChange = (dates) => {
 
         if(dates.length > 0)
         {
-            emit('update:modelValue', dates[0]);
+            const date = new Date(dates[0].getTime());
 
-            inputRef.value.value = dates[0];
+            emit('update:modelValue', date);
+
+            emit('date-change', date);
         }
     };
 
@@ -72,9 +71,9 @@ onMounted(() => {
         time_24hr: true,
         inline: props.inline,
         enableTime: props.enableTime,
-        defaultDate: props.modelValue,
-        onChange: update,
-        onClose: update,
+        defaultDate: defaultDate,
+        onChange: onChange,
+        onClose: onChange,
     });
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -83,7 +82,7 @@ onMounted(() => {
 
         if(flatpickrInstance.selectedDates?.[0]?.getTime() !== value.getTime() && value instanceof Date)
         {
-            flatpickrInstance.setDate(value, true);
+            flatpickrInstance.setDate(value, false);
         }
     });
 
@@ -94,7 +93,12 @@ onMounted(() => {
 
 onUnmounted(() => {
 
-    flatpickrInstance.destroy();
+    if(flatpickrInstance)
+    {
+        flatpickrInstance.destroy();
+
+        flatpickrInstance = null;
+    }
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/

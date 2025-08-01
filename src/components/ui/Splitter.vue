@@ -49,7 +49,7 @@ const currDirection = ref('none');
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-let splitter = null;
+let splitterInstance = null;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
@@ -57,11 +57,11 @@ let splitter = null;
 
 const destroySplitter = () => {
 
-    if(splitter)
+    if(splitterInstance)
     {
-        splitter.destroy();
+        splitterInstance.destroy();
 
-        splitter = null;
+        splitterInstance = null;
     }
 };
 
@@ -93,7 +93,7 @@ const updateSplitter = () => {
         {
             nextTick(() => {
 
-                splitter = Split([
+                splitterInstance = Split([
                     `#${props.leftId}`,
                     `#${props.rightId}`,
                 ], {
@@ -102,11 +102,11 @@ const updateSplitter = () => {
                     gutterSize: props.gutterSize,
                     onDragEnd: () => {
 
-                        emit('resize', {sizes: splitter.getSizes()});
+                        emit('resize', {sizes: splitterInstance.getSizes()});
                     },
                 });
 
-                emit('resize', {sizes: splitter.getSizes()});
+                emit('resize', {sizes: splitterInstance.getSizes()});
             });
         }
         else
@@ -118,9 +118,9 @@ const updateSplitter = () => {
     }
     else
     {
-        if(splitter)
+        if(splitterInstance)
         {
-            emit('resize', {sizes: splitter.getSizes()});
+            emit('resize', {sizes: splitterInstance.getSizes()});
         }
         else
         {
