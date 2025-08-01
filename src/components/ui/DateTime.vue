@@ -45,48 +45,55 @@ let flatpickrInstance = null;
 
 onMounted(() => {
 
-    /*----------------------------------------------------------------------------------------------------------------*/
+    setTimeout(() => {
 
-    const defaultDate = props.modelValue ?? new Date();
+        /*------------------------------------------------------------------------------------------------------------*/
 
-    /*----------------------------------------------------------------------------------------------------------------*/
+        const defaultDate = props.modelValue ?? new Date();
 
-    const onChange = (dates) => {
+        /*------------------------------------------------------------------------------------------------------------*/
 
-        if(dates.length > 0)
-        {
-            const date = new Date(dates[0].getTime());
+        // noinspection JSValidateTypes
+        flatpickrInstance = flatpickr(inputRef.value, {
+            /*--------------------------------------------------------------------------------------------------------*/
 
-            emit('update:modelValue', date);
+            time_24hr: true,
+            inline: props.inline,
+            dateFormat: props.enableTime
+                                  ? 'Z' : 'Y-m-d',
+            enableTime: props.enableTime,
+            defaultDate: defaultDate,
 
-            emit('date-change', date);
-        }
-    };
+            /*--------------------------------------------------------------------------------------------------------*/
 
-    /*----------------------------------------------------------------------------------------------------------------*/
+            onChange: (dates) => {
 
-    // noinspection JSValidateTypes
-    flatpickrInstance = flatpickr(inputRef.value, {
-        dateFormat: !props.enableTime ? 'Y-m-d' : 'Z',
-        time_24hr: true,
-        inline: props.inline,
-        enableTime: props.enableTime,
-        defaultDate: defaultDate,
-        onChange: onChange,
-        onClose: onChange,
-    });
+                if(dates.length > 0)
+                {
+                    const date = new Date(dates[0].getTime());
 
-    /*----------------------------------------------------------------------------------------------------------------*/
+                    emit('update:modelValue', date);
 
-    watch(() => props.modelValue, (value) => {
+                    emit('date-change', date);
+                }
+            },
 
-        if(flatpickrInstance.selectedDates?.[0]?.getTime() !== value.getTime() && value instanceof Date)
-        {
-            //flatpickrInstance.setDate(value, false);
-        }
-    });
+            /*--------------------------------------------------------------------------------------------------------*/
+        });
 
-    /*----------------------------------------------------------------------------------------------------------------*/
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        watch(() => props.modelValue, (value) => {
+
+            if((value instanceof Date) && (flatpickrInstance?.selectedDates?.at(0)?.getTime() !== value.getTime()))
+            {
+                flatpickrInstance.setDate(value, false);
+            }
+        });
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+    }, 250);
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
