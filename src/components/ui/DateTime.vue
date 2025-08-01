@@ -29,7 +29,7 @@ const props = defineProps({
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const emit = defineEmits(['update:modelValue', 'date-change']);
+const emit = defineEmits(['update:modelValue']);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -47,22 +47,34 @@ onMounted(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    if(!(props.modelValue instanceof Date))
+    {
+        props.modelValue = new Date();
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const update = (dates) => {
+
+        if(dates.length > 0)
+        {
+            emit('update:modelValue', dates[0]);
+
+            inputRef.value.value = dates[0];
+        }
+    };
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     // noinspection JSValidateTypes
     flatpickrInstance = flatpickr(inputRef.value, {
-        dateFormat: 'Z',
+        dateFormat: !props.enableTime ? 'Y-m-d' : 'Z',
         time_24hr: true,
         inline: props.inline,
         enableTime: props.enableTime,
-        defaultDate: (props.modelValue ?? new Date()).toISOString(),
-        onChange: (dates) => {
-
-            if(dates.length > 0)
-            {
-                emit('update:modelValue', dates[0]);
-
-                emit('date-change', dates[0]);
-            }
-        },
+        defaultDate: props.modelValue,
+        onChange: update,
+        onClose: update,
     });
 
     /*----------------------------------------------------------------------------------------------------------------*/
