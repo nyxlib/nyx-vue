@@ -102,16 +102,16 @@ const updateSplitter = () => {
                     gutterSize: props.gutterSize,
                     onDragEnd: () => {
 
-                        emit('resize', {sizes: splitterInstance.getSizes()});
+                        emit('resize', splitterInstance.getSizes());
                     },
                 });
 
-                emit('resize', {sizes: splitterInstance.getSizes()});
+                emit('resize', splitterInstance.getSizes());
             });
         }
         else
         {
-            emit('resize', {sizes: [100, 100]});
+            emit('resize', [50, 50]);
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -120,11 +120,11 @@ const updateSplitter = () => {
     {
         if(splitterInstance)
         {
-            emit('resize', {sizes: splitterInstance.getSizes()});
+            emit('resize', splitterInstance.getSizes());
         }
         else
         {
-            emit('resize', {sizes: [100, 100]});
+            emit('resize', [50, 50]);
         }
     }
 
