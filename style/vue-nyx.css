@@ -71,16 +71,19 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 .form-check-input {
+
     clear: left;
 }
 
 /**/
 
 .form-switch.form-switch-sm {
+
     margin-bottom: 0.5rem;
 }
 
 .form-switch.form-switch-sm .form-check-input {
+
     height: 1.0rem;
     width: calc(1rem + 0.75rem);
     border-radius: 2rem;
@@ -89,10 +92,12 @@
 /**/
 
 .form-switch.form-switch-md {
+
     margin-bottom: 1.0rem;
 }
 
 .form-switch.form-switch-md .form-check-input {
+
     height: 1.5rem;
     width: calc(2rem + 0.75rem);
     border-radius: 3rem;
@@ -101,10 +106,12 @@
 /**/
 
 .form-switch.form-switch-lg {
+
     margin-bottom: 1.5rem;
 }
 
 .form-switch.form-switch-lg .form-check-input {
+
     height: 2.0rem;
     width: calc(3rem + 0.75rem);
     border-radius: 4rem;
@@ -113,13 +120,24 @@
 /**/
 
 .form-switch.form-switch-xl {
+
     margin-bottom: 2.0rem;
 }
 
 .form-switch.form-switch-xl .form-check-input {
+
     height: 2.5rem;
     width: calc(4rem + 0.75rem);
     border-radius: 5rem;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+.flatpickr-monthDropdown-months {
+
+    color: var(--bs-body-color) !important;
+
+    background-color: var(--bs-body-bg) !important;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

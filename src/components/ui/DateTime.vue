@@ -63,6 +63,7 @@ onMounted(() => {
                                   ? 'Z' : 'Y-m-d',
             enableTime: props.enableTime,
             defaultDate: defaultDate,
+            minuteIncrement: 1,
 
             /*--------------------------------------------------------------------------------------------------------*/
 
