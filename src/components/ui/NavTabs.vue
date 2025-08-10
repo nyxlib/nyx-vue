@@ -11,9 +11,13 @@ import {Tab} from 'bootstrap';
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 defineProps({
+    card: {
+      type: Boolean,
+      default: false,
+    },
     margin: {
         type: String,
-        default: 'mb-4',
+        default: 'mb-3',
     },
 });
 
@@ -86,26 +90,46 @@ provide('updateIcon', (tabId, tabIcon) => {
 <template>
 
     <!-- *********************************************************************************************************** -->
-    <!-- NAV TABS                                                                                                    -->
+    <!-- CARD VERSION                                                                                                -->
     <!-- *********************************************************************************************************** -->
 
-    <div :class="['nav', 'nav-tabs', margin]" role="tablist" ref="tabListRef">
+    <div class="card" v-if="card">
 
         <!-- ******************************************************************************************************* -->
-
-        <button :class="['nav-link', 'px-3', 'py-2', tab.tabClass, {'active': idx === 0}]" type="button" data-bs-toggle="tab" :data-bs-target="`#${tab.tabId}`" role="tab" v-for="(tab, idx) in sortedTabs" :key="tab.tabId">
-
-            <i :class="['bi', `bi-${tab.tabIcon}`]" v-if="tab.tabIcon"></i>
-
-            {{ tab.tabTitle }}
-
-        </button>
-
+        <!-- NAV TABS                                                                                                -->
         <!-- ******************************************************************************************************* -->
 
-        <div :class="['pb-2', {'ms-auto': !sortedTabs.some((tab) => tab.tabClass?.includes('ms-auto') || tab.tabClass?.includes('me-auto'))}]">
+        <div class="card-header nav nav-tabs pb-0" role="tablist" ref="tabListRef">
 
-            <slot name="button"></slot>
+            <!-- *************************************************************************************************** -->
+
+            <button :class="['nav-link', 'px-3', 'py-2', tab.tabClass, {'active': idx === 0}]" type="button" data-bs-toggle="tab" :data-bs-target="`#${tab.tabId}`" role="tab" v-for="(tab, idx) in sortedTabs" :key="tab.tabId">
+
+                <i :class="['bi', `bi-${tab.tabIcon}`]" v-if="tab.tabIcon"></i>
+
+                {{ tab.tabTitle }}
+
+            </button>
+
+            <!-- *************************************************************************************************** -->
+
+            <div :class="['pb-2', {'ms-auto': !sortedTabs.some((tab) => tab.tabClass?.includes('ms-auto') || tab.tabClass?.includes('me-auto'))}]">
+
+                <slot name="button"></slot>
+
+            </div>
+
+            <!-- *************************************************************************************************** -->
+
+        </div>
+
+        <!-- ******************************************************************************************************* -->
+        <!-- TABS CONTENT                                                                                            -->
+        <!-- ******************************************************************************************************* -->
+
+        <div class="card-body tab-content">
+
+            <slot></slot>
 
         </div>
 
@@ -114,14 +138,52 @@ provide('updateIcon', (tabId, tabIcon) => {
     </div>
 
     <!-- *********************************************************************************************************** -->
-    <!-- TABS CONTENT                                                                                                -->
+    <!-- STD VERSION                                                                                                 -->
     <!-- *********************************************************************************************************** -->
 
-    <div class="tab-content flex-grow-1">
+    <template v-else>
 
-        <slot></slot>
+        <!-- ******************************************************************************************************* -->
+        <!-- NAV TABS                                                                                                -->
+        <!-- ******************************************************************************************************* -->
 
-    </div>
+        <div :class="['nav', 'nav-tabs', margin]" role="tablist" ref="tabListRef">
+
+            <!-- *************************************************************************************************** -->
+
+            <button :class="['nav-link', 'px-3', 'py-2', tab.tabClass, {'active': idx === 0}]" type="button" data-bs-toggle="tab" :data-bs-target="`#${tab.tabId}`" role="tab" v-for="(tab, idx) in sortedTabs" :key="tab.tabId">
+
+                <i :class="['bi', `bi-${tab.tabIcon}`]" v-if="tab.tabIcon"></i>
+
+                {{ tab.tabTitle }}
+
+            </button>
+
+            <!-- *************************************************************************************************** -->
+
+            <div :class="['pb-2', {'ms-auto': !sortedTabs.some((tab) => tab.tabClass?.includes('ms-auto') || tab.tabClass?.includes('me-auto'))}]">
+
+                <slot name="button"></slot>
+
+            </div>
+
+            <!-- *************************************************************************************************** -->
+
+        </div>
+
+        <!-- ******************************************************************************************************* -->
+        <!-- TABS CONTENT                                                                                            -->
+        <!-- ******************************************************************************************************* -->
+
+        <div class="tab-content flex-grow-1">
+
+            <slot></slot>
+
+        </div>
+
+        <!-- ******************************************************************************************************* -->
+
+    </template>
 
     <!-- *********************************************************************************************************** -->
 
