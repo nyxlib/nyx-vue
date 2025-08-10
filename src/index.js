@@ -30,6 +30,7 @@ import DateTime from './components/ui/DateTime.vue';
 import Splitter from './components/ui/Splitter.vue';
 import NavTabs from './components/ui/NavTabs.vue';
 import TabPane from './components/ui/TabPane.vue';
+import InputRange from './components/ui/InputRange.vue';
 import Gauge from './components/ui/Gauge.vue';
 
 import NyxTopology from './components/NyxTopology.vue';
@@ -77,6 +78,7 @@ const setup = (app, pinia = null) => {
     app.component('Splitter', Splitter);
     app.component('NavTabs', NavTabs);
     app.component('TabPane', TabPane);
+    app.component('InputRange', InputRange);
     app.component('Gauge', Gauge);
 
     app.component('NyxTopology', NyxTopology);
