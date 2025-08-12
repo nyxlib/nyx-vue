@@ -180,12 +180,14 @@ const useNyxStore = defineStore('nyx', {
 
             if(options.category)
             {
-                const composedName = Object.values(options.deviceDict).filter((x) => x.category === options.category).map((x) => `${x.device}:${variableName}`)[0];
+                const device = options.deviceDict[options.category]?.trim();
 
-                if(composedName)
+                if(device)
                 {
-                    return options.startsWith ? Object.entries(this.variables).filter((x) => x[0].startsWith(composedName)).map((x) => x[1])///
-                                              : Object.entries(this.variables).filter((x) => x[0]    ===    (composedName)).map((x) => x[1])[0]
+                    const qualifiedName = `${device}:${variableName}`;
+
+                    return options.startsWith ? Object.entries(this.variables).filter((x) => x[0].startsWith(qualifiedName)).map((x) => x[1])///
+                                              : Object.entries(this.variables).filter((x) => x[0]    ===    (qualifiedName)).map((x) => x[1])[0]
                     ;
                 }
             }
