@@ -1,3 +1,4 @@
+<!--suppress JSUnresolvedReference, JSUnusedLocalSymbols -->
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -8,6 +9,7 @@ import {ref, computed} from 'vue';
 import useNyxStore from '../stores/nyx';
 
 import NavTabs from './ui/NavTabs.vue';
+import TabPane from './ui/TabPane.vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
