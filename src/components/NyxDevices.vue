@@ -97,16 +97,23 @@ watch(() => props.modelValue, (modelValue) => {
                                     {{ categoryDef.label }}
                                 </td>
                                 <td class="text-center">
+
                                     <multiselect
                                         mode="single"
+
                                         :can-clear="false"
                                         :searchable="true"
                                         :create-option="false"
                                         :close-on-select="true"
-                                        :disabled="!nyxStore.isConnected"
+
                                         :options="nyxStore.deviceDefs"
                                         :model-value="localDevices[categoryDef.value]"
-                                        @update:model-value="(value) => setDevice(categoryDef.value, value)" />
+                                        @update:model-value="(value) => setDevice(categoryDef.value, value)"
+
+                                        v-if="nyxStore.isConnected" />
+
+                                    <input class="form-control form-control-sm" type="text" :value="localDevices[categoryDef.value]" readonly v-else />
+
                                 </td>
                             </tr>
                         </tbody>
