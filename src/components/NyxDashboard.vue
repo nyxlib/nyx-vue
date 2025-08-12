@@ -15,6 +15,15 @@ import NyxDevice from './dashboard/NyxDevice.vue';
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const props = defineProps({
+    showDevices: {
+        type: Boolean,
+        default: true,
+    },
+});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const emit = defineEmits([
     'connect',
     'disconnect',
@@ -124,7 +133,7 @@ onUnmounted(() => {
 
             <!-- *************************************************************************************************** -->
 
-            <tab-pane class="align-items-center justify-content-center" title="Nyx" icon="command">
+            <tab-pane class="align-items-center justify-content-center" title="Nyx" icon="command" v-if="showDevices">
 
                 <div class="d-flex flex-column h-100">
 
