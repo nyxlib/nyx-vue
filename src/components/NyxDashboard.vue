@@ -36,9 +36,7 @@ const nyxStore = useNyxStore();
 
 const devices = computed(() => {
 
-    const result = {
-        'Home': {}
-    };
+    const result = {};
 
     Object.values(nyxStore.defXXXVectorDict).forEach((defXXXVector) => {
 
@@ -103,27 +101,60 @@ onUnmounted(() => {
 <template>
 
     <!-- *********************************************************************************************************** -->
-    <!-- DASHBOARD                                                                                                  -->
+    <!-- DASHBOARD                                                                                                   -->
     <!-- *********************************************************************************************************** -->
 
     <div class="d-flex flex-column h-100">
 
-        <nav-tabs margin="mb-4">
+        <nav-tabs margin="mb-2">
 
-            <tab-pane class="align-items-center justify-content-center" :title="deviceName" icon="command" v-for="(deviceDescr, deviceName, deviceIndex) in devices" :key="deviceName">
+            <!-- *************************************************************************************************** -->
+            <!-- HOME PANEL                                                                                          -->
+            <!-- *************************************************************************************************** -->
+
+            <tab-pane class="align-items-center justify-content-center" title="Home" icon="house">
 
                 <div class="d-flex align-items-center justify-content-center h-100">
 
-                    <nyx-home @connect="emit('connect')" @disconnect="emit('disconnect')" v-if="deviceIndex === 0" />
-
-                    <nyx-device :device-name="deviceName"
-                                :device-descr="deviceDescr"
-                                v-else
-                    />
+                    <nyx-home @connect="emit('connect')" @disconnect="emit('disconnect')" />
 
                 </div>
 
             </tab-pane>
+
+            <!-- *************************************************************************************************** -->
+
+            <tab-pane class="align-items-center justify-content-center" title="Nyx" icon="command">
+
+                <div class="d-flex flex-column h-100">
+
+                    <nav-tabs margin="mb-2">
+
+                        <tab-pane class="align-items-center justify-content-center" :title="deviceName" icon="command" v-for="(deviceDescr, deviceName) in devices" :key="deviceName">
+
+                            <div class="d-flex align-items-center justify-content-center h-100">
+
+                                <nyx-device :device-name="deviceName"
+                                            :device-descr="deviceDescr"
+                                />
+
+                            </div>
+
+                        </tab-pane>
+
+                </nav-tabs>
+
+                </div>
+
+            </tab-pane>
+
+            <!-- *************************************************************************************************** -->
+            <!-- CUSTOM                                                                                              -->
+            <!-- *************************************************************************************************** -->
+
+            <slot></slot>
+
+            <!-- *************************************************************************************************** -->
 
         </nav-tabs>
 
