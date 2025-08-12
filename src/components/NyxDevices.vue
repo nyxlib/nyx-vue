@@ -80,7 +80,7 @@ watch(() => props.modelValue, (modelValue) => {
 
                         <thead>
                             <tr>
-                                <th class="text-start" style="width: 200px;">
+                                <th class="text-center" style="width: 200px;">
                                     Category
                                 </th>
                                 <th class="text-center" style="width: auto;">
