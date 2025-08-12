@@ -13,9 +13,17 @@ const CATEGORY_DEFS = [
     {value: 'mount', label: 'Mount'},
     {value: 'imaging_camera', label: 'Imaging camera'},
     {value: 'guiding_camera', label: 'Guiding camera'},
-    {value: 'rotator', label: 'Rotator'},
+    {value: 'rotator', label: 'Field Rotator'},
+    {value: 'filters', label: 'Filter wheel'},
     {value: 'focuser', label: 'Focuser'},
-    {value: 'filters', label: 'Filters'},
+    {value: 'aux1', label: 'Aux 1'},
+    {value: 'aux2', label: 'Aux 2'},
+    {value: 'aux3', label: 'Aux 3'},
+    {value: 'aux4', label: 'Aux 4'},
+    {value: 'aux5', label: 'Aux 5'},
+    {value: 'aux6', label: 'Aux 6'},
+    {value: 'aux7', label: 'Aux 7'},
+    {value: 'aux8', label: 'Aux 8'},
 ];
 
 /*--------------------------------------------------------------------------------------------------------------------*/

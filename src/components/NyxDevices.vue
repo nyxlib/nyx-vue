@@ -1,9 +1,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {ref, watchEffect} from 'vue';
-
-import draggable from 'vuedraggable';
+import {watch, reactive} from 'vue';
 
 import Multiselect from '@vueform/multiselect';
 
@@ -20,7 +18,7 @@ const nyxStore = useNyxStore();
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const props = defineProps({
-    devices: {
+    modelValue: {
         type: Object,
         required: true,
     },
@@ -28,53 +26,35 @@ const props = defineProps({
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const sortedDevices = ref([]);
+const emit = defineEmits([
+    'update:modelValue'
+]);
 
-watchEffect(() => {
+/*--------------------------------------------------------------------------------------------------------------------*/
 
-    sortedDevices.value = Object.values(props.devices).sort((a, b) => a.rank - b.rank);
-});
+const localDevices = reactive(Object.fromEntries(nyxStore.categoryDefs.map((categoryDef) => [categoryDef.value, props.modelValue?.[categoryDef.value]])));
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const onDragEnd = () => {
+function setDevice(category, device)
+{
+    localDevices[category] = device;
 
-    for(let i = 0; i < sortedDevices.value.length; i++)
+    emit('update:modelValue', {...localDevices});
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+watch(() => props.modelValue, (modelValue) => {
+
+    for(const def of nyxStore.categoryDefs)
     {
-        const device = sortedDevices.value[i];
-
-        props.devices[device.id].rank = i;
+        localDevices[def.value] = modelValue?.[def.value];
     }
-};
 
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const deviceAppend = () => {
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    const id = __NYX_UUID__.v4();
-
-    const rank = Date.now();
-
-    props.devices[id] = {
-        id: id,
-        rank: rank,
-        category: '',
-        device: '',
-    };
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const deviceRm = (device) => {
-
-    delete props.devices[device.id];
-};
+}, {deep: false});
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 </script>
@@ -85,76 +65,60 @@ const deviceRm = (device) => {
 
     <div class="card">
         <div class="card-header px-3 py-2">
-            Device
-            [
-            <button class="btn btn-xs btn-primary" type="button" @click="deviceAppend">
-                <i class="bi bi-plus-lg"></i>
-                Add
-            </button>
-            ]
+            Devices
         </div>
         <div class="card-body px-3 py-2">
 
-            <!-- *************************************************************************************************** -->
+            <div class="row">
+                <div class="col-md-6" v-for="([a, b], idx) in [[0, 8], [8, 16]]" :key="idx">
 
-            <table class="table table-sm table-striped">
+                    <!-- ******************************************************************************************* -->
 
-                <!-- *********************************************************************************************** -->
+                    <table class="table table-sm table-striped">
 
-                <thead>
-                    <tr>
-                        <th class="text-center" style="width: 105px;">
-                            Tools
-                        </th>
-                        <th class="text-center" style="width: auto;">
-                            Category
-                        </th>
-                        <th class="text-center" style="width: auto;">
-                            Device
-                        </th>
-                    </tr>
-                </thead>
+                        <!-- *************************************************************************************** -->
 
-                <!-- *********************************************************************************************** -->
+                        <thead>
+                            <tr>
+                                <th class="text-start" style="width: 200px;">
+                                    Category
+                                </th>
+                                <th class="text-center" style="width: auto;">
+                                    Device
+                                </th>
+                            </tr>
+                        </thead>
 
-                <draggable tag="tbody" handle=".drag-handle" v-model="sortedDevices" item-key="id" @end="onDragEnd">
-                    <template #item="{element: device}">
-                        <tr :key="device.id">
-                            <td class="text-center">
-                                <i class="bi bi-list drag-handle" style="cursor: grab;"></i>
-                                <button class="btn btn-sm btn-link" type="button" @click="deviceRm(device)">
-                                    <i class="bi bi-trash2 text-danger"></i>
-                                </button>
-                            </td>
-                            <td class="text-center">
-                                <multiselect
-                                    mode="single"
-                                    :can-clear="false"
-                                    :searchable="true"
-                                    :create-option="false"
-                                    :close-on-select="true"
-                                    :disabled="!nyxStore.isConnected"
-                                    :options="nyxStore.categoryDefs" v-model="device.category" />
-                            </td>
-                            <td class="text-center">
-                                <multiselect
-                                    mode="single"
-                                    :can-clear="false"
-                                    :searchable="true"
-                                    :create-option="false"
-                                    :close-on-select="true"
-                                    :disabled="!nyxStore.isConnected"
-                                    :options="nyxStore.deviceDefs" v-model="device.device" />
-                            </td>
-                        </tr>
-                    </template>
-                </draggable>
+                        <!-- *************************************************************************************** -->
 
-                <!-- *********************************************************************************************** -->
+                        <tbody>
+                            <tr v-for="categoryDef in nyxStore.categoryDefs.slice(a, b)" :key="categoryDef.value">
+                                <td class="text-center">
+                                    {{ categoryDef.label }}
+                                </td>
+                                <td class="text-center">
+                                    <multiselect
+                                        mode="single"
+                                        :can-clear="false"
+                                        :searchable="true"
+                                        :create-option="false"
+                                        :close-on-select="true"
+                                        :disabled="!nyxStore.isConnected"
+                                        :options="nyxStore.deviceDefs"
+                                        :model-value="localDevices[categoryDef.value]"
+                                        @update:model-value="(value) => setDevice(categoryDef.value, value)" />
+                                </td>
+                            </tr>
+                        </tbody>
 
-            </table>
+                        <!-- *************************************************************************************** -->
 
-            <!-- *************************************************************************************************** -->
+                    </table>
+
+                    <!-- ******************************************************************************************* -->
+
+                </div>
+            </div>
 
         </div>
     </div>
