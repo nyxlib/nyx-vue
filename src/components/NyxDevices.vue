@@ -70,7 +70,7 @@ watch(() => props.modelValue, (modelValue) => {
         <div class="card-body px-3 py-2">
 
             <div class="row">
-                <div class="col-md-6" v-for="([a, b], idx) in [[0, 8], [8, 16]]" :key="idx">
+                <div class="col-md-6" v-for="([a, b], idx) in [[0, 8], [8, 64]]" :key="idx">
 
                     <!-- ******************************************************************************************* -->
 
