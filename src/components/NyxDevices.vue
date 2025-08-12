@@ -69,6 +69,10 @@ watch(() => props.modelValue, (modelValue) => {
         </div>
         <div class="card-body px-3 py-2">
 
+            <div class="alert alert-warning mb-1" v-if="!nyxStore.isConnected">
+                <i class="bi bi-exclamation-triangle"></i> Not connected!
+            </div>
+
             <div class="row">
                 <div class="col-md-6" v-for="([a, b], idx) in [[0, 8], [8, 64]]" :key="idx">
 
