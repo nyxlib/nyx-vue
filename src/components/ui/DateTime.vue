@@ -4,8 +4,6 @@
 
 import {ref, watch, nextTick, onMounted, onUnmounted} from 'vue';
 
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 import flatpickr from 'flatpickr';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -29,7 +27,10 @@ const props = defineProps({
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const emit = defineEmits(['update:modelValue', 'date-change']);
+const emit = defineEmits([
+    'update:modelValue',
+    'date-change',
+]);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -38,6 +39,25 @@ const inputRef = ref(null);
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 let flatpickrInstance = null;
+
+let popperInstance = null;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* FUNCTIONS                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const onDocClick = (e) => {
+
+    if(flatpickrInstance && !props.inline)
+    {
+        const insideCalendar = flatpickrInstance.calendarContainer?.contains(e.target) || inputRef.value?.contains(e.target);
+
+        if(!insideCalendar)
+        {
+            flatpickrInstance.close();
+        }
+    }
+};
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* INITIALIZATION                                                                                                     */
@@ -53,17 +73,62 @@ onMounted(() => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        // noinspection JSValidateTypes
         flatpickrInstance = flatpickr(inputRef.value, {
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            static: false,
+            inline: props.inline,
+
             /*--------------------------------------------------------------------------------------------------------*/
 
             time_24hr: true,
-            inline: props.inline,
-            dateFormat: props.enableTime
-                                  ? 'Z' : 'Y-m-d',
+            dateFormat: props.enableTime ? 'Y-m-d H:i:S' : 'Y-m-d',
             enableTime: props.enableTime,
             defaultDate: defaultDate,
             minuteIncrement: 1,
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            onOpen: () => {
+
+                if(!props.inline)
+                {
+                    popperInstance =  window.Popper.createPopper(inputRef.value, flatpickrInstance.calendarContainer, {
+                        placement: 'bottom-start',
+                        modifiers: [
+                            {name: 'flip', options: {fallbackPlacements: ['top-start', 'right-start', 'left-start']}},
+                            {name: 'preventOverflow', options: {boundary: 'viewport'}},
+                            {name: 'offset', options: {offset: [0, 6]}},
+                        ],
+                    });
+                }
+            },
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            onClose: () => {
+
+                popperInstance?.destroy();
+                popperInstance = null;
+            },
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            onValueUpdate: () => {
+
+                popperInstance?.update();
+            },
+
+            onMonthChange: () => {
+
+                popperInstance?.update();
+            },
+
+            onYearChange: () => {
+
+                popperInstance?.update();
+            },
 
             /*--------------------------------------------------------------------------------------------------------*/
 
@@ -89,8 +154,14 @@ onMounted(() => {
             if((value instanceof Date) && (flatpickrInstance?.selectedDates?.at(0)?.getTime() !== value.getTime()))
             {
                 flatpickrInstance.setDate(value, false);
+
+                popperInstance?.update();
             }
         });
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        document.addEventListener('click', onDocClick, true);
 
         /*------------------------------------------------------------------------------------------------------------*/
     });
@@ -100,12 +171,21 @@ onMounted(() => {
 
 onUnmounted(() => {
 
-    if(flatpickrInstance)
-    {
-        flatpickrInstance.destroy();
+    /*----------------------------------------------------------------------------------------------------------------*/
 
-        flatpickrInstance = null;
-    }
+    document.removeEventListener('click', onDocClick, true);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    popperInstance?.destroy();
+    popperInstance = null;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    flatpickrInstance?.destroy();
+    flatpickrInstance = null;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
