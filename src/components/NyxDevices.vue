@@ -116,7 +116,7 @@ watch(() => props.modelValue, (modelValue) => {
                                         v-if="nyxStore.isConnected"
                                     />
 
-                                    <input class="form-control form-control-sm" type="text" :value="localDevices[categoryDef.value]" readonly v-else />
+                                    <input class="form-control form-control-sm" type="text" :value="localDevices[categoryDef.value]" :readonly="true" v-else />
 
                                 </td>
                             </tr>
