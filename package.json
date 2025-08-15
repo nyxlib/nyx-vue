@@ -24,7 +24,7 @@
         "split.js": "^1.6.5",
         "uuid": "^11.1.0",
         "vue": "^3.5.18",
-        "vuedraggable": "^2.24.3"
+        "vuedraggable": "^4.1.0"
     },
     "devDependencies": {
         "eslint-plugin-vue": "^10.4.0"
