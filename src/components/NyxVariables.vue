@@ -97,8 +97,8 @@ const filteredStreams = computed(() => {
                             </thead>
                             <tbody>
                                 <tr v-for="(value, name) in filteredVariables" :key="name">
-                                    <td class="user-select-all"><i>{{name}}</i></td>
-                                    <td class="user-select-all">{{value['$']}}</td>
+                                    <td class="user-select-all"><i>{{ name }}</i></td>
+                                    <td class="user-select-all">{{ value['$'] }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -134,7 +134,7 @@ const filteredStreams = computed(() => {
                             </thead>
                             <tbody>
                                 <tr v-for="(value, name) in filteredBLOBs" :key="name">
-                                    <td class="user-select-all"><i>{{name}}</i></td>
+                                    <td class="user-select-all"><i>{{ name }}</i></td>
                                     <td class="user-select-all">...</td>
                                 </tr>
                             </tbody>
@@ -171,8 +171,8 @@ const filteredStreams = computed(() => {
                             </thead>
                             <tbody>
                                 <tr v-for="(value, name) in filteredStreams" :key="name">
-                                    <td class="user-select-all"><i>{{name}}</i></td>
-                                    <td class="user-select-all">{{value['$']}}</td>
+                                    <td class="user-select-all"><i>{{ name }}</i></td>
+                                    <td class="user-select-all">{{ value['$'] }}</td>
                                 </tr>
                             </tbody>
                         </table>

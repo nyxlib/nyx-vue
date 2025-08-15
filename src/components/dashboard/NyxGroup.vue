@@ -12,7 +12,7 @@ import NyxNumberVector from '../nyx/NyxNumberVector.vue';
 
 defineProps({
     groupDescr: {
-        type: Object,
+        type: Array,
         default: () => [],
     },
 });

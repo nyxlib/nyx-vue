@@ -5,7 +5,7 @@
     "type": "module",
     "main": "./src/index.js",
     "scripts": {
-        "lint": "./node_modules/eslint/bin/eslint.js ./src/"
+        "lint": "eslint"
     },
     "dependencies": {
         "@vueform/multiselect": "^2.6.11",
@@ -25,6 +25,9 @@
         "uuid": "^11.1.0",
         "vue": "^3.5.16",
         "vuedraggable": "^4.1.0"
+    },
+    "devDependencies": {
+        "eslint-plugin-vue": "^10.4.0"
     },
     "author": "Jérôme Odier",
     "license": "CeCILL",

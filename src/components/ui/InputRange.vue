@@ -12,7 +12,10 @@ const emit = defineEmits([
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const props = defineProps({
-    modelValue: Number,
+    modelValue: {
+        type: Number,
+        default: 0.0,
+    },
     min: {
         type: Number,
         default: 0.0,

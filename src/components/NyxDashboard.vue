@@ -170,7 +170,7 @@ onUnmounted(() => {
             <!-- BUTTONS                                                                                             -->
             <!-- *************************************************************************************************** -->
 
-            <template v-slot:button>
+            <template #button>
                 <slot name="button"></slot>
             </template>
 

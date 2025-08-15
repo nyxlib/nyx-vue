@@ -81,6 +81,8 @@ const setup = (app, pinia = null) => {
     app.component('InputRange', InputRange);
     app.component('Gauge', Gauge);
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     app.component('NyxTopology', NyxTopology);
     app.component('NyxVariables', NyxVariables);
     app.component('NyxDashboard', NyxDashboard);

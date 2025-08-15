@@ -109,12 +109,12 @@ watch(() => props.modelValue, (modelValue) => {
                                         :searchable="true"
                                         :create-option="false"
                                         :close-on-select="true"
-
                                         :options="nyxStore.deviceDefs"
                                         :model-value="localDevices[categoryDef.value]"
                                         @update:model-value="(value) => setDevice(categoryDef.value, value)"
 
-                                        v-if="nyxStore.isConnected" />
+                                        v-if="nyxStore.isConnected"
+                                    />
 
                                     <input class="form-control form-control-sm" type="text" :value="localDevices[categoryDef.value]" readonly v-else />
 
