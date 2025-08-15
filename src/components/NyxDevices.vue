@@ -105,9 +105,9 @@ watch(() => props.modelValue, (modelValue) => {
                                     <multiselect
                                         mode="single"
 
-                                        :can-clear="false"
+                                        :can-clear="true"
                                         :searchable="true"
-                                        :create-option="false"
+                                        :create-option="true"
                                         :close-on-select="true"
                                         :options="nyxStore.deviceDefs"
                                         :model-value="localDevices[categoryDef.value]"
