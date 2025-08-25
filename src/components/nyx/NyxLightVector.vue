@@ -39,7 +39,7 @@ const COLORS = {
 
         <!-- ******************************************************************************************************* -->
 
-        <div class="col-lg-2">
+        <div class="col-lg-3">
 
             <i :class="['bi', 'bi-circle-fill', `text-${COLORS[defLightVector['@state']]}`]"></i>
 
@@ -49,7 +49,7 @@ const COLORS = {
 
         <!-- ******************************************************************************************************* -->
 
-        <div class="col-lg-10">
+        <div class="col-lg-9">
 
             <div v-for="defLight in sortedDefs" :key="`${defLight['@name']}-${defLight['@rank']}`">
 
