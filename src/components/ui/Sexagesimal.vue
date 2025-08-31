@@ -68,6 +68,8 @@ const minStep = computed(() => minDec.value ? 0.1 : 1);
 const secStep = computed(() => secDec.value === 2 ? 0.01 : (secDec.value === 1 ? 0.1 : 1));
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+/* FUNCTIONS                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 const parseIn = (s) => {
 
@@ -213,7 +215,7 @@ watch(() => props.format, () => {
 
     <!-- *********************************************************************************************************** -->
 
-        <input class="form-control"
+        <input class="form-control text-center"
                :type="readonly ? 'text' : 'number'" inputmode="decimal"
                step="1"
                :readonly="readonly"
@@ -222,9 +224,9 @@ watch(() => props.format, () => {
                @input="onInput"
         />
 
-        <span class="input-group-text px-2">:</span>
+        <span class="input-group-text px-2">°</span>
 
-        <input class="form-control"
+        <input class="form-control text-center"
                :type="readonly ? 'text' : 'number'" :inputmode="minDec ? 'decimal' : 'numeric'"
                :min="0" :max="minMax" :step="minStep"
                :readonly="readonly"
@@ -233,11 +235,11 @@ watch(() => props.format, () => {
                @input="onInput"
         />
 
+        <span class="input-group-text px-2">'</span>
+
         <template v-if="hasSec">
 
-            <span class="input-group-text px-2">:</span>
-
-            <input class="form-control"
+            <input class="form-control text-center"
                    :type="readonly ? 'text' : 'number'" :inputmode="secDec ? 'decimal' : 'numeric'"
                    :min="0" :max="secMax" :step="secStep"
                    :readonly="readonly"
@@ -245,6 +247,8 @@ watch(() => props.format, () => {
                    v-model="sec"
                    @input="onInput"
             />
+
+            <span class="input-group-text px-2">''</span>
 
         </template>
 
