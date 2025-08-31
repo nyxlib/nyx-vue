@@ -224,7 +224,9 @@ watch(() => props.format, () => {
            @input="onInput"
     />
 
-    <span class="input-group-text px-2">°</span>
+    <span class="input-group-text">°</span>
+
+    <!-- *********************************************************************************************************** -->
 
     <input class="form-control text-center"
            :type="readonly ? 'text' : 'number'" :inputmode="minDec ? 'decimal' : 'numeric'"
@@ -235,7 +237,9 @@ watch(() => props.format, () => {
            @input="onInput"
     />
 
-    <span class="input-group-text px-2">'</span>
+    <span class="input-group-text">'</span>
+
+    <!-- *********************************************************************************************************** -->
 
     <template v-if="hasSec">
 
@@ -248,7 +252,7 @@ watch(() => props.format, () => {
                @input="onInput"
         />
 
-        <span class="input-group-text px-2">''</span>
+        <span class="input-group-text">''</span>
 
     </template>
 
