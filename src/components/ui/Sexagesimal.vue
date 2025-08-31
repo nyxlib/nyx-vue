@@ -71,7 +71,7 @@ const secStep = computed(() => secDec.value === 2 ? 0.01 : (secDec.value === 1 ?
 /* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const parseIn = (s) => {
+const parseInput = (s) => {
 
     const t = (s ?? '').trim();
 
@@ -178,7 +178,7 @@ const toNumber = (s, def = 0) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const formatOut = () => {
+const formatOutput = () => {
 
     const _deg = toNumber(deg.value, 0.0);
     const _min = toNumber(min.value, 0.0);
@@ -197,12 +197,12 @@ const formatOut = () => {
 
 function onInput()
 {
-    emit('update:modelValue', formatOut());
+    emit('update:modelValue', formatOutput());
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-watch(() => props.modelValue, parseIn, {immediate: true});
+watch(() => props.modelValue, parseInput, {immediate: true});
 
 watch(() => props.format, () => {
 
