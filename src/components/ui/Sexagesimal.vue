@@ -213,7 +213,7 @@ watch(() => props.format, () => {
 
     <!-- *********************************************************************************************************** -->
 
-        <input class="form-control text-end"
+        <input class="form-control"
                :type="readonly ? 'text' : 'number'" inputmode="decimal"
                step="1"
                :readonly="readonly"
@@ -224,7 +224,7 @@ watch(() => props.format, () => {
 
         <span class="input-group-text px-2">:</span>
 
-        <input class="form-control text-end"
+        <input class="form-control"
                :type="readonly ? 'text' : 'number'" :inputmode="minDec ? 'decimal' : 'numeric'"
                :min="0" :max="minMax" :step="minStep"
                :readonly="readonly"
@@ -237,7 +237,7 @@ watch(() => props.format, () => {
 
             <span class="input-group-text px-2">:</span>
 
-            <input class="form-control text-end"
+            <input class="form-control"
                    :type="readonly ? 'text' : 'number'" :inputmode="secDec ? 'decimal' : 'numeric'"
                    :min="0" :max="secMax" :step="secStep"
                    :readonly="readonly"
