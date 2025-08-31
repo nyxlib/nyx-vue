@@ -215,42 +215,42 @@ watch(() => props.format, () => {
 
     <!-- *********************************************************************************************************** -->
 
+    <input class="form-control text-center"
+           :type="readonly ? 'text' : 'number'" inputmode="decimal"
+           step="1"
+           :readonly="readonly"
+           :placeholder="'D'"
+           v-model="deg"
+           @input="onInput"
+    />
+
+    <span class="input-group-text px-2">°</span>
+
+    <input class="form-control text-center"
+           :type="readonly ? 'text' : 'number'" :inputmode="minDec ? 'decimal' : 'numeric'"
+           :min="0" :max="minMax" :step="minStep"
+           :readonly="readonly"
+           :placeholder="minDec ? 'MM.m' : 'MM'"
+           v-model="min"
+           @input="onInput"
+    />
+
+    <span class="input-group-text px-2">'</span>
+
+    <template v-if="hasSec">
+
         <input class="form-control text-center"
-               :type="readonly ? 'text' : 'number'" inputmode="decimal"
-               step="1"
+               :type="readonly ? 'text' : 'number'" :inputmode="secDec ? 'decimal' : 'numeric'"
+               :min="0" :max="secMax" :step="secStep"
                :readonly="readonly"
-               :placeholder="'D'"
-               v-model="deg"
+               :placeholder="secDec ? 'SS.s' : 'SS'"
+               v-model="sec"
                @input="onInput"
         />
 
-        <span class="input-group-text px-2">°</span>
+        <span class="input-group-text px-2">''</span>
 
-        <input class="form-control text-center"
-               :type="readonly ? 'text' : 'number'" :inputmode="minDec ? 'decimal' : 'numeric'"
-               :min="0" :max="minMax" :step="minStep"
-               :readonly="readonly"
-               :placeholder="minDec ? 'MM.m' : 'MM'"
-               v-model="min"
-               @input="onInput"
-        />
-
-        <span class="input-group-text px-2">'</span>
-
-        <template v-if="hasSec">
-
-            <input class="form-control text-center"
-                   :type="readonly ? 'text' : 'number'" :inputmode="secDec ? 'decimal' : 'numeric'"
-                   :min="0" :max="secMax" :step="secStep"
-                   :readonly="readonly"
-                   :placeholder="secDec ? 'SS.s' : 'SS'"
-                   v-model="sec"
-                   @input="onInput"
-            />
-
-            <span class="input-group-text px-2">''</span>
-
-        </template>
+    </template>
 
     <!-- *********************************************************************************************************** -->
 
