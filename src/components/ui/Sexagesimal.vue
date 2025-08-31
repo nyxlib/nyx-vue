@@ -205,6 +205,7 @@ function onInput()
 watch(() => props.modelValue, parseIn, {immediate: true});
 
 watch(() => props.format, () => {
+
     onInput();
 });
 
