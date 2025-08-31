@@ -78,7 +78,7 @@ const sendMessage = () => {
 
                     <sexagesimal :format="defNumber['@format']" v-model="defNumber['$']" :readonly="defNumberVector['@perm'] === 'ro'" v-if="defNumber['@format'].match(/%(\d+)\.(\d+)m/)" />
 
-                    <input class="form-control" type="number" :min="defNumber['@min']" :max="defNumber['@max']" :step="defNumber['@step']" :readonly="defNumberVector['@perm'] === 'ro'" v-model="defNumber['$']" v-else />
+                    <input class="form-control" :type="defNumberVector['@perm'] === 'ro' ? 'text' : 'number'" :min="defNumber['@min']" :max="defNumber['@max']" :step="defNumber['@step']" :readonly="defNumberVector['@perm'] === 'ro'" v-model="defNumber['$']" v-else />
 
                 </div>
 
