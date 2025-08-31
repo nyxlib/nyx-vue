@@ -121,9 +121,9 @@ const formatM = (value, f) => {
 
     const sgn = value < 0 ? '-' : '';
 
-    let v = Math.abs(value);
+    const v = Math.abs(value);
     let d = Math.floor(v);
-    let frac = v - d;
+    const frac = v - d;
 
     /**/ if(f === 3)
     {
@@ -133,35 +133,35 @@ const formatM = (value, f) => {
     }
     else if(f === 5)
     {
-        let m10 = Math.round(frac * 600.0);
+        const m10 = Math.round(frac * 600.0);
         let mm = Math.trunc(m10 / 10);
-        let mt1 = m10 % 10;
+        const mt1 = m10 % 10;
         if(mm >= 60) { mm = 0; d++; }
         return `${sgn}${d}:${pad2(mm)}.${mt1}`;
     }
     else if(f === 6)
     {
-        let s1 = Math.round(frac * 3600.0);
+        const s1 = Math.round(frac * 3600.0);
         let mm = Math.trunc(s1 / 60);
-        let ss = s1 % 60;
+        const ss = s1 % 60;
         if(mm >= 60) { mm = 0; d++; }
         return `${sgn}${d}:${pad2(mm)}:${pad2(ss)}`;
     }
     else if(f === 8)
     {
-        let s10 = Math.round(frac * 36000.0);
+        const s10 = Math.round(frac * 36000.0);
         let mm = Math.trunc(s10 / 600);
-        let ss = Math.trunc((s10 % 600) / 10);
-        let st1 = s10 % 10;
+        const ss = Math.trunc((s10 % 600) / 10);
+        const st1 = s10 % 10;
         if(mm >= 60) { mm = 0; d++; }
         return `${sgn}${d}:${pad2(mm)}:${pad2(ss)}.${st1}`;
     }
     else /* f === 9 */
     {
-        let s100 = Math.round(frac * 360000.0);
+        const s100 = Math.round(frac * 360000.0);
         let mm = Math.trunc(s100 / 6000);
-        let ss = Math.trunc((s100 % 6000) / 100);
-        let st2 = s100 % 100;
+        const ss = Math.trunc((s100 % 6000) / 100);
+        const st2 = s100 % 100;
         if(mm >= 60) { mm = 0; d++; }
         return `${sgn}${d}:${pad2(mm)}:${pad2(ss)}.${st2.toString().padStart(2, '0')}`;
     }
