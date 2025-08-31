@@ -2,6 +2,7 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import {inject} from 'vue';
+import Sexagesimal from "../ui/Sexagesimal.vue";
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -75,7 +76,9 @@ const sendMessage = () => {
                         {{ defNumber['@label'] || defNumber['@name'] }}
                     </span>
 
-                    <input class="form-control" type="number" :min="defNumber['@min']" :max="defNumber['@max']" :step="defNumber['@step']" :readonly="defNumberVector['@perm'] === 'ro'" v-model="defNumber['$']" />
+                    <sexagesimal :format="defNumber['@format']" v-model="defNumber['$']" :readonly="defNumberVector['@perm'] === 'ro'" v-if="defNumber['@format'].match(/%(\d+)\.(\d+)m/)" />
+
+                    <input class="form-control" type="number" :min="defNumber['@min']" :max="defNumber['@max']" :step="defNumber['@step']" :readonly="defNumberVector['@perm'] === 'ro'" v-model="defNumber['$']" v-else />
 
                 </div>
 
