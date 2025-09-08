@@ -65,6 +65,8 @@ onMounted(() => {
             trigger: 'focus hover',
             content: marked.parse(props.defTextVector['@hints'])
         });
+
+        popoverRef.value.style.cursor = 'pointer';
     }
 });
 
