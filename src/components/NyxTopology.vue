@@ -4,6 +4,8 @@
 
 import {ref, onMounted, onUnmounted} from 'vue';
 
+import * as uuid from 'uuid';
+
 import * as d3 from 'd3';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -287,7 +289,7 @@ const update = (pingDict, type) => {
         {
             /*--------------------------------------------------------------------------------------------------------*/
 
-            const id = __NYX_UUID__.v4();
+            const id = uuid.v4();
 
             graph.nodes.push({
                 id: id,

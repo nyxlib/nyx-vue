@@ -1,6 +1,8 @@
 // noinspection JSUnusedGlobalSymbols,JSUnresolvedReference
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+import * as uuid from 'uuid';
+
 import {Terminal} from '@xterm/xterm';
 
 import {WebLinksAddon} from '@xterm/addon-web-links';
@@ -55,7 +57,7 @@ const _init_func = (mqtt, nss) => {
 
         const clientId = localStorage.getItem('nyx-client-id') ?? (() => {
 
-            const clientId = __NYX_UUID__.v4().substring(0, 4).toUpperCase();
+            const clientId = uuid.v4().substring(0, 4).toUpperCase();
 
             localStorage.setItem('nyx-client-id', clientId);
 
