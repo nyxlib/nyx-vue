@@ -58,12 +58,12 @@ const sendMessage = (index) => {
 
 onMounted(() => {
 
-    if(popoverRef.value)
+    if(props.defSwitchVector['@hints'])
     {
         new Popover(popoverRef.value, {
             html: true,
             trigger: 'focus hover',
-            content: marked.parse(props.defNumberVector['@hints'])
+            content: marked.parse(props.defSwitchVector['@hints'])
         });
     }
 });
@@ -83,7 +83,7 @@ onMounted(() => {
 
             <i :class="['bi', 'bi-circle-fill', `text-${COLORS[defSwitchVector['@state']]}`]"></i>
 
-            {{ defSwitchVector['@label'] || defSwitchVector['@name'] }} <i class="bi bi-info-circle" tabindex="0" v-if="defSwitchVector['@hints']" ref="popoverRef"></i>
+            <span class="ms-1" tabindex="0" ref="popoverRef">{{ defSwitchVector['@label'] || defSwitchVector['@name'] }}</span>
 
         </div>
 

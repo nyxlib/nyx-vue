@@ -62,7 +62,7 @@ const sendMessage = () => {
 
 onMounted(() => {
 
-    if(popoverRef.value)
+    if(props.defNumberVector['@hints'])
     {
         new Popover(popoverRef.value, {
             html: true,
@@ -87,7 +87,7 @@ onMounted(() => {
 
             <i :class="['bi', 'bi-circle-fill', `text-${COLORS[defNumberVector['@state']]}`]"></i>
 
-            {{ defNumberVector['@label'] || defNumberVector['@name'] }} <i class="bi bi-info-circle" tabindex="0" v-if="defNumberVector['@hints']" ref="popoverRef"></i>
+            <span class="ms-1" tabindex="0" ref="popoverRef">{{ defNumberVector['@label'] || defNumberVector['@name'] }}</span>
 
         </div>
 

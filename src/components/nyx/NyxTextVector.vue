@@ -58,12 +58,12 @@ const sendMessage = () => {
 
 onMounted(() => {
 
-    if(popoverRef.value)
+    if(props.defTextVector['@hints'])
     {
         new Popover(popoverRef.value, {
             html: true,
             trigger: 'focus hover',
-            content: marked.parse(props.defNumberVector['@hints'])
+            content: marked.parse(props.defTextVector['@hints'])
         });
     }
 });
@@ -83,7 +83,7 @@ onMounted(() => {
 
             <i :class="['bi', 'bi-circle-fill', `text-${COLORS[defTextVector['@state']]}`]"></i>
 
-            {{ defTextVector['@label'] || defTextVector['@name'] }} <i class="bi bi-info-circle" tabindex="0" v-if="defTextVector['@hints']" ref="popoverRef"></i>
+            <span class="ms-1" tabindex="0" ref="popoverRef">{{ defTextVector['@label'] || defTextVector['@name'] }}</span>
 
         </div>
 

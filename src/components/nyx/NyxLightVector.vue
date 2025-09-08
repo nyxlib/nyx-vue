@@ -2,7 +2,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {ref, inject, onMounted} from 'vue';
+import {ref, onMounted} from 'vue';
 
 import {Popover} from 'bootstrap';
 
@@ -42,12 +42,12 @@ const COLORS = {
 
 onMounted(() => {
 
-    if(popoverRef.value)
+    if(props.defLightVector['@hints'])
     {
         new Popover(popoverRef.value, {
             html: true,
             trigger: 'focus hover',
-            content: marked.parse(props.defNumberVector['@hints'])
+            content: marked.parse(props.defLightVector['@hints'])
         });
     }
 });
@@ -67,7 +67,7 @@ onMounted(() => {
 
             <i :class="['bi', 'bi-circle-fill', `text-${COLORS[defLightVector['@state']]}`]"></i>
 
-            {{ defLightVector['@label'] || defLightVector['@name'] }} <i class="bi bi-info-circle" tabindex="0" v-if="defLightVector['@hints']" ref="popoverRef"></i>
+            <span class="ms-1" tabindex="0" ref="popoverRef">{{ defLightVector['@label'] || defLightVector['@name'] }}</span>
 
         </div>
 
