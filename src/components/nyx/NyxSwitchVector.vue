@@ -1,7 +1,11 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {inject} from 'vue';
+import {ref, inject, onMounted} from 'vue';
+
+import {Popover} from 'bootstrap';
+
+import {marked} from 'marked';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -18,6 +22,10 @@ const props = defineProps({
         default: () => {},
     },
 });
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const popoverRef = ref(null);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -45,6 +53,22 @@ const sendMessage = (index) => {
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+/* INITIALIZATION                                                                                                     */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+onMounted(() => {
+
+    if(popoverRef.value)
+    {
+        new Popover(popoverRef.value, {
+            html: true,
+            trigger: 'focus hover',
+            content: marked.parse(props.defNumberVector['@hints'])
+        });
+    }
+});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 </script>
 
 <template>
@@ -59,7 +83,7 @@ const sendMessage = (index) => {
 
             <i :class="['bi', 'bi-circle-fill', `text-${COLORS[defSwitchVector['@state']]}`]"></i>
 
-            {{ defSwitchVector['@label'] || defSwitchVector['@name'] }}
+            {{ defSwitchVector['@label'] || defSwitchVector['@name'] }} <i class="bi bi-info-circle" tabindex="0" v-if="defSwitchVector['@hints']" ref="popoverRef"></i>
 
         </div>
 

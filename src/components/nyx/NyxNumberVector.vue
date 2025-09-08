@@ -1,7 +1,14 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {inject} from 'vue';
+import {ref, inject, onMounted} from 'vue';
+
+import {Popover} from 'bootstrap';
+
+import {marked} from 'marked';
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 import Sexagesimal from "../ui/Sexagesimal.vue";
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -19,6 +26,10 @@ const props = defineProps({
         default: () => {},
     },
 });
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const popoverRef = ref(null);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -46,6 +57,22 @@ const sendMessage = () => {
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+/* INITIALIZATION                                                                                                     */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+onMounted(() => {
+
+    if(popoverRef.value)
+    {
+        new Popover(popoverRef.value, {
+            html: true,
+            trigger: 'focus hover',
+            content: marked.parse(props.defNumberVector['@hints'])
+        });
+    }
+});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 </script>
 
 <template>
@@ -60,7 +87,7 @@ const sendMessage = () => {
 
             <i :class="['bi', 'bi-circle-fill', `text-${COLORS[defNumberVector['@state']]}`]"></i>
 
-            {{ defNumberVector['@label'] || defNumberVector['@name'] }}
+            {{ defNumberVector['@label'] || defNumberVector['@name'] }} <i class="bi bi-info-circle" tabindex="0" v-if="defNumberVector['@hints']" ref="popoverRef"></i>
 
         </div>
 

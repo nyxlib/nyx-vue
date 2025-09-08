@@ -2,7 +2,11 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {computed} from 'vue';
+import {ref, inject, onMounted} from 'vue';
+
+import {Popover} from 'bootstrap';
+
+import {marked} from 'marked';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -21,12 +25,32 @@ const sortedDefs = computed(() => [...props.defLightVector.children].sort((x, y)
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const popoverRef = ref(null);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const COLORS = {
     'Idle': 'secondary',
     'Ok': 'success',
     'Busy': 'warning',
     'Alert': 'danger',
 };
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* INITIALIZATION                                                                                                     */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+onMounted(() => {
+
+    if(popoverRef.value)
+    {
+        new Popover(popoverRef.value, {
+            html: true,
+            trigger: 'focus hover',
+            content: marked.parse(props.defNumberVector['@hints'])
+        });
+    }
+});
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 </script>
@@ -43,7 +67,7 @@ const COLORS = {
 
             <i :class="['bi', 'bi-circle-fill', `text-${COLORS[defLightVector['@state']]}`]"></i>
 
-            {{ defLightVector['@label'] || defLightVector['@name'] }}
+            {{ defLightVector['@label'] || defLightVector['@name'] }} <i class="bi bi-info-circle" tabindex="0" v-if="defLightVector['@hints']" ref="popoverRef"></i>
 
         </div>
 
