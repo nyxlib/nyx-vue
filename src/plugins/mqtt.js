@@ -186,40 +186,38 @@ const _emit_func = (topic, payload) => {
 
 const _enableBLOB_func = (enabled, device = null, name = null) => {
 
-    const status = enabled ? 'Also' : 'Never';
+    const command = {'<>': 'enableBLOB', '$': enabled ? 'Also' : 'Never'};
 
     if(device)
     {
-        if(name) {
-            _emit_func('nyx/cmd/json' , `{"<>": "enableBLOB", "@device": "${device}", "@name": "${name}", "$": "${status}"}`);
-        }
-        else {
-            _emit_func('nyx/cmd/json' , `{"<>": "enableBLOB", "@device": "${device}", "$": "${status}"}`);
+        command['@device'] = device;
+
+        if(name)
+        {
+            command['@name'] = name;
         }
     }
-    else {
-        _emit_func('nyx/cmd/json' , `{"<>": "enableBLOB", "$": "${status}"}`);
-    }
+
+    _emit_func('nyx/cmd/json', JSON.stringify(command, null, 2));
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const _enableStream_func = (enabled, device = null, name = null) => {
 
-    const status = enabled ? 'Also' : 'Never';
+    const command = {'<>': 'enableStream', '$': enabled ? 'Also' : 'Never'};
 
     if(device)
     {
-        if(name) {
-            _emit_func('nyx/cmd/json' , `{"<>": "enableStream", "@device": "${device}", "@name": "${name}", "$": "${status}"}`);
-        }
-        else {
-            _emit_func('nyx/cmd/json' , `{"<>": "enableStream", "@device": "${device}", "$": "${status}"}`);
+        command['@device'] = device;
+
+        if(name)
+        {
+            command['@name'] = name;
         }
     }
-    else {
-        _emit_func('nyx/cmd/json' , `{"<>": "enableStream", "$": "${status}"}`);
-    }
+
+    _emit_func('nyx/cmd/json', JSON.stringify(command, null, 2));
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
