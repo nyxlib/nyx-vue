@@ -184,6 +184,46 @@ const _emit_func = (topic, payload) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const _enableBLOB_func = (enabled, device = null, name = null) => {
+
+    const status = enabled ? 'Alse' : 'Never';
+
+    if(device)
+    {
+        if(name) {
+            _emit_func('nyx/cmd/json' , `{"<>": "enableBLOB", "@device": "${device}", "@name": "${name}", "$": "${status}"}`);
+        }
+        else {
+            _emit_func('nyx/cmd/json' , `{"<>": "enableBLOB", "@device": "${device}", "$": "${status}"}`);
+        }
+    }
+    else {
+        _emit_func('nyx/cmd/json' , `{"<>": "enableBLOB", "$": "${status}"}`);
+    }
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const _enableStream_func = (enabled, device = null, name = null) => {
+
+    const status = enabled ? 'Alse' : 'Never';
+
+    if(device)
+    {
+        if(name) {
+            _emit_func('nyx/cmd/json' , `{"<>": "enableStream", "@device": "${device}", "@name": "${name}", "$": "${status}"}`);
+        }
+        else {
+            _emit_func('nyx/cmd/json' , `{"<>": "enableStream", "@device": "${device}", "$": "${status}"}`);
+        }
+    }
+    else {
+        _emit_func('nyx/cmd/json' , `{"<>": "enableStream", "$": "${status}"}`);
+    }
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 export default {
 
     install(app)
@@ -196,6 +236,8 @@ export default {
             subscribe            : _subscribe_func            ,
             unsubscribe          : _unsubscribe_func          ,
             emit                 : _emit_func                 ,
+            enableBLOB           : _enableBLOB_func           ,
+            enableStream         : _enableStream_func         ,
         });
     }
 };
