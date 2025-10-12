@@ -186,7 +186,7 @@ const _emit_func = (topic, payload) => {
 
 const _enableBLOB_func = (enabled, device = null, name = null) => {
 
-    const status = enabled ? 'Alse' : 'Never';
+    const status = enabled ? 'Also' : 'Never';
 
     if(device)
     {
@@ -206,7 +206,7 @@ const _enableBLOB_func = (enabled, device = null, name = null) => {
 
 const _enableStream_func = (enabled, device = null, name = null) => {
 
-    const status = enabled ? 'Alse' : 'Never';
+    const status = enabled ? 'Also' : 'Never';
 
     if(device)
     {
