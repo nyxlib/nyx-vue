@@ -184,44 +184,6 @@ const _emit_func = (topic, payload) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const _enableBLOB_func = (enabled, device = null, name = null) => {
-
-    const command = {'<>': 'enableBLOB', '$': enabled ? 'Also' : 'Never'};
-
-    if(device)
-    {
-        command['@device'] = device;
-
-        if(name)
-        {
-            command['@name'] = name;
-        }
-    }
-
-    _emit_func('nyx/cmd/json', JSON.stringify(command, null, 2));
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const _enableStream_func = (enabled, device = null, name = null) => {
-
-    const command = {'<>': 'enableStream', '$': enabled ? 'Also' : 'Never'};
-
-    if(device)
-    {
-        command['@device'] = device;
-
-        if(name)
-        {
-            command['@name'] = name;
-        }
-    }
-
-    _emit_func('nyx/cmd/json', JSON.stringify(command, null, 2));
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 export default {
 
     install(app)
@@ -234,8 +196,6 @@ export default {
             subscribe            : _subscribe_func            ,
             unsubscribe          : _unsubscribe_func          ,
             emit                 : _emit_func                 ,
-            enableBLOB           : _enableBLOB_func           ,
-            enableStream         : _enableStream_func         ,
         });
     }
 };

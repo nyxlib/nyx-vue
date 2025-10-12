@@ -429,6 +429,44 @@ const _buildNewSwitchVectorMessage_func = (defSwitchVector, index) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const _enableBLOB_func = (enabled, device = null, name = null) => {
+
+    const command = {'<>': 'enableBLOB', '@client': useNyxStore().clientId, '$': enabled ? 'Also' : 'Never'};
+
+    if(device)
+    {
+        command['@device'] = device;
+
+        if(name)
+        {
+            command['@name'] = name;
+        }
+    }
+
+    _mqtt.emit('nyx/cmd/json', JSON.stringify(command, null, 2));
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const _enableStream_func = (enabled, device = null, name = null) => {
+
+    const command = {'<>': 'enableStream', '@client': useNyxStore().clientId, '$': enabled ? 'Also' : 'Never'};
+
+    if(device)
+    {
+        command['@device'] = device;
+
+        if(name)
+        {
+            command['@name'] = name;
+        }
+    }
+
+    _mqtt.emit('nyx/cmd/json', JSON.stringify(command, null, 2));
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const _setupTerminal_func = (div, newDeviceName) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -496,6 +534,8 @@ export default {
             buildNewTextVectorMessage: _buildNewTextVectorMessage_func,
             buildNewNumberVectorMessage: _buildNewNumberVectorMessage_func,
             buildNewSwitchVectorMessage: _buildNewSwitchVectorMessage_func,
+            enableBLOB: _enableBLOB_func,
+            enableStream: _enableStream_func,
             /* TERMINAL */
             setupTerminal: _setupTerminal_func,
             clearTerminal: _clearTerminal_func,
