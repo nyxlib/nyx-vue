@@ -102,9 +102,9 @@ const _init_func = (mqtt, nss) => {
     /* SETUP MESSAGE MECHANISM                                                                                        */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const _getProperties = (connected) => {
+    const _connectionCallback = (state) => {
 
-        if(connected)
+        /**/ if(state === _mqtt.CONNECTED)
         {
             _mqtt.subscribe('nyx/json');
             _mqtt.subscribe('nyx/ping/node');
@@ -112,11 +112,16 @@ const _init_func = (mqtt, nss) => {
 
             _mqtt.emit('nyx/cmd/json', '{"<>": "getProperties", "@version": "1.7"}');
         }
+        else if(state === _mqtt.DISCONNECTING)
+        {
+            _mqtt.emit('nyx/cmd/json', `{"<>": "enableBLOB", "@client": "${useNyxStore().clientId}", "$": "Never"}`);
+            _mqtt.emit('nyx/cmd/json', `{"<>": "enableStream", "@client": "${useNyxStore().clientId}", "$": "Never"}`);
+        }
     };
 
-    _mqtt.setConnectionCallback(_getProperties);
+    _mqtt.setConnectionCallback(_connectionCallback);
 
-    _getProperties(_mqtt.connected());
+    _connectionCallback(_mqtt.connected());
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -429,40 +434,55 @@ const _buildNewSwitchVectorMessage_func = (defSwitchVector, index) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const _enableBLOB_func = (enabled, device = null, name = null) => {
+const _enableBLOB_func = (blob, enabled) => {
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     const command = {'<>': 'enableBLOB', '@client': useNyxStore().clientId, '$': enabled ? 'Also' : 'Never'};
 
-    if(device)
-    {
-        command['@device'] = device;
+    const parts = (blob || '').split(':').map((part) => part.trim());
 
-        if(name)
-        {
-            command['@name'] = name;
-        }
+    command['@device'] = parts[0];
+    if(parts.length > 1) {
+        command['@name'] = parts[1];
     }
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     _mqtt.emit('nyx/cmd/json', JSON.stringify(command, null, 2));
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const _enableStream_func = (enabled, device = null, name = null) => {
+const _enableStream_func = (stream, callback, enabled) => {
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     const command = {'<>': 'enableStream', '@client': useNyxStore().clientId, '$': enabled ? 'Also' : 'Never'};
 
-    if(device)
-    {
-        command['@device'] = device;
+    const parts = (stream || '').split(':').map((part) => part.trim());
 
-        if(name)
-        {
-            command['@name'] = name;
-        }
+    command['@device'] = parts[0];
+    if(parts.length > 1) {
+        command['@name'] = parts[1];
     }
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     _mqtt.emit('nyx/cmd/json', JSON.stringify(command, null, 2));
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(enabled) {
+        _nss.register(stream, callback);
+    }
+    else {
+        _nss.unregister(stream, callback);
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -534,19 +554,13 @@ export default {
             buildNewTextVectorMessage: _buildNewTextVectorMessage_func,
             buildNewNumberVectorMessage: _buildNewNumberVectorMessage_func,
             buildNewSwitchVectorMessage: _buildNewSwitchVectorMessage_func,
+            /* BLOBS & STREAMS */
             enableBLOB: _enableBLOB_func,
             enableStream: _enableStream_func,
             /* TERMINAL */
             setupTerminal: _setupTerminal_func,
             clearTerminal: _clearTerminal_func,
             updateTerminal: _updateTerminal_func,
-            /* STREAMS */
-            stream_register: (stream, callback) => {
-                _nss.register(stream, callback);
-            },
-            stream_unregister: (stream, callback) => {
-                _nss.unregister(stream, callback);
-            },
         });
     }
 };

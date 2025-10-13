@@ -13,6 +13,13 @@ import useNyxStore from '../stores/nyx';
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const CONNECTING = 0;
+const CONNECTED = 1;
+const DISCONNECTING = 2;
+const DISCONNECTED = 3;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 let _client = null;
 let _endpoint = null;
 let _connectionCallback = null;
@@ -35,7 +42,25 @@ const _update_func = (endpoint, username, password) => {
     {
         if(_endpoint !== endpoint)
         {
-            try { _client.disconnect(); } catch (_) { /* IGNORE */ }
+            try
+            {
+                /*----------------------------------------------------------------------------------------------------*/
+
+                if(_connectionCallback)
+                {
+                    _connectionCallback(DISCONNECTING);
+                }
+
+                /*----------------------------------------------------------------------------------------------------*/
+
+                _client.disconnect();
+
+                /*----------------------------------------------------------------------------------------------------*/
+            }
+            catch(_)
+            {
+                /* IGNORE */
+            }
         }
         else
         {
@@ -51,6 +76,13 @@ const _update_func = (endpoint, username, password) => {
         {
             /*--------------------------------------------------------------------------------------------------------*/
 
+            if(_connectionCallback)
+            {
+                _connectionCallback(CONNECTING);
+            }
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
             const url = new URL(_endpoint = endpoint);
 
             _client = new paho.Client(url.hostname, parseInt(url.port || '443'), url.pathname, uuid.v4());
@@ -63,8 +95,9 @@ const _update_func = (endpoint, username, password) => {
 
                 useNyxStore().isConnected = true;
 
-                if(_connectionCallback) {
-                    _connectionCallback(true);
+                if(_connectionCallback)
+                {
+                    _connectionCallback(CONNECTED);
                 }
             };
 
@@ -76,8 +109,9 @@ const _update_func = (endpoint, username, password) => {
 
                 useNyxStore().isConnected = false;
 
-                if(_connectionCallback) {
-                    _connectionCallback(false);
+                if(_connectionCallback)
+                {
+                    _connectionCallback(DISCONNECTED);
                 }
             };
 
@@ -189,6 +223,10 @@ export default {
     install(app)
     {
         app.provide('mqtt', {
+            CONNECTING           : CONNECTING                 ,
+            CONNECTED            : CONNECTED                  ,
+            DISCONNECTING        : DISCONNECTING              ,
+            DISCONNECTED         : DISCONNECTED               ,
             connected            : _connected_func            ,
             update               : _update_func               ,
             setConnectionCallback: _setConnectionCallback_func,
