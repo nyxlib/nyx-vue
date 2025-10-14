@@ -439,11 +439,14 @@ const _enableBLOB_func = (blob, enabled) => {
 
     const command = {'<>': 'enableBLOB', '@client': useNyxStore().clientId, '$': enabled ? 'Also' : 'Never'};
 
-    const parts = (blob || '').split(':').map((part) => part.trim());
+    if(Object.prototype.toString.call(blob) === '[object String]')
+    {
+        const parts = blob.split(':').map((part) => part.trim());
 
-    command['@device'] = parts[0];
-    if(parts.length > 1) {
-        command['@name'] = parts[1];
+        command['@device'] = parts[0];
+        if(parts.length > 1) {
+            command['@name'] = parts[1];
+        }
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -461,11 +464,14 @@ const _enableStream_func = (stream, enabled) => {
 
     const command = {'<>': 'enableStream', '@client': useNyxStore().clientId, '$': enabled ? 'Also' : 'Never'};
 
-    const parts = (stream || '').split(':').map((part) => part.trim());
+    if(Object.prototype.toString.call(stream) === '[object String]')
+    {
+        const parts = stream.split(':').map((part) => part.trim());
 
-    command['@device'] = parts[0];
-    if(parts.length > 1) {
-        command['@name'] = parts[1];
+        command['@device'] = parts[0];
+        if(parts.length > 1) {
+            command['@name'] = parts[1];
+        }
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
