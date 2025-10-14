@@ -57,7 +57,7 @@ const tabId = `nyx_tab_${uuid.v4()}`;
 
 const onShow = (e) => {
 
-    emit('shown', e);
+    emit('show', e);
 };
 
 const onShown = (e) => {
@@ -67,7 +67,7 @@ const onShown = (e) => {
 
 const onHide = (e) => {
 
-    emit('hidden', e);
+    emit('hide', e);
 };
 
 const onHidden = (e) => {
