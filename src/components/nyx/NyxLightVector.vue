@@ -75,7 +75,7 @@ onMounted(() => {
 
         <!-- ******************************************************************************************************* -->
 
-        <div class="col-lg-9">
+        <div class="col-lg-7">
 
             <div v-for="defLight in sortedDefs" :key="`${defLight['@name']}-${defLight['@rank']}`">
 

@@ -91,7 +91,7 @@ onMounted(() => {
 
         <!-- ******************************************************************************************************* -->
 
-        <div :class="{'col-lg-9': defTextVector['@perm'] === 'ro', 'col-lg-7': defTextVector['@perm'] !== 'ro'}">
+        <div class="col-lg-7">
 
             <template v-for="defText in defTextVector['children']" :key="defText">
 
@@ -111,7 +111,7 @@ onMounted(() => {
 
         <!-- ******************************************************************************************************* -->
 
-        <div class="col-lg-2 mb-1" v-if="defTextVector['@perm'] !== 'ro'">
+        <div class="col-lg-2 pb-1" v-if="defTextVector['@perm'] !== 'ro'">
 
             <button class="btn btn-xs btn-outline-primary h-100 w-100" @click="sendMessage">
                 Apply
