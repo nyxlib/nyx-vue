@@ -77,7 +77,7 @@ onMounted(() => {
 
     <!-- *********************************************************************************************************** -->
 
-    <div class="row mx-0 w-100">
+    <div class="row mx-0 w-100 text-start">
 
         <!-- ******************************************************************************************************* -->
 
@@ -91,7 +91,7 @@ onMounted(() => {
 
         <!-- ******************************************************************************************************* -->
 
-        <div class="col-lg-7 px-5">
+        <div class="col-lg-7 text-center">
 
             <!-- *************************************************************************************************** -->
             <!-- ONE OF MANY                                                                                         -->
@@ -99,7 +99,7 @@ onMounted(() => {
 
             <template v-if="defSwitchVector['@rule'] === 'OneOfMany'">
 
-                <div class="btn-group btn-group-sm mb-1 w-100" role="group" v-if="defSwitchVector['children'].length < 4">
+                <div class="btn-group btn-group-sm mb-1 w-75" role="group" v-if="defSwitchVector['children'].length < 4">
                     <button class="btn" :class="{'btn-primary': defSwitch['$'] === 'On', 'btn-outline-secondary': defSwitch['$'] === 'Off'}" :style="{'width': `${100.0 / props.defSwitchVector['children'].length}%`}" :disabled="defSwitchVector['@perm'] === 'wo'" @click="sendMessage(index)" v-for="(defSwitch, index) in defSwitchVector['children']" :key="index">
                         {{ defSwitch['@label'] || defSwitch['@name'] }}
                     </button>
@@ -119,9 +119,9 @@ onMounted(() => {
 
             <template v-if="defSwitchVector['@rule'] === 'AtMostOne'">
 
-                <div class="btn-group btn-group-sm mb-1 w-100" role="group">
+                <div class="btn-group btn-group-sm mb-1 w-75" role="group">
                     <button class="btn" :class="{'btn-primary': defSwitch['$'] === 'On', 'btn-outline-secondary': defSwitch['$'] === 'Off'}" :style="{'width': `${100.0 / props.defSwitchVector['children'].length}%`}" :disabled="defSwitchVector['@perm'] === 'wo'" @click="sendMessage(index)" v-for="(defSwitch, index) in defSwitchVector['children']" :key="index">
-                        <i :class="['bi', {'bi-check-circle': defSwitch['$'] === 'On', 'bi-circle': defSwitch['$'] === 'Off'}]"></i>
+                        <i :class="['bi', {'bi-check-circle': defSwitch['$'] === 'On', 'bi-circle': defSwitch['$'] === 'Off'}]" v-if="defSwitchVector['children'].length > 1"></i>
                         {{ defSwitch['@label'] || defSwitch['@name'] }}
                     </button>
                 </div>
@@ -134,9 +134,9 @@ onMounted(() => {
 
             <template v-if="defSwitchVector['@rule'] === 'AnyOfMany'">
 
-                <div class="btn-group btn-group-sm mb-1 w-100" role="group">
+                <div class="btn-group btn-group-sm mb-1 w-75" role="group">
                     <button class="btn" :class="{'btn-primary': defSwitch['$'] === 'On', 'btn-outline-secondary': defSwitch['$'] === 'Off'}" :style="{'width': `${100.0 / props.defSwitchVector['children'].length}%`}" :disabled="defSwitchVector['@perm'] === 'wo'" @click="sendMessage(index)" v-for="(defSwitch, index) in defSwitchVector['children']" :key="index">
-                        <i :class="['bi', {'bi-check-square': defSwitch['$'] === 'On', 'bi-square': defSwitch['$'] === 'Off'}]"></i>
+                        <i :class="['bi', {'bi-check-square': defSwitch['$'] === 'On', 'bi-square': defSwitch['$'] === 'Off'}]" v-if="defSwitchVector['children'].length > 1"></i>
                         {{ defSwitch['@label'] || defSwitch['@name'] }}
                     </button>
                 </div>

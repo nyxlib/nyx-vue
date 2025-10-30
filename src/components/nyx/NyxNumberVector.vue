@@ -101,7 +101,7 @@ onMounted(() => {
 
                 <div class="input-group input-group-sm mb-1">
 
-                    <span class="input-group-text" style="min-width: 175px;">
+                    <span class="input-group-text" style="min-width: 200px;">
                         {{ defNumber['@label'] || defNumber['@name'] }}
                     </span>
 
