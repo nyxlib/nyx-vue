@@ -13,9 +13,9 @@ import * as uuid from 'uuid';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import * as d3              from 'd3'               ;
-import * as d3Zoom          from 'd3-zoom'          ;
-import * as d3Selection     from 'd3-selection'     ;
+import * as d3 from 'd3';
+import * as d3Zoom from 'd3-zoom';
+import * as d3Selection from 'd3-selection';
 import * as d3GeoProjection from 'd3-geo-projection';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
