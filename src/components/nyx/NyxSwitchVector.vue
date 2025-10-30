@@ -92,18 +92,59 @@ onMounted(() => {
         <!-- ******************************************************************************************************* -->
 
         <div class="col-lg-10 text-center">
-            <div class="btn-group btn-group-sm mb-1 w-50" role="group">
 
-                <button class="btn" :class="{'btn-primary': defSwitch['$'] === 'On', 'btn-outline-secondary': defSwitch['$'] === 'Off', 'disabled': defSwitchVector['@perm'] === 'wo'}" :style="{'width': `${100.0 / props.defSwitchVector['children'].length}%`}" v-for="(defSwitch, index) in defSwitchVector['children']" :key="index" @click="sendMessage(index)">
+            <!-- *************************************************************************************************** -->
+            <!-- ONE OF MANY                                                                                         -->
+            <!-- *************************************************************************************************** -->
 
-                    <i :class="['bi', {'bi-check-circle': defSwitch['$'] === 'On', 'bi-circle': defSwitch['$'] === 'Off'}]" v-if="defSwitchVector['@rule'] === 'AtMostOne'"></i>
-                    <i :class="['bi', {'bi-check-square': defSwitch['$'] === 'On', 'bi-square': defSwitch['$'] === 'Off'}]" v-if="defSwitchVector['@rule'] === 'AnyOfMany'"></i>
+            <template v-if="defSwitchVector['@rule'] === 'OneOfMany'">
 
-                    {{ defSwitch['@label'] || defSwitch['@name'] }}
+                <div class="btn-group btn-group-sm mb-1 w-50" role="group" v-if="defSwitchVector['children'].length < 4">
+                    <button class="btn" :class="{'btn-primary': defSwitch['$'] === 'On', 'btn-outline-secondary': defSwitch['$'] === 'Off'}" :style="{'width': `${100.0 / props.defSwitchVector['children'].length}%`}" :disabled="defSwitchVector['@perm'] === 'wo'" @click="sendMessage(index)"  v-for="(defSwitch, index) in defSwitchVector['children']" :key="index">
+                        {{ defSwitch['@label'] || defSwitch['@name'] }}
+                    </button>
+                </div>
 
-                </button>
+                <select class="form-select form-select-sm mb-1 w-100" :disabled="defSwitchVector['@perm'] === 'wo'" @change="sendMessage($event.target.value)" v-else>
+                    <option :value="index" :selected="defSwitch['$'] === 'On'" v-for="(defSwitch, index) in defSwitchVector['children']" :key="index">
+                        {{ defSwitch['@label'] || defSwitch['@name'] }}
+                    </option>
+                </select>
 
-            </div>
+            </template>
+
+            <!-- *************************************************************************************************** -->
+            <!-- AT MOST ONE                                                                                         -->
+            <!-- *************************************************************************************************** -->
+
+            <template v-if="defSwitchVector['@rule'] === 'AtMostOne'">
+
+                <div class="btn-group btn-group-sm mb-1 w-50" role="group">
+                    <button class="btn" :class="{'btn-primary': defSwitch['$'] === 'On', 'btn-outline-secondary': defSwitch['$'] === 'Off'}" :style="{'width': `${100.0 / props.defSwitchVector['children'].length}%`}" :disabled="defSwitchVector['@perm'] === 'wo'" @click="sendMessage(index)" v-for="(defSwitch, index) in defSwitchVector['children']" :key="index">
+                        <i :class="['bi', {'bi-check-circle': defSwitch['$'] === 'On', 'bi-circle': defSwitch['$'] === 'Off'}]" v-if="defSwitchVector['@rule'] === 'AtMostOne'"></i>
+                        {{ defSwitch['@label'] || defSwitch['@name'] }}
+                    </button>
+                </div>
+
+            </template>
+
+            <!-- *************************************************************************************************** -->
+            <!-- ANY OF MANY                                                                                         -->
+            <!-- *************************************************************************************************** -->
+
+            <template v-if="defSwitchVector['@rule'] === 'AnyOfMany'">
+
+                <div class="btn-group btn-group-sm mb-1 w-50" role="group">
+                    <button class="btn" :class="{'btn-primary': defSwitch['$'] === 'On', 'btn-outline-secondary': defSwitch['$'] === 'Off'}" :style="{'width': `${100.0 / props.defSwitchVector['children'].length}%`}" :disabled="defSwitchVector['@perm'] === 'wo'"  @click="sendMessage(index)" v-for="(defSwitch, index) in defSwitchVector['children']" :key="index">
+                        <i :class="['bi', {'bi-check-square': defSwitch['$'] === 'On', 'bi-square': defSwitch['$'] === 'Off'}]" v-if="defSwitchVector['@rule'] === 'AnyOfMany'"></i>
+                        {{ defSwitch['@label'] || defSwitch['@name'] }}
+                    </button>
+                </div>
+
+            </template>
+
+            <!-- *************************************************************************************************** -->
+
         </div>
 
         <!-- ******************************************************************************************************* -->
