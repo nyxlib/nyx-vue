@@ -22,7 +22,8 @@ const nyxStore = useNyxStore();
 
 const TYPE_BROKER = 1;
 const TYPE_NODE = 2;
-const TYPE_CLIENT = 3;
+const TYPE_SPECIAL = 3;
+const TYPE_CLIENT = 4;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -96,11 +97,13 @@ const getColorFromType = (type) => {
 
     switch(type)
     {
-        case TYPE_CLIENT:
-            return '#2CA02C';
         case TYPE_BROKER:
             return '#1F77B4';
         case TYPE_NODE:
+            return '#2CA02C';
+        case TYPE_SPECIAL:
+            return '#CED4DA';
+        case TYPE_CLIENT:
             return '#2CA02C';
         default:
             return '#FFFFF';
@@ -113,15 +116,31 @@ const getIconFromType = (type) => {
 
     switch(type)
     {
-        case TYPE_CLIENT:
-            return '\uF456';
         case TYPE_BROKER:
             return '\uF411';
         case TYPE_NODE:
             return '\uF40D';
+        case TYPE_SPECIAL:
+            return '\uF685';
+        case TYPE_CLIENT:
+            return '\uF456';
         default:
             return '\uF50C';
     }
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const patchName = (name) => {
+
+    /**/ if(name === '$$nyx-stream-server$$') {
+        return 'Nyx Stream Server';
+    }
+    else if(name === '$$nyx-indi-bridge$$') {
+        return 'Nyx Indi Bridge';
+    }
+
+    return name;
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -170,7 +189,7 @@ const updateNodes = () => {
 
     nodesEnter.append('text').attr('text-anchor', 'middle').attr('dominant-baseline', 'central').attr('class', 'nyx-topology-icon').text((d) => getIconFromType(d.type));
 
-    nodesEnter.append('text').attr('text-anchor', 'right').attr('dominant-baseline', 'central').attr('class', 'nyx-topology-label').attr('x', CIRCLE_DIAMETER + 5).text((d) => d.name);
+    nodesEnter.append('text').attr('text-anchor', 'right').attr('dominant-baseline', 'central').attr('class', 'nyx-topology-label').attr('x', CIRCLE_DIAMETER + 5).text((d) => patchName(d.name));
 
     nodesEnter.merge(nodes).call(d3.drag()
         .on('start', onDragStart)
@@ -269,6 +288,8 @@ const update = (pingDict, type) => {
 
     for(const [name, timestamp] of Object.entries(pingDict))
     {
+        /*------------------------------------------------------------------------------------------------------------*/
+
         let found = false;
 
         for(const node of graph.nodes)
@@ -287,6 +308,13 @@ const update = (pingDict, type) => {
 
         if(!found)
         {
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            if(name.startsWith('$$nyx-'))
+            {
+                type = TYPE_SPECIAL;
+            }
+
             /*--------------------------------------------------------------------------------------------------------*/
 
             const id = uuid.v4();
