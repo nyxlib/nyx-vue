@@ -136,7 +136,7 @@ onUnmounted(() => {
 
             <!-- *************************************************************************************************** -->
 
-            <tab-pane class="align-items-center justify-content-center" title="Nyx" icon="command" v-if="showDevices">
+            <tab-pane class="align-items-center justify-content-center" title="Nyx" icon="command" v-if="nyxStore.isConnected && showDevices">
 
                 <div class="d-flex flex-column h-100">
 
