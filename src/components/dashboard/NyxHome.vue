@@ -45,7 +45,7 @@ const nyxStore = useNyxStore();
 
     <!-- *********************************************************************************************************** -->
 
-    <span class="badge rounded-pill text-bg-dark position-absolute" style="bottom: 10px;">
+    <span class="position-absolute fs-6" style="bottom: 10px;">
         Copyright <i class="bi bi-c-circle"></i> 2024-{{ new Date().getFullYear() }} <a href="https://nyxlib.org/" target="_blank">Nyx Lab</a> — <a href="https://odier.xyz/" target="_blank">Jérôme ODIER</a>, <a href="https://lpsc.in2p3.fr/" target="_blank">LPSC</a> / <a href="https://cnrs.fr/" target="_blank">CNRS</a>.
     </span>
 
@@ -57,9 +57,7 @@ const nyxStore = useNyxStore();
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 a {
-    color: white;
-
-    font-weight: 800;
+    color: var(--bs-body-color);
 
     text-decoration: none;
 }
