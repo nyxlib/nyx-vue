@@ -2,7 +2,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {ref, computed, onMounted} from 'vue';
+import {ref, onMounted} from 'vue';
 
 import {Popover} from 'bootstrap';
 
@@ -18,10 +18,6 @@ const props = defineProps({
         default: () => {},
     },
 });
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const sortedDefs = computed(() => [...props.defLightVector.children].sort((x, y) => x['@rank'] - y['@rank']));
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -77,7 +73,7 @@ onMounted(() => {
 
         <div class="col-lg-7">
 
-            <div v-for="defLight in sortedDefs" :key="`${defLight['@name']}-${defLight['@rank']}`">
+            <div v-for="defLight in defLightVector['children']" :key="`${defLight['@name']}-${defLight['@rank']}`">
 
                 <i :class="['bi', 'bi-circle-fill', `text-${COLORS[defLight['$']]}`]"></i>
 
