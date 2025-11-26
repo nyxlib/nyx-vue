@@ -16,6 +16,21 @@ const _endpoint_func = () => _endpoint;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const _computeToken = (username, password) => {
+
+    return new Promise((resolve) => {
+
+        crypto.subtle.digest('SHA-256', new TextEncoder().encode(`${username}:${password}`)).then((buffer) => {
+
+            resolve(Array.from(new Uint8Array(buffer).slice(0, 8)).map((b) => b.toString(16).padStart(2, '0'))
+                                                                  .join('')
+            );
+        });
+    });
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const _update_func = (endpoint, username, password) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -26,11 +41,9 @@ const _update_func = (endpoint, username, password) => {
 
     if(username && password)
     {
-        crypto.subtle.digest('SHA-256', new TextEncoder().encode(`${username}:${password}`)).then((buff) => {
+        _computeToken(username, password).then((token) => {
 
-            _token = Array.from(new Uint8Array(buff).slice(0, 8)).map((b) => b.toString(16).padStart(2, '0'))
-                                                                 .join('')
-            ;
+            _token = token;
         });
     }
 
@@ -134,44 +147,54 @@ const _parseNyxRESP = (buffer) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const _check_func = () => {
+const _check_func = (endpoint, username, password) => {
 
     return new Promise((resolve, reject) => {
 
-        if(_endpoint)
+        if(endpoint)
         {
-            /*--------------------------------------------------------------------------------------------------------*/
+            _computeToken(username, password).then((token) => {
 
-            const url = new URL(_endpoint);
+                /*----------------------------------------------------------------------------------------------------*/
 
-            if(_token)
-            {
-                url.searchParams.set('token', _token);
-            }
+                const url = new URL(endpoint.replace('ws://', 'http://').replace('wss://', 'https://'));
 
-            /*--------------------------------------------------------------------------------------------------------*/
+                if(token)
+                {
+                    url.searchParams.set('token', token);
+                }
 
-            fetch(url).then((response) => {
+                /*----------------------------------------------------------------------------------------------------*/
 
-                response.text().then(() => {
+                fetch(url).then((response) => {
 
-                    resolve();
+                    response.text().then((data) => {
+
+                        if((data || '').trim() !== 'Unauthorized')
+                        {
+                            resolve('Successfully connected :-)');
+                        }
+                        else
+                        {
+                            reject('Unauthorized');
+                        }
+
+                    }).catch((e) => {
+
+                        reject('Error');
+                    });
 
                 }).catch((e) => {
 
-                    reject(e);
+                    reject('Error');
                 });
 
-            }).catch((e) => {
-
-                reject(e);
+                /*----------------------------------------------------------------------------------------------------*/
             });
-
-            /*--------------------------------------------------------------------------------------------------------*/
         }
         else
         {
-            reject();
+            reject('Error');
         }
     });
 };
