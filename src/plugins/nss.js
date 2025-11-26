@@ -179,12 +179,12 @@ const _check_func = (endpoint, username, password) => {
                             reject('Unauthorized');
                         }
 
-                    }).catch((e) => {
+                    }).catch(() => {
 
                         reject('Error');
                     });
 
-                }).catch((e) => {
+                }).catch(() => {
 
                     reject('Error');
                 });
