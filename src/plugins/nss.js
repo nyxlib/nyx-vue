@@ -134,6 +134,50 @@ const _parseNyxRESP = (buffer) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const _check_func = () => {
+
+    return new Promise((resolve, reject) => {
+
+        if(_endpoint)
+        {
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            const url = new URL(_endpoint);
+
+            if(_token)
+            {
+                url.searchParams.set('token', _token);
+            }
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            fetch(url).then((response) => {
+
+                response.text().then(() => {
+
+                    resolve();
+
+                }).catch((e) => {
+
+                    reject(e);
+                });
+
+            }).catch((e) => {
+
+                reject(e);
+            });
+
+            /*--------------------------------------------------------------------------------------------------------*/
+        }
+        else
+        {
+            reject();
+        }
+    });
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 const _register_func = (stream, callback) => {
 
     if(!stream || !_endpoint || typeof callback !== 'function')
@@ -255,6 +299,7 @@ export default {
         app.provide('nss', {
             endpoint  : _endpoint_func  ,
             update    : _update_func    ,
+            check     : _check_func     ,
             register  : _register_func  ,
             unregister: _unregister_func,
         });
