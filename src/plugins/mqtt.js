@@ -40,7 +40,34 @@ const _update_func = (endpoint, username, password) => {
 
     if(_client)
     {
-        if(_endpoint !== endpoint)
+        try
+        {
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            if(_connectionCallback)
+            {
+                _connectionCallback(DISCONNECTING);
+            }
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            _client.disconnect();
+
+            /*--------------------------------------------------------------------------------------------------------*/
+        }
+        catch(_)
+        {
+            /* IGNORE */
+        }
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    return new Promise((resolve, reject) => {
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        if(endpoint)
         {
             try
             {
@@ -48,110 +75,91 @@ const _update_func = (endpoint, username, password) => {
 
                 if(_connectionCallback)
                 {
-                    _connectionCallback(DISCONNECTING);
+                    _connectionCallback(CONNECTING);
                 }
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                _client.disconnect();
+                const url = new URL(_endpoint = endpoint);
+
+                _client = new paho.Client(url.hostname, parseInt(url.port || '443'), url.pathname, uuid.v4());
+
+                /*----------------------------------------------------------------------------------------------------*/
+
+                _client.onConnected = () => {
+
+                    _connected = true;
+
+                    useNyxStore().isConnected = true;
+
+                    if(_connectionCallback)
+                    {
+                        _connectionCallback(CONNECTED);
+                    }
+                };
+
+                /*----------------------------------------------------------------------------------------------------*/
+
+                _client.onConnectionLost = () => {
+
+                    _connected = false;
+
+                    useNyxStore().isConnected = false;
+
+                    if(_connectionCallback)
+                    {
+                        _connectionCallback(DISCONNECTED);
+                    }
+                };
+
+                /*----------------------------------------------------------------------------------------------------*/
+
+                _client.onMessageArrived = (message) => {
+
+                    if(_messageCallback)
+                    {
+                        _messageCallback(
+                            message.topic,
+                            message.payloadString
+                        );
+                    }
+                };
+
+                /*----------------------------------------------------------------------------------------------------*/
+
+                _client.connect({
+                    useSSL: url.protocol === 'wss:',
+                    userName: username || '',
+                    password: password || '',
+                    reconnect: true,
+                    onSuccess: () => {
+
+                        resolve('Successfully connected :-)');
+                    },
+                    onFailure: (e) => {
+
+                        reject(e.errorMessage);
+                    }
+                })
 
                 /*----------------------------------------------------------------------------------------------------*/
             }
-            catch(_)
+            catch(e)
             {
-                /* IGNORE */
+                _client = null;
+
+                reject(`${e}`);
             }
         }
         else
         {
-            return;
-        }
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    if(endpoint)
-    {
-        try
-        {
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            if(_connectionCallback)
-            {
-                _connectionCallback(CONNECTING);
-            }
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            const url = new URL(_endpoint = endpoint);
-
-            _client = new paho.Client(url.hostname, parseInt(url.port || '443'), url.pathname, uuid.v4());
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            _client.onConnected = () => {
-
-                _connected = true;
-
-                useNyxStore().isConnected = true;
-
-                if(_connectionCallback)
-                {
-                    _connectionCallback(CONNECTED);
-                }
-            };
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            _client.onConnectionLost = () => {
-
-                _connected = false;
-
-                useNyxStore().isConnected = false;
-
-                if(_connectionCallback)
-                {
-                    _connectionCallback(DISCONNECTED);
-                }
-            };
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            _client.onMessageArrived = (message) => {
-
-                if(_messageCallback)
-                {
-                    _messageCallback(
-                        message.topic,
-                        message.payloadString
-                    );
-                }
-            };
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            _client.connect({
-                useSSL: url.protocol === 'wss:',
-                userName: username || '',
-                password: password || '',
-                reconnect: true,
-            });
-
-            /*--------------------------------------------------------------------------------------------------------*/
-        }
-        catch(e)
-        {
-            console.error(e);
-
             _client = null;
-        }
-    }
-    else
-    {
-        _client = null;
-    }
 
-    /*----------------------------------------------------------------------------------------------------------------*/
+            reject('Empty URL');
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+    });
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/

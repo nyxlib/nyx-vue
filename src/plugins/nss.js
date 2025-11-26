@@ -179,14 +179,14 @@ const _check_func = (endpoint, username, password) => {
                             reject('Unauthorized');
                         }
 
-                    }).catch(() => {
+                    }).catch((e) => {
 
-                        reject('Error');
+                        reject(`${e}`);
                     });
 
-                }).catch(() => {
+                }).catch((e) => {
 
-                    reject('Error');
+                    reject(`${e}`);
                 });
 
                 /*----------------------------------------------------------------------------------------------------*/
@@ -194,7 +194,7 @@ const _check_func = (endpoint, username, password) => {
         }
         else
         {
-            reject('Error');
+            reject('Empty URL');
         }
     });
 };
