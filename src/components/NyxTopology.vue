@@ -19,10 +19,10 @@ const nyxStore = useNyxStore();
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const TYPE_BROKER = 1;
-const TYPE_NODE = 2;
+const TYPE_NODE = 1;
+const TYPE_CLIENT = 2;
 const TYPE_SPECIAL = 3;
-const TYPE_CLIENT = 4;
+const TYPE_BROKER = 4;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -96,14 +96,14 @@ const getColorFromType = (type) => {
 
     switch(type)
     {
-        case TYPE_BROKER:
-            return '#1F77B4';
         case TYPE_NODE:
-            return '#2CA02C';
-        case TYPE_SPECIAL:
             return '#2CA02C';
         case TYPE_CLIENT:
             return '#2CA02C';
+        case TYPE_SPECIAL:
+            return '#2CA02C';
+        case TYPE_BROKER:
+            return '#1F77B4';
         default:
             return '#FFFFF';
     }
@@ -113,18 +113,20 @@ const getColorFromType = (type) => {
 
 const getIconFromType = (type) => {
 
+    console.log(type);
+
     switch(type)
     {
-        case TYPE_BROKER:
-            return '\uF411';
         case TYPE_NODE:
             return '\uF40D';
-        case TYPE_SPECIAL:
-            return '\uF685';
         case TYPE_CLIENT:
             return '\uF456';
+        //case TYPE_SPECIAL:
+            //return '\uF40D';
+        case TYPE_BROKER:
+            return '\uF411';
         default:
-            return '\uF50C';
+            return '\uF64E';
     }
 };
 
@@ -208,6 +210,8 @@ const init = () => {
 
     timer = setInterval(() => {
 
+        update(nyxStore.specialPingDict, TYPE_SPECIAL);
+
         update(nyxStore.clientPingDict, TYPE_CLIENT);
 
         update(nyxStore.nodePingDict, TYPE_NODE);
@@ -288,13 +292,6 @@ const update = (pingDict, type) => {
 
     for(const [name, timestamp] of Object.entries(pingDict))
     {
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        if(name.startsWith('$$nyx-'))
-        {
-            type = TYPE_SPECIAL;
-        }
-
         /*------------------------------------------------------------------------------------------------------------*/
 
         let found = false;

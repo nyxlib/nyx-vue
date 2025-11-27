@@ -133,11 +133,15 @@ const _init_func = (mqtt, nss) => {
             }
             else if(topic === 'nyx/ping/node')
             {
-                _processPing(payload, true);
+                useNyxStore().nodePingDict[payload] = Date.now();
             }
             else if(topic === 'nyx/ping/client')
             {
-                _processPing(payload, false);
+                useNyxStore().clientPingDict[payload] = Date.now();
+            }
+            else if(topic === 'nyx/ping/special')
+            {
+                useNyxStore().specialPingDict[payload] = Date.now();
             }
         }
         catch(e)
@@ -154,22 +158,6 @@ const _init_func = (mqtt, nss) => {
 const _final_func = () => {
 
     _mqtt.setConnectionCallback(null);
-};
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const _processPing = (message, isNode) => {
-
-    const nyxStore = useNyxStore();
-
-    if(isNode)
-    {
-        nyxStore.nodePingDict[message] = Date.now();
-    }
-    else
-    {
-        nyxStore.clientPingDict[message] = Date.now();
-    }
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/

@@ -44,6 +44,7 @@ const useNyxStore = defineStore('nyx', {
             /**/
             nodePingDict: {},
             clientPingDict: {},
+            specialPingDict: {},
         };
 
         /*------------------------------------------------------------------------------------------------------------*/
