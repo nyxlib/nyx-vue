@@ -1,4 +1,4 @@
-// noinspection JSUnusedGlobalSymbols,JSUnresolvedReference
+// noinspection JSUnusedGlobalSymbols, JSUnresolvedReference
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import * as uuid from 'uuid';
@@ -217,7 +217,7 @@ const _emit_func = (topic, payload) => {
 		const message = new paho.Message(payload);
 
 		message.topic    = topic;
-		message.qos      = 0x000;
+		message.qos      = 0x002;
 		message.retained = false;
 
 		_client.send(message);
