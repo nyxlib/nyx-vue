@@ -101,7 +101,7 @@ const getColorFromType = (type) => {
         case TYPE_CLIENT:
             return '#2CA02C';
         case TYPE_SPECIAL:
-            return '#D1E7DD';
+            return '#1F77B4';
         case TYPE_BROKER:
             return '#1F77B4';
         default:
