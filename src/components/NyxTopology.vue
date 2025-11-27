@@ -101,7 +101,7 @@ const getColorFromType = (type) => {
         case TYPE_NODE:
             return '#2CA02C';
         case TYPE_SPECIAL:
-            return '#CED4DA';
+            return '#2CA02C';
         case TYPE_CLIENT:
             return '#2CA02C';
         default:
@@ -176,6 +176,7 @@ const updateNodes = () => {
                 break;
 
             case TYPE_NODE:
+            case TYPE_SPECIAL:
                 d.x = 0.000 + CIRCLE_DIAMETER;
                 d.y = 0.0;
                 break;
