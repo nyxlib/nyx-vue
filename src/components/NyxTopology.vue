@@ -120,7 +120,7 @@ const getIconFromType = (type) => {
         case TYPE_CLIENT:
             return '\uF456';
         case TYPE_SPECIAL:
-            return '\uF411';
+            return '\uF685';
         case TYPE_BROKER:
             return '\uF411';
         default:
