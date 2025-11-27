@@ -14,7 +14,7 @@ import useNyxStore from '../stores/nyx';
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const TERMINAL = new Terminal({
+const terminal = new Terminal({
     rows: 28,
     cols: 85,
     convertEol: true,
@@ -23,7 +23,7 @@ const TERMINAL = new Terminal({
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-TERMINAL.loadAddon(new WebLinksAddon());
+terminal.loadAddon(new WebLinksAddon());
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -487,7 +487,7 @@ const _setupTerminal_func = (div, newDeviceName) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    TERMINAL.open(div);
+    terminal.open(div);
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -502,7 +502,7 @@ const _clearTerminal_func = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    TERMINAL.clear();
+    terminal.clear();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -522,7 +522,7 @@ const _updateTerminal_func = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    TERMINAL.clear();
+    terminal.clear();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -530,7 +530,7 @@ const _updateTerminal_func = () => {
 
     if(nyxStore.curDeviceName in nyxStore.messageDict)
     {
-        nyxStore.messageDict[nyxStore.curDeviceName].map((x) => `${x.timestamp.replace('T', ' ')} - ${x.message}`).forEach((line) => TERMINAL.writeln(line));
+        nyxStore.messageDict[nyxStore.curDeviceName].map((x) => `${x.timestamp.replace('T', ' ')} - ${x.message}`).forEach((line) => terminal.writeln(line));
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/

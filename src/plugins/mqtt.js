@@ -79,9 +79,15 @@ const _update_func = (endpoint, username, password) => {
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                const url = new URL(_endpoint = endpoint);
+                // noinspection HttpUrlsUsage
+                const url = new URL(_endpoint = endpoint.replace('http://', 'ws://').replace('https://', 'wss://'));
 
-                _client = new paho.Client(url.hostname, parseInt(url.port || '443'), url.pathname, uuid.v4());
+                _client = new paho.Client(
+                    url.hostname,
+                    parseInt(url.port || '443'),
+                    url.pathname,
+                    uuid.v4()
+                );
 
                 /*----------------------------------------------------------------------------------------------------*/
 
@@ -159,6 +165,84 @@ const _update_func = (endpoint, username, password) => {
 
         /*------------------------------------------------------------------------------------------------------------*/
     });
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const _check_func = (endpoint, username, password) => {
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    return new Promise((resolve, reject) => {
+
+        if(endpoint)
+        {
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            try
+            {
+                /*----------------------------------------------------------------------------------------------------*/
+
+                // noinspection HttpUrlsUsage
+                const url = new URL(endpoint.replace('http://', 'ws://').replace('https://', 'wss://'));
+
+                const client = new paho.Client(
+                    url.hostname,
+                    parseInt(url.port || '443'),
+                    url.pathname,
+                    uuid.v4()
+                );
+
+                /*----------------------------------------------------------------------------------------------------*/
+
+                client.connect({
+                    useSSL: url.protocol === 'wss:',
+                    userName: username || '',
+                    password: password || '',
+                    reconnect: false,
+                    timeout: 4,
+                    onSuccess: () => {
+
+                        try {
+                            client.disconnect();
+                        }
+                        catch(_) {
+                            /* IGNORE */
+                        }
+
+                        resolve('Successfully connected :-)');
+                    },
+                    onFailure: (e) => {
+
+                        try {
+                            client.disconnect();
+                        }
+                        catch(_) {
+                            /* IGNORE */
+                        }
+
+                        reject(e.errorMessage);
+                    },
+                });
+
+                /*--------------------------------------------------------------------------------------------------------*/
+            }
+            catch(e)
+            {
+                reject(`${e}`);
+            }
+
+            /*------------------------------------------------------------------------------------------------------------*/
+        }
+        else
+        {
+            reject('Empty URL');
+        }
+    });
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -236,6 +320,7 @@ export default {
             DISCONNECTED         : DISCONNECTED               ,
             connected            : _connected_func            ,
             update               : _update_func               ,
+            check                : _check_func                ,
             setConnectionCallback: _setConnectionCallback_func,
             setMessageCallback   : _setMessageCallback_func   ,
             subscribe            : _subscribe_func            ,

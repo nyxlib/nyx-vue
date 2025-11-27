@@ -159,6 +159,7 @@ const _check_func = (endpoint, username, password) => {
 
                 /*----------------------------------------------------------------------------------------------------*/
 
+                // noinspection HttpUrlsUsage
                 const url = new URL(endpoint.replace('ws://', 'http://').replace('wss://', 'https://'));
 
                 if(token)
