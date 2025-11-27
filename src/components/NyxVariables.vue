@@ -1,4 +1,3 @@
-<!--suppress JSUnresolvedReference, JSUnusedLocalSymbols -->
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -133,7 +132,7 @@ const filteredStreams = computed(() => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(value, name) in filteredBLOBs" :key="name">
+                                <tr v-for="(_____, name) in filteredBLOBs" :key="name">
                                     <td class="user-select-all"><i>{{ name }}</i></td>
                                     <td class="user-select-all">...</td>
                                 </tr>

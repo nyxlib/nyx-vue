@@ -1,4 +1,3 @@
-// noinspection JSUnusedGlobalSymbols, JSUnresolvedReference
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 import * as uuid from 'uuid';
@@ -140,7 +139,7 @@ const _update_func = (endpoint, username, password) => {
 
                         reject(e.errorMessage);
                     }
-                })
+                });
 
                 /*----------------------------------------------------------------------------------------------------*/
             }

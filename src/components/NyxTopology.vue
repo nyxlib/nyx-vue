@@ -1,4 +1,3 @@
-<!--suppress CssUnusedSymbol, CssNoGenericFontName, JSUnresolvedReference, PointlessArithmeticExpressionJS -->
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
