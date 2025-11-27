@@ -113,16 +113,14 @@ const getColorFromType = (type) => {
 
 const getIconFromType = (type) => {
 
-    console.log(type);
-
     switch(type)
     {
         case TYPE_NODE:
             return '\uF40D';
         case TYPE_CLIENT:
             return '\uF456';
-        //case TYPE_SPECIAL:
-            //return '\uF40D';
+        case TYPE_SPECIAL:
+            return '\uF411';
         case TYPE_BROKER:
             return '\uF411';
         default:

@@ -107,6 +107,7 @@ const _init_func = (mqtt, nss) => {
             _mqtt.subscribe('nyx/json');
             _mqtt.subscribe('nyx/ping/node');
             _mqtt.subscribe('nyx/ping/client');
+            _mqtt.subscribe('nyx/ping/special');
 
             _mqtt.emit('nyx/cmd/json', '{"<>": "getProperties", "@version": "1.7"}');
         }
