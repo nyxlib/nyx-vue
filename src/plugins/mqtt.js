@@ -3,7 +3,7 @@
 
 import * as uuid from 'uuid';
 
-import mqtt from 'mqtt';
+import * as paho from 'paho-mqtt';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -51,7 +51,7 @@ const _update_func = (endpoint, username, password) => {
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            _client.end(true);
+            _client.disconnect();
 
             /*--------------------------------------------------------------------------------------------------------*/
         }
@@ -82,21 +82,11 @@ const _update_func = (endpoint, username, password) => {
 
                 const url = new URL(_endpoint = endpoint);
 
-                let settled = false;
+                _client = new paho.Client(url.hostname, parseInt(url.port || '443'), url.pathname, uuid.v4());
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                _client = mqtt.connect(url.toString(), {
-                    clientId       : uuid.v4(),
-                    username       : username || '',
-                    password       : password || '',
-                    reconnectPeriod: 1000,
-                    clean          : true,
-                });
-
-                /*----------------------------------------------------------------------------------------------------*/
-
-                _client.on('connect', () => {
+                _client.onConnected = () => {
 
                     _connected = true;
 
@@ -106,18 +96,11 @@ const _update_func = (endpoint, username, password) => {
                     {
                         _connectionCallback(CONNECTED);
                     }
-
-                    if(!settled)
-                    {
-                        settled = true;
-
-                        resolve('Successfully connected :-)');
-                    }
-                });
+                };
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                _client.on('close', () => {
+                _client.onConnectionLost = () => {
 
                     _connected = false;
 
@@ -127,32 +110,37 @@ const _update_func = (endpoint, username, password) => {
                     {
                         _connectionCallback(DISCONNECTED);
                     }
-                });
+                };
 
                 /*----------------------------------------------------------------------------------------------------*/
 
-                _client.on('error', (e) => {
-
-                    if(!settled)
-                    {
-                        settled = true;
-
-                        reject(`${e}`);
-                    }
-                });
-
-                /*----------------------------------------------------------------------------------------------------*/
-
-                _client.on('message', (topic, payload /*, packet */) => {
+                _client.onMessageArrived = (message) => {
 
                     if(_messageCallback)
                     {
                         _messageCallback(
-                            topic,
-                            payload != null ? payload.toString() : ''
+                            message.topic,
+                            message.payloadString
                         );
                     }
-                });
+                };
+
+                /*----------------------------------------------------------------------------------------------------*/
+
+                _client.connect({
+                    useSSL: url.protocol === 'wss:',
+                    userName: username || '',
+                    password: password || '',
+                    reconnect: true,
+                    onSuccess: () => {
+
+                        resolve('Successfully connected :-)');
+                    },
+                    onFailure: (e) => {
+
+                        reject(e.errorMessage);
+                    }
+                })
 
                 /*----------------------------------------------------------------------------------------------------*/
             }
@@ -194,12 +182,12 @@ const _subscribe_func = (topic) => {
 
     if(_client)
     {
-        _client.subscribe(topic, (e) => {
+        _client.subscribe(topic, {
+            timeout: 5000,
+            onFailure: (x, y, errorMessage) => {
 
-            if(e)
-            {
-                console.log(`Error subscribing to topic \`${topic}\`: ${e.message || e}`);
-            }
+                console.log(`Error subscribing to topic \`${topic}\`: ${errorMessage}`);
+            },
         });
     }
 };
@@ -210,12 +198,12 @@ const _unsubscribe_func = (topic) => {
 
     if(_client)
     {
-        _client.unsubscribe(topic, (e) => {
+        _client.unsubscribe(topic, {
+            timeout: 5000,
+            onFailure: (x, y, errorMessage) => {
 
-            if(e)
-            {
-                console.log(`Error unsubscribing from topic \`${topic}\`: ${e.message || e}`);
-            }
+                console.log(`Error unsubscribing to topic \`${topic}\`: ${errorMessage}`);
+            },
         });
     }
 };
@@ -226,14 +214,13 @@ const _emit_func = (topic, payload) => {
 
     if(_connected_func())
     {
-        _client.publish(
-            topic,
-            payload,
-            {
-                qos: 2,
-                retain: false,
-            }
-        );
+		const message = new paho.Message(payload);
+
+		message.topic    = topic;
+		message.qos      = 0x002;
+		message.retained = false;
+
+		_client.send(message);
     }
 };
 
