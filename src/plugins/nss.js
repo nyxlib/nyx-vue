@@ -2,7 +2,7 @@
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-let _endpoint = '';
+let _url = '';
 
 let _token = '';
 
@@ -12,7 +12,7 @@ const _streamMap = new Map();
 /* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const _endpoint_func = () => _endpoint;
+const _url_func = () => _url;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -35,7 +35,7 @@ const _update_func = (endpoint, username, password) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    _endpoint = endpoint;
+    _url = new URL(endpoint).toString();
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -48,8 +48,6 @@ const _update_func = (endpoint, username, password) => {
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
-
-    return Promise.resolve();
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -149,18 +147,18 @@ const _parseNyxRESP = (buffer) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const _check_func = (endpoint, username, password) => {
+const _check_func = (url, username, password) => {
 
     return new Promise((resolve, reject) => {
 
-        if(endpoint)
+        if(url)
         {
             _computeToken(username, password).then((token) => {
 
                 /*----------------------------------------------------------------------------------------------------*/
 
                 // noinspection HttpUrlsUsage
-                const url = new URL(endpoint.replace('ws://', 'http://').replace('wss://', 'https://'));
+                const url = new URL(url.replace('ws://', 'http://').replace('wss://', 'https://'));
 
                 if(token)
                 {
@@ -206,7 +204,7 @@ const _check_func = (endpoint, username, password) => {
 
 const _register_func = (stream, callback) => {
 
-    if(!stream || !_endpoint || typeof callback !== 'function')
+    if(!stream || !_url || typeof callback !== 'function')
     {
         return;
     }
@@ -226,7 +224,7 @@ const _register_func = (stream, callback) => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        const url = new URL(`/streams/${stream.replace(':', '/')}`, _endpoint);
+        const url = new URL(`/streams/${stream.replace(':', '/')}`, _url);
 
         if(_token)
         {
@@ -286,7 +284,7 @@ const _register_func = (stream, callback) => {
 
 const _unregister_func = (stream, callback) => {
 
-    if(!stream || !_endpoint || typeof(callback) !== 'function')
+    if(!stream || !_url || typeof(callback) !== 'function')
     {
         return;
     }
@@ -323,7 +321,7 @@ export default {
     install(app)
     {
         app.provide('nss', {
-            endpoint  : _endpoint_func  ,
+            url       : _url_func       ,
             update    : _update_func    ,
             check     : _check_func     ,
             register  : _register_func  ,
