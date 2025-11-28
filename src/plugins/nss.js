@@ -168,7 +168,7 @@ const _check_func = (endpoint, username, password) => new Promise((resolve, reje
 
             if(token)
             {
-                url.searchParams.set('token', token);
+                url.searchParams.set('token', token.toString());
             }
 
             /*--------------------------------------------------------------------------------------------------------*/

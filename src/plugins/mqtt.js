@@ -208,7 +208,7 @@ const _check_func = (endpoint, username, password) => new Promise((resolve, reje
 
                 resolve('Successfully connected :-)');
             },
-            onFailure: (e) => {
+            onFailure: () => {
 
                 try {
                     client.disconnect();
@@ -217,7 +217,7 @@ const _check_func = (endpoint, username, password) => new Promise((resolve, reje
                     /* IGNORE */
                 }
 
-                reject(e.errorMessage || `${e}`);
+                reject('Connection error');
             },
         });
 
