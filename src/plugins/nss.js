@@ -151,7 +151,7 @@ const _check_func = (endpoint, username, password) => {
 
     return new Promise((resolve, reject) => {
 
-        if(url)
+        if(endpoint)
         {
             _computeToken(username, password).then((token) => {
 
