@@ -169,74 +169,67 @@ const _update_func = (endpoint, username, password) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const _check_func = (endpoint, username, password) => {
+const _check_func = (endpoint, username, password) => new Promise((resolve, reject) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    return new Promise((resolve, reject) => {
+    try
+    {
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        // noinspection HttpUrlsUsage
+        const url = new URL(endpoint.replace('http://', 'ws://').replace('https://', 'wss://'));
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        try
-        {
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            // noinspection HttpUrlsUsage
-            const url = new URL(endpoint.replace('http://', 'ws://').replace('https://', 'wss://'));
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            const client = new paho.Client(
-                url.hostname,
-                parseInt(url.port || (url.protocol === 'wss:' ? '443' : '80')),
-                url.pathname,
-                uuid.v4()
-            );
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            client.connect({
-                useSSL: url.protocol === 'wss:',
-                userName: username || '',
-                password: password || '',
-                reconnect: false,
-                timeout: 4,
-                onSuccess: () => {
-
-                    try {
-                        client.disconnect();
-                    }
-                    catch(_) {
-                        /* IGNORE */
-                    }
-
-                    resolve('Successfully connected :-)');
-                },
-                onFailure: (e) => {
-
-                    try {
-                        client.disconnect();
-                    }
-                    catch(_) {
-                        /* IGNORE */
-                    }
-
-                    reject(e.errorMessage || `${e}`);
-                },
-            });
-
-            /*--------------------------------------------------------------------------------------------------------*/
-        }
-        catch(e)
-        {
-            reject(e.message || `${e}`);
-        }
+        const client = new paho.Client(
+            url.hostname,
+            parseInt(url.port || (url.protocol === 'wss:' ? '443' : '80')),
+            url.pathname,
+            uuid.v4()
+        );
 
         /*------------------------------------------------------------------------------------------------------------*/
-    });
+
+        client.connect({
+            useSSL: url.protocol === 'wss:',
+            userName: username || '',
+            password: password || '',
+            reconnect: false,
+            timeout: 4,
+            onSuccess: () => {
+
+                try {
+                    client.disconnect();
+                }
+                catch(_) {
+                    /* IGNORE */
+                }
+
+                resolve('Successfully connected :-)');
+            },
+            onFailure: (e) => {
+
+                try {
+                    client.disconnect();
+                }
+                catch(_) {
+                    /* IGNORE */
+                }
+
+                reject(e.errorMessage || `${e}`);
+            },
+        });
+
+        /*------------------------------------------------------------------------------------------------------------*/
+    }
+    catch(e)
+    {
+        reject(e.message || `${e}`);
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
-};
+});
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
