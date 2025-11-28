@@ -16,38 +16,46 @@ const _url_func = () => _url;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const _computeToken = (username, password) => {
+const _computeToken = (username, password) => new Promise((resolve) => {
 
-    return new Promise((resolve) => {
-
+    if(username || password)
+    {
         crypto.subtle.digest('SHA-256', new TextEncoder().encode(`${username}:${password}`)).then((buffer) => {
 
-            resolve(Array.from(new Uint8Array(buffer).slice(0, 8)).map((b) => b.toString(16).padStart(2, '0'))
-                                                                  .join('')
-            );
+            const result = Array.from(new Uint8Array(buffer).slice(0, 8)).map((b) => b.toString(16).padStart(2, '0'))
+                                                                               .join('')
+            ;
+
+            resolve(result);
+
+        }).catch(() => {
+
+            resolve(null);
         });
-    });
-};
+    }
+    else
+    {
+        resolve(null);
+    }
+});
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const _update_func = (endpoint, username, password) => {
 
-    /*----------------------------------------------------------------------------------------------------------------*/
+    _computeToken(username, password).then((token) => {
 
-    _url = new URL(endpoint).toString();
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    if(username && password)
-    {
-        _computeToken(username, password).then((token) => {
+        try
+        {
+            _url = new URL(endpoint).toString();
 
             _token = token;
-        });
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
+        }
+        catch(e)
+        {
+            /* IGNORE */
+        }
+    });
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -147,64 +155,71 @@ const _parseNyxRESP = (buffer) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const _check_func = (endpoint, username, password) => {
+const _check_func = (endpoint, username, password) => new Promise((resolve, reject) => {
 
-    return new Promise((resolve, reject) => {
+    _computeToken(username, password).then((token) => {
 
-        if(endpoint)
+        try
         {
-            _computeToken(username, password).then((token) => {
+            /*--------------------------------------------------------------------------------------------------------*/
 
-                /*----------------------------------------------------------------------------------------------------*/
+            // noinspection HttpUrlsUsage
+            const url = new URL(endpoint.replace('ws://', 'http://').replace('wss://', 'https://'));
 
-                // noinspection HttpUrlsUsage
-                const url = new URL(endpoint.replace('ws://', 'http://').replace('wss://', 'https://'));
+            if(token)
+            {
+                url.searchParams.set('token', token);
+            }
 
-                if(token)
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            fetch(url).then((response) => {
+
+                if(response.ok)
                 {
-                    url.searchParams.set('token', token);
-                }
-
-                /*----------------------------------------------------------------------------------------------------*/
-
-                fetch(url).then((response) => {
-
                     response.text().then((data) => {
 
-                        if((data || '').trim() !== 'Unauthorized')
+                        if(data?.trim() !== 'Unauthorized')
                         {
                             resolve('Successfully connected :-)');
                         }
                         else
                         {
-                            reject('Unauthorized');
+                            reject('Unauthorized access');
                         }
 
-                    }).catch((e) => {
+                    }).catch((_) => {
 
-                        reject(`${e}`);
+                        reject('Connection error');
                     });
+                }
+                else
+                {
+                    reject('Connection error');
+                }
 
-                }).catch((e) => {
+            }).catch((_) => {
 
-                    reject(`${e}`);
-                });
-
-                /*----------------------------------------------------------------------------------------------------*/
+                reject('Connection error');
             });
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
         }
-        else
+        catch(e)
         {
-            reject('Empty URL');
+            reject(e.message || `${e}`);
         }
+
+        /*------------------------------------------------------------------------------------------------------------*/
     });
-};
+});
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const _register_func = (stream, callback) => {
 
-    if(!stream || !_url || typeof callback !== 'function')
+    if(!_url || !stream || typeof callback !== 'function')
     {
         return;
     }
@@ -284,7 +299,7 @@ const _register_func = (stream, callback) => {
 
 const _unregister_func = (stream, callback) => {
 
-    if(!stream || !_url || typeof(callback) !== 'function')
+    if(!_url || !stream || typeof(callback) !== 'function')
     {
         return;
     }
