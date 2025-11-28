@@ -221,7 +221,7 @@ const _check_func = (endpoint, username, password) => {
                         /* IGNORE */
                     }
 
-                    reject(e.errorMessage);
+                    reject(e.errorMessage || `${e}`);
                 },
             });
 
@@ -229,7 +229,7 @@ const _check_func = (endpoint, username, password) => {
         }
         catch(e)
         {
-            reject(`${e}`);
+            reject(e.message || `${e}`);
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
