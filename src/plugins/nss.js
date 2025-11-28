@@ -147,7 +147,7 @@ const _parseNyxRESP = (buffer) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const _check_func = (url, username, password) => {
+const _check_func = (endpoint, username, password) => {
 
     return new Promise((resolve, reject) => {
 
@@ -158,7 +158,7 @@ const _check_func = (url, username, password) => {
                 /*----------------------------------------------------------------------------------------------------*/
 
                 // noinspection HttpUrlsUsage
-                const url = new URL(url.replace('ws://', 'http://').replace('wss://', 'https://'));
+                const url = new URL(endpoint.replace('ws://', 'http://').replace('wss://', 'https://'));
 
                 if(token)
                 {
