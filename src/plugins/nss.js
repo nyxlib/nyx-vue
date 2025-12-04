@@ -121,7 +121,7 @@ const _parseNyxBinaryStream = (buffer) => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        result[field_hash.toString(16).padStart(8, '0')] = new Uint8Array(buffer.buffer, buffer.byteOffset + offset, field_size);
+        result[field_hash.toString(16).padStart(8, '0').toUpperCase()] = new Uint8Array(buffer.buffer, buffer.byteOffset + offset, field_size);
 
         /*------------------------------------------------------------------------------------------------------------*/
 
