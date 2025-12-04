@@ -185,7 +185,7 @@ const _processMessage = (message) => {
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            const url = _nss.endpoint() ? new URL(`streams/${message['@device']}/${message['@name']}`, _nss.endpoint()).toString()
+            const url = _nss.url() ? new URL(`streams/${message['@device']}/${message['@name']}`, _nss.url()).toString()
                                        : ''
             ;
 
