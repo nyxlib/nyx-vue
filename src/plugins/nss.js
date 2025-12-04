@@ -75,6 +75,7 @@ const _parseNyxBinaryStream = (buffer) => {
 
     const view = new DataView(buffer.buffer, buffer.byteOffset, buffer.byteLength);
 
+    let cursor = 0;
     let offset = 0;
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -96,11 +97,9 @@ const _parseNyxBinaryStream = (buffer) => {
 
     const result = {};
 
-    let consumed = 0;
-
-    while(consumed < payload_size)
+    while(cursor < payload_size)
     {
-        if(payload_size - consumed < 8)
+        if(payload_size - cursor < 8)
         {
             throw new Error('Truncated field header');
         }
@@ -110,14 +109,15 @@ const _parseNyxBinaryStream = (buffer) => {
         const field_hash = view.getUint32(offset, true); offset += 4;
         const field_size = view.getUint32(offset, true); offset += 4;
 
-        consumed += 8;
+        cursor += 8;
 
-        if(payload_size - consumed < field_size
-            ||
-            offset + field_size > buffer.byteLength
+        if(cursor + field_size > payload_size
+           ||
+           offset + field_size > buffer.byteLength
         ) {
             throw new Error('Truncated field data');
         }
+
 
         /*------------------------------------------------------------------------------------------------------------*/
 
@@ -125,8 +125,8 @@ const _parseNyxBinaryStream = (buffer) => {
 
         /*------------------------------------------------------------------------------------------------------------*/
 
-        offset   += field_size;
-        consumed += field_size;
+        cursor += field_size;
+        offset += field_size;
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
