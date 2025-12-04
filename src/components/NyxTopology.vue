@@ -133,7 +133,7 @@ const getIconFromType = (type) => {
 const patchName = (name) => {
 
     /**/ if(name === '$$nyx-stream-server$$') {
-        return 'Nyx Stream Server';
+        return 'Nyx-Stream Server';
     }
     else if(name === '$$nyx-indi-bridge$$') {
         return 'Nyx Indi Bridge';

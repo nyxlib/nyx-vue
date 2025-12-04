@@ -191,7 +191,7 @@ const _processMessage = (message) => {
 
             message['children'].forEach((defXXX) => {
 
-                defXXX['$'] = url;
+                defXXX['$'] = `${url}#${defXXX['@hash']}`;
             });
 
             message['url'] = url;

@@ -164,15 +164,13 @@ const filteredStreams = computed(() => {
                         <table class="table table-sm table-striped">
                             <thead>
                                 <tr>
-                                    <th style="width: 30%;">Stream</th>
-                                    <th style="width: 15%;">Hash</th>
-                                    <th style="width: 55%;">URL</th>
+                                    <th style="width: 33.33%;">Stream</th>
+                                    <th style="width: 66.66%;">URL</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="(value, name) in filteredStreams" :key="name">
                                     <td class="user-select-all"><i>{{ name }}</i></td>
-                                    <td class="user-select-all">{{ value['@hash'] }}</td>
                                     <td class="user-select-all">{{ value['$'] }}</td>
                                 </tr>
                             </tbody>
