@@ -60,92 +60,75 @@ const _update_func = (endpoint, username, password) => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const _parseInt = (s) => {
-
-    const result = parseInt(s);
-
-    if(!Number.isFinite(result))
-    {
-        throw new Error('Invalid length');
-    }
-
-    return result;
-};
+const NYX_STREAM_MAGIC = 0x5358594E;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const _parseNyxRESP = (buffer) => {
+const _parseNyxBinaryStream = (buffer) => {
+
+    if(buffer.byteLength < 12)
+    {
+        throw new Error('Frame too short');
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const textDecoder = new TextDecoder('utf-8');
-
-    const result = {};
+    const view = new DataView(buffer.buffer, buffer.byteOffset, buffer.byteLength);
 
     let offset = 0;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const readLine = () => {
+    const stream_magic = view.getUint32(offset, true); offset += 8;
+    const payload_size = view.getUint32(offset, true); offset += 4;
 
-        const s = offset;
-        while(offset < buffer.length && buffer[offset] !== 0x0D) offset++; // look for '\r'
-        const e = offset;
-
-        if(buffer[offset++] !== 0x0D
-           ||
-           buffer[offset++] !== 0x0A
-        ) {
-            throw new Error('Expected CRLF after line');
-        }
-
-        return buffer.subarray(s, e);
-    };
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    const readLengthLine = (expectedPrefix) => {
-
-        if(buffer[offset++] !== expectedPrefix)
-        {
-            throw new Error('Expected prefix ' + String.fromCharCode(expectedPrefix));
-        }
-
-        return _parseInt(textDecoder.decode(readLine()));
-    };
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    const readBlock = (len) => {
-
-        const result = buffer.subarray(offset, offset + len); offset += len;
-
-        if(buffer[offset++] !== 0x0D
-           ||
-           buffer[offset++] !== 0x0A
-        ) {
-            throw new Error('Expected CRLF after data block');
-        }
-
-        return result;
-    };
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    const match = textDecoder.decode(readLine()).match(/^nyx-stream\[(\d+)]$/);
-
-    if(!match)
+    if(stream_magic !== NYX_STREAM_MAGIC)
     {
-        throw new Error('Invalid stream header');
+        throw new Error('Invalid NyxStream magic');
     }
 
-    for(let i = 0; i < _parseInt(match[1]); i++)
+    if(buffer.byteLength < 12 + payload_size)
     {
-        const keyLen = readLengthLine(0x24); // '$'
-        const key = textDecoder.decode(readBlock(keyLen));
+        throw new Error('Incomplete NyxStream frame');
+    }
 
-        const valLen = readLengthLine(0x24); // '$'
-        result[key] = /*------------*/(readBlock(valLen));
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const result = {};
+
+    let consumed = 0;
+
+    while(consumed < payload_size)
+    {
+        if(payload_size - consumed < 8)
+        {
+            throw new Error('Truncated field header');
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        const field_hash = view.getUint32(offset, true); offset += 4;
+        const field_size = view.getUint32(offset, true); offset += 4;
+
+        consumed += 8;
+
+        if(payload_size - consumed < field_size
+            ||
+            offset + field_size > buffer.byteLength
+        ) {
+            throw new Error('Truncated field data');
+        }
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        result[field_hash.toString(16).padStart(8, '0')] = new Uint8Array(buffer.buffer, buffer.byteOffset + offset, field_size);
+
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        offset   += field_size;
+        consumed += field_size;
+
+        /*------------------------------------------------------------------------------------------------------------*/
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -260,7 +243,7 @@ const _register_func = (stream, callback) => {
             {
                 try
                 {
-                    const data = _parseNyxRESP(new Uint8Array(e.data));
+                    const data = _parseNyxBinaryStream(new Uint8Array(e.data));
 
                     for(const callback of entry.callbacks)
                     {
