@@ -221,7 +221,7 @@ const init = () => {
     graph.nodes.push({
         id: '0',
         type: TYPE_BROKER,
-        name: 'MQTT broker',
+        name: 'MQTT Broker',
         timestamp: 0x00000000,
     });
 
