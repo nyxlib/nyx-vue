@@ -191,7 +191,7 @@ const _check_func = (endpoint, username, password) => new Promise((resolve, reje
         }
         catch(e)
         {
-            reject(e.message || `${e}`);
+            reject(new Error(e.message || `${e}`));
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
