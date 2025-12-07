@@ -31,11 +31,11 @@ const nyxStore = useNyxStore();
 
         <br /><br />
 
-        <button class="btn btn-success w-100" type="button" v-if="!nyxStore.isConnected" @click="emit('connect')">
+        <button class="btn btn-success w-100" type="button" @click="emit('connect')" v-if="!nyxStore.isConnected">
             connect
         </button>
 
-        <button class="btn btn-secondary w-100" type="button" v-if="nyxStore.isConnected" @click="emit('disconnect')">
+        <button class="btn btn-secondary w-100" type="button" @click="emit('disconnect')" v-if="nyxStore.isConnected">
             disconnect
         </button>
 

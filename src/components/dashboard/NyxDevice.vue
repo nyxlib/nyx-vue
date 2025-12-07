@@ -3,6 +3,9 @@
 
 import useNyxStore from '../../stores/nyx';
 
+import NavTabs from '../ui/NavTabs.vue';
+import TabPane from '../ui/TabPane.vue';
+
 import NyxPanel from './NyxGroup.vue';
 import NyxConsole from './NyxConsole.vue';
 
@@ -40,11 +43,11 @@ const nyxStore = useNyxStore();
                 <nyx-console :device-name="deviceName" />
             ]
         </div>
-        <div class="card-body px-3 py-2">
+        <div :class="['card-body', 'px-3', 'py-2', {'disabled': !nyxStore.isConnected}]">
 
             <!-- *************************************************************************************************** -->
 
-            <nav-tabs margin="mb-4" v-if="nyxStore.isConnected">
+            <nav-tabs margin="mb-4">
 
                 <template v-for="(groupDescr, groupName) in deviceDescr" :key="groupName">
 
@@ -60,15 +63,37 @@ const nyxStore = useNyxStore();
 
             <!-- *************************************************************************************************** -->
 
-            <div v-else>
-                No longer connected...
-            </div>
-
-            <!-- *************************************************************************************************** -->
-
         </div>
     </div>
 
     <!-- *********************************************************************************************************** -->
 
 </template>
+
+<style scoped>
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+.disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+    user-select: none;
+    opacity: 0.4;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+.disabled::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        45deg,
+        rgba(0,0,0,0.15) 0,
+        rgba(0,0,0,0.15) 8px,
+        rgba(0,0,0,0.25) 8px,
+        rgba(0,0,0,0.25) 16px
+    );
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+</style>
