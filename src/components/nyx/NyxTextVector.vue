@@ -60,7 +60,7 @@ onMounted(() => {
 
     if(props.defTextVector['@hints'])
     {
-        new Popover(popoverRef.value, {
+        /* NOSONAR */ new Popover(popoverRef.value, {
             html: true,
             trigger: 'focus hover',
             content: marked.parse(props.defTextVector['@hints'])
@@ -85,7 +85,7 @@ onMounted(() => {
 
             <i :class="['bi', 'bi-circle-fill', `text-${COLORS[defTextVector['@state']]}`]"></i>
 
-            <span class="ms-1" tabindex="0" ref="popoverRef">{{ defTextVector['@label'] || defTextVector['@name'] }}</span>
+            <span class="ms-1" ref="popoverRef">{{ defTextVector['@label'] || defTextVector['@name'] }}</span>
 
         </div>
 

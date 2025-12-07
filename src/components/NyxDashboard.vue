@@ -137,9 +137,11 @@ onUnmounted(() => {
             <!-- NYX PANEL                                                                                           -->
             <!-- *************************************************************************************************** -->
 
-            <tab-pane title="Nyx" icon="command" v-if="nyxStore.isConnected || Object.keys(devices).length > 0">
+            <tab-pane title="Nyx" icon="command" v-if="showDevices">
 
-                <div class="d-flex flex-column h-100">
+                <!-- *********************************************************************************************** -->
+
+                <div class="d-flex flex-column h-100" v-if="Object.keys(devices).length > 0">
 
                     <nav-tabs margin="mb-2">
 
@@ -158,6 +160,20 @@ onUnmounted(() => {
                     </nav-tabs>
 
                 </div>
+
+                <!-- *********************************************************************************************** -->
+
+                <div class="d-flex align-items-center justify-content-center h-100" v-else>
+
+                    <div class="text-center">
+                        <span class="spinner-grow" style="width: 3rem; height: 3rem;"></span>
+                        <br />
+                        Waiting for connection...
+                    </div>
+
+                </div>
+
+                <!-- *********************************************************************************************** -->
 
             </tab-pane>
 

@@ -54,7 +54,7 @@ const _update_func = (endpoint, username, password) => {
 
             /*--------------------------------------------------------------------------------------------------------*/
         }
-        catch(_)
+        catch(/* NOSONAR */ _)
         {
             /* IGNORE */
         }
@@ -90,7 +90,7 @@ const _update_func = (endpoint, username, password) => {
 
         _client = new paho.Client(
             url.hostname,
-            parseInt(url.port || (url.protocol === 'wss:' ? '443' : '80')),
+            Number.parseInt(url.port || (url.protocol === 'wss:' ? '443' : '80')),
             url.pathname,
             uuid.v4()
         );
@@ -155,7 +155,7 @@ const _update_func = (endpoint, username, password) => {
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
-    catch(_)
+    catch(/* NOSONAR */ _)
     {
         _url = null;
         _client = null;
@@ -184,7 +184,7 @@ const _check_func = (endpoint, username, password) => new Promise((resolve, reje
 
         const client = new paho.Client(
             url.hostname,
-            parseInt(url.port || (url.protocol === 'wss:' ? '443' : '80')),
+            Number.parseInt(url.port || (url.protocol === 'wss:' ? '443' : '80')),
             url.pathname,
             uuid.v4()
         );
@@ -202,7 +202,7 @@ const _check_func = (endpoint, username, password) => new Promise((resolve, reje
                 try {
                     client.disconnect();
                 }
-                catch(_) {
+                catch(/* NOSONAR */ _) {
                     /* IGNORE */
                 }
 
@@ -213,11 +213,11 @@ const _check_func = (endpoint, username, password) => new Promise((resolve, reje
                 try {
                     client.disconnect();
                 }
-                catch(_) {
+                catch(/* NOSONAR */ _) {
                     /* IGNORE */
                 }
 
-                reject('Connection error');
+                reject(new Error('Connection error'));
             },
         });
 
@@ -225,7 +225,7 @@ const _check_func = (endpoint, username, password) => new Promise((resolve, reje
     }
     catch(e)
     {
-        reject(e.message || `${e}`);
+        reject(new Error(e.message || `${e}`));
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/

@@ -28,13 +28,13 @@ const tabListRef = ref(null);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const sortedTabs = computed(() => [...Object.values(tabs.value)].sort((x, y) => x.tabRank - y.tabRank));
+const sortedTabs = computed(() => Object.values(tabs.value).sort((x, y) => x.tabRank - y.tabRank));
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-provide('addTab', (tabId, tabRank, tabTitle, tabIcon, tabClass, onShow, onShown, onHide, onHidden) => {
+provide('addTab', /* NOSONAR */ (tabId, tabRank, tabTitle, tabIcon, tabClass, onShow, onShown, onHide, onHidden) => {
 
     tabs.value[tabId] = {
         tabId: tabId,

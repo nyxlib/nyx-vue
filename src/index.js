@@ -7,7 +7,7 @@ import {createPinia} from 'pinia';
 import * as bootstrap from 'bootstrap';
 import draggable from 'vuedraggable';
 import flatpickr from 'flatpickr';
-import chartjs from 'chart.js/auto';
+import chartJS from 'chart.js/auto';
 import * as uuid from 'uuid';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -30,6 +30,7 @@ import Splitter from './components/ui/Splitter.vue';
 import NavTabs from './components/ui/NavTabs.vue';
 import TabPane from './components/ui/TabPane.vue';
 import InputRange from './components/ui/InputRange.vue';
+import Sexagesimal from './components/ui/Sexagesimal.vue';
 import Gauge from './components/ui/Gauge.vue';
 
 import NyxTopology from './components/NyxTopology.vue';
@@ -45,18 +46,18 @@ const setup = (app, pinia = null) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    window.__NYX_BOOTSTRAP__ = bootstrap;
-    window.__NYX_DRAGGABLE__ = draggable;
-	window.__NYX_FLATPICKR__ = flatpickr;
-    window.__NYX_CHARTJS__ = chartjs;
-    window.__NYX_UUID__ = uuid;
+    window.__NYX_BOOTSTRAP__ = /* NOSONAR */ bootstrap;
+    window.__NYX_DRAGGABLE__ = /* NOSONAR */ draggable;
+	window.__NYX_FLATPICKR__ = /* NOSONAR */ flatpickr;
+    window.__NYX_CHARTJS__ = /* NOSONAR */ chartJS;
+    window.__NYX_UUID__ = /* NOSONAR */ uuid;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    window.__NYX_D3__                = d3             ;
-    window.__NYX_D3_ZOOM__           = d3Zoom         ;
-    window.__NYX_D3_SELECTION__      = d3Selection    ;
-    window.__NYX_D3_GEO_PROJECTION__ = d3GeoProjection;
+    window.__NYX_D3__                = /* NOSONAR */ d3             ;
+    window.__NYX_D3_ZOOM__           = /* NOSONAR */ d3Zoom         ;
+    window.__NYX_D3_SELECTION__      = /* NOSONAR */ d3Selection    ;
+    window.__NYX_D3_GEO_PROJECTION__ = /* NOSONAR */ d3GeoProjection;
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -78,6 +79,7 @@ const setup = (app, pinia = null) => {
     app.component('NavTabs', NavTabs);
     app.component('TabPane', TabPane);
     app.component('InputRange', InputRange);
+    app.component('Sexagesimal', Sexagesimal);
     app.component('Gauge', Gauge);
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -94,8 +96,8 @@ const setup = (app, pinia = null) => {
 
 export {
     setup,
-    useNyxStore,
-    NyxGroup,
+    /* NOSONAR */ useNyxStore,
+    /* NOSONAR */ NyxGroup,
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/

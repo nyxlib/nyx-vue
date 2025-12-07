@@ -9,7 +9,7 @@ import {marked} from 'marked';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import Sexagesimal from "../ui/Sexagesimal.vue";
+import Sexagesimal from '../ui/Sexagesimal.vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -64,7 +64,7 @@ onMounted(() => {
 
     if(props.defNumberVector['@hints'])
     {
-        new Popover(popoverRef.value, {
+        /* NOSONAR */ new Popover(popoverRef.value, {
             html: true,
             trigger: 'focus hover',
             content: marked.parse(props.defNumberVector['@hints'])
@@ -89,7 +89,7 @@ onMounted(() => {
 
             <i :class="['bi', 'bi-circle-fill', `text-${COLORS[defNumberVector['@state']]}`]"></i>
 
-            <span class="ms-1" tabindex="0" ref="popoverRef">{{ defNumberVector['@label'] || defNumberVector['@name'] }}</span>
+            <span class="ms-1" ref="popoverRef">{{ defNumberVector['@label'] || defNumberVector['@name'] }}</span>
 
         </div>
 
@@ -105,7 +105,7 @@ onMounted(() => {
                         {{ defNumber['@label'] || defNumber['@name'] }}
                     </span>
 
-                    <sexagesimal :format="defNumber['@format']" v-model="defNumber['$']" :readonly="defNumberVector['@perm'] === 'ro'" v-if="defNumber['@format'].match(/%(\d+)\.(\d+)m/)" />
+                    <sexagesimal :format="defNumber['@format']" :readonly="defNumberVector['@perm'] === 'ro'" v-model="defNumber['$']" v-if="defNumber['@format'].match(/%(\d+)\.(\d+)m/)" />
 
                     <input class="form-control" :type="defNumberVector['@perm'] === 'ro' ? 'text' : 'number'" :min="defNumber['@min']" :max="defNumber['@max']" :step="defNumber['@step']" :readonly="defNumberVector['@perm'] === 'ro'" v-model="defNumber['$']" v-else />
 

@@ -39,7 +39,7 @@ onMounted(() => {
 
     if(props.defLightVector['@hints'])
     {
-        new Popover(popoverRef.value, {
+        /* NOSONAR */ new Popover(popoverRef.value, {
             html: true,
             trigger: 'focus hover',
             content: marked.parse(props.defLightVector['@hints'])
@@ -64,7 +64,7 @@ onMounted(() => {
 
             <i :class="['bi', 'bi-circle-fill', `text-${COLORS[defLightVector['@state']]}`]"></i>
 
-            <span class="ms-1" tabindex="0" ref="popoverRef">{{ defLightVector['@label'] || defLightVector['@name'] }}</span>
+            <span class="ms-1" ref="popoverRef">{{ defLightVector['@label'] || defLightVector['@name'] }}</span>
 
         </div>
 

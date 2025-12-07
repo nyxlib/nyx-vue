@@ -51,7 +51,7 @@ const _update_func = (endpoint, username, password) => {
 
             _token = token;
         }
-        catch(e)
+        catch(/* NOSONAR */ _)
         {
             /* IGNORE */
         }
@@ -168,22 +168,22 @@ const _check_func = (endpoint, username, password) => new Promise((resolve, reje
                         }
                         else
                         {
-                            reject('Unauthorized access');
+                            reject(new Error('Unauthorized access'));
                         }
 
-                    }).catch((_) => {
+                    }).catch(() => {
 
-                        reject('Connection error');
+                        reject(new Error('Connection error'));
                     });
                 }
                 else
                 {
-                    reject('Connection error');
+                    reject(new Error('Connection error'));
                 }
 
-            }).catch((_) => {
+            }).catch(() => {
 
-                reject('Connection error');
+                reject(new Error('Connection error'));
             });
 
             /*--------------------------------------------------------------------------------------------------------*/

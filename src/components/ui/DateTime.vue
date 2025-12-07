@@ -3,6 +3,8 @@
 
 import {ref, watch, nextTick, onMounted, onUnmounted} from 'vue';
 
+import {createPopper} from '@popperjs/core';
+
 import flatpickr from 'flatpickr';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -93,7 +95,7 @@ onMounted(() => {
 
                 if(!props.inline)
                 {
-                    popperInstance =  window.Popper.createPopper(inputRef.value, flatpickrInstance.calendarContainer, {
+                    popperInstance = createPopper(inputRef.value, flatpickrInstance.calendarContainer, {
                         placement: 'bottom-start',
                         modifiers: [
                             {name: 'flip', options: {fallbackPlacements: ['top-start', 'right-start', 'left-start']}},
@@ -135,7 +137,7 @@ onMounted(() => {
 
                 if(dates.length > 0)
                 {
-                    const date = new Date(dates[0].getTime());
+                    const date = new Date(dates[0]);
 
                     emit('update:modelValue', date);
 

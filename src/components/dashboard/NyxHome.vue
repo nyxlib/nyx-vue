@@ -58,7 +58,6 @@ const nyxStore = useNyxStore();
 
 a {
     color: var(--bs-body-color);
-
     text-decoration: none;
 }
 

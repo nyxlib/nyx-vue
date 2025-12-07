@@ -217,9 +217,9 @@ const _processMessage = (message) => {
                 {
                     const m = /%\d*(?:\.(\d+))?f/.exec(defXXX['@format'].toString());
 
-                    defXXX['$'] = (m && typeof m[1] !== 'undefined') ? defXXX['$']
-                                                                         = parseFloat(defXXX['$'].toString()).toFixed(parseInt(m[1])).toString()
-                                                                     : defXXX['$']
+                    defXXX['$'] = (m?.[1] !== undefined) ? defXXX['$']
+                                                           = Number.parseFloat(defXXX['$'].toString()).toFixed(Number.parseInt(m[1])).toString()
+                                                         : defXXX['$']
                     ;
                 }
 
@@ -303,7 +303,7 @@ const _processMessage = (message) => {
 
             if(message['@device'] in nyxStore.messageDict)
             {
-                list = nyxStore.messageDict[message['@device']] ; //;
+                list = nyxStore.messageDict[message['@device']] /**/;
             }
             else
             {
@@ -376,12 +376,11 @@ const _buildNewSwitchVectorMessage_func = (defSwitchVector, index) => {
         /* OneOfMany                                                                                                  */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        case 'OneOfMany':
+        case 'OneOfMany': {
 
             const def = defSwitchVector['children'][index];
 
-            if(def)
-            {
+            if (def) {
                 result['children'].push({
                     '<>': 'oneSwitch',
                     '@name': def['@name'],
@@ -390,12 +389,13 @@ const _buildNewSwitchVectorMessage_func = (defSwitchVector, index) => {
             }
 
             break;
+        }
 
         /*------------------------------------------------------------------------------------------------------------*/
         /* AtMostOne                                                                                                  */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        case 'AtMostOne':
+        case 'AtMostOne': {
 
             defSwitchVector['children'].forEach((def, INDEX) => {
 
@@ -407,12 +407,13 @@ const _buildNewSwitchVectorMessage_func = (defSwitchVector, index) => {
             });
 
             break;
+        }
 
         /*------------------------------------------------------------------------------------------------------------*/
         /* AnyOfMany                                                                                                  */
         /*------------------------------------------------------------------------------------------------------------*/
 
-        case 'AnyOfMany':
+        case 'AnyOfMany': {
 
             defSwitchVector['children'].forEach((def, INDEX) => {
 
@@ -424,6 +425,7 @@ const _buildNewSwitchVectorMessage_func = (defSwitchVector, index) => {
             });
 
             break;
+        }
 
         /*------------------------------------------------------------------------------------------------------------*/
     }
