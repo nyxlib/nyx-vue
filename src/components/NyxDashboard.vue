@@ -63,7 +63,7 @@ const devices = computed(() => {
         let device;
 
         if(defXXXVector['@device'] in result) {
-            device = result[defXXXVector['@device']] ; //;
+            device = result[defXXXVector['@device']] /**/;
         }
         else {
             device = result[defXXXVector['@device']] = {};
@@ -74,7 +74,7 @@ const devices = computed(() => {
         let group;
 
         if(defXXXVector['@group'] in device) {
-            group = device[defXXXVector['@group']] ; //;
+            group = device[defXXXVector['@group']] /**/;
         }
         else {
             group = device[defXXXVector['@group']] = {};
@@ -134,14 +134,16 @@ onUnmounted(() => {
             </tab-pane>
 
             <!-- *************************************************************************************************** -->
+            <!-- NYX PANEL                                                                                           -->
+            <!-- *************************************************************************************************** -->
 
-            <tab-pane class="align-items-center justify-content-center" title="Nyx" icon="command" v-if="nyxStore.isConnected && showDevices">
+            <tab-pane title="Nyx" icon="command" v-if="nyxStore.isConnected || Object.keys(devices).length > 0">
 
                 <div class="d-flex flex-column h-100">
 
                     <nav-tabs margin="mb-2">
 
-                        <tab-pane class="align-items-center justify-content-center" :title="deviceName" icon="command" v-for="(deviceDescr, deviceName) in devices" :key="deviceName">
+                        <tab-pane :title="deviceName" icon="command" v-for="(deviceDescr, deviceName) in devices" :key="deviceName">
 
                             <div class="d-flex align-items-center justify-content-center h-100">
 
@@ -153,7 +155,7 @@ onUnmounted(() => {
 
                         </tab-pane>
 
-                </nav-tabs>
+                    </nav-tabs>
 
                 </div>
 
