@@ -78,7 +78,7 @@ const nyxStore = useNyxStore();
     cursor: not-allowed;
     pointer-events: none;
     user-select: none;
-    opacity: 0.8;
+    opacity: 0.75;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
