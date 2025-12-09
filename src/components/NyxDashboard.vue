@@ -207,7 +207,10 @@ onUnmounted(() => {
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
 
+                    <!-- ******************************************************************************************* -->
+
                     <div class="modal-header px-3 py-2">
+
                         <h5 class="modal-title">
                             <i class="bi bi-card-text"></i>
                             {{ nyxStore.curDeviceName }}
@@ -221,10 +224,20 @@ onUnmounted(() => {
                                 </button>
                             ]
                         </h5>
+
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+
                     </div>
 
-                    <div class="modal-body bg-black px-3 py-2" id="nyx_terminal"></div>
+                    <!-- ******************************************************************************************* -->
+
+                    <div class="modal-body bg-black px-3 py-2">
+
+                        <!-- DYNAMIC -->
+
+                    </div>
+
+                    <!-- ******************************************************************************************* -->
 
                 </div>
             </div>

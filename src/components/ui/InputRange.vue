@@ -44,7 +44,7 @@ const effectiveValue = computed(() => props.log ? (Math.log(props.modelValue / p
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const handleInput = (e) => { const v = parseFloat(e.target.value); return emit('update:modelValue', props.log ? (props.min * Math.pow(props.max / props.min, v / effectiveMax.value)).toPrecision(2) : v + props.min); };
+const handleInput = (e) => { const v = Number.parseFloat(e.target.value); return emit('update:modelValue', props.log ? (props.min * Math.pow(props.max / props.min, v / effectiveMax.value)).toPrecision(2) : v + props.min); };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 </script>

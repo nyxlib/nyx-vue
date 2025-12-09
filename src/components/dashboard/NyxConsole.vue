@@ -49,9 +49,8 @@ const setupAndUpdateTerminal = () => {
 onMounted(() => {
 
     modalEl = document.getElementById('nyx_console');
-    terminalEl = document.getElementById('nyx_terminal');
 
-    /**/
+    terminalEl = modalEl.querySelector('.modal-body');
 
     modalEl.addEventListener('shown.bs.modal', setupAndUpdateTerminal);
 });
@@ -60,12 +59,11 @@ onMounted(() => {
 
 onUnmounted(() => {
 
+    modalEl = document.getElementById('nyx_console');
+
+    terminalEl = modalEl.querySelector('.modal-body');
+
     modalEl.removeEventListener('shown.bs.modal', setupAndUpdateTerminal);
-
-    /**/
-
-    modalEl = /*----------------*/ null /*----------------*/;
-    terminalEl = /*----------------*/ null /*----------------*/;
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
