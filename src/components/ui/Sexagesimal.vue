@@ -43,7 +43,7 @@ const fmt = computed(() => {
         const w = Number.parseInt(m[1], 10);
         const f = Number.parseInt(m[2], 10);
 
-        if(!(f === 3 || f === 5 || f === 6 || f === 8 || f === 9))
+        if(f === 3 || f === 5 || f === 6 || f === 8 || f === 9)
         {
             return {w: w, f: f};
         }

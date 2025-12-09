@@ -52,16 +52,14 @@ onMounted(() => {
 
     terminalEl = modalEl.querySelector('.modal-body');
 
+    /**/
+
     modalEl.addEventListener('shown.bs.modal', setupAndUpdateTerminal);
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 onUnmounted(() => {
-
-    modalEl = document.getElementById('nyx_console');
-
-    terminalEl = modalEl.querySelector('.modal-body');
 
     modalEl.removeEventListener('shown.bs.modal', setupAndUpdateTerminal);
 });
