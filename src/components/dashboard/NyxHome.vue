@@ -32,11 +32,11 @@ const nyxStore = useNyxStore();
         <br /><br />
 
         <button class="btn btn-success w-100" type="button" @click="emit('connect')" v-if="!nyxStore.isConnected">
-            connect
+            Connect
         </button>
 
         <button class="btn btn-secondary w-100" type="button" @click="emit('disconnect')" v-if="nyxStore.isConnected">
-            disconnect
+            Disconnect
         </button>
 
         <br /><br />
@@ -45,8 +45,8 @@ const nyxStore = useNyxStore();
 
     <!-- *********************************************************************************************************** -->
 
-    <span class="position-absolute opacity-50 fs-6" style="bottom: 8px;">
-        Copyright <i class="bi bi-c-circle"></i> 2024-{{ new Date().getFullYear() }} <a href="https://nyxlib.org/" target="_blank">Nyx Lab</a> — <a href="https://odier.xyz/" target="_blank">Jérôme ODIER</a>, <a href="https://lpsc.in2p3.fr/" target="_blank">LPSC</a> / <a href="https://cnrs.fr/" target="_blank">CNRS</a>.
+    <span class="position-absolute opacity-50" style="bottom: 8px; font-size: 0.9rem;">
+        Copyright © 2024-{{ new Date().getFullYear() }} <a href="https://nyxlib.org/" target="_blank">Nyx Lab</a> — <a href="https://odier.xyz/" target="_blank">Jérôme ODIER</a>, <a href="https://lpsc.in2p3.fr/" target="_blank">LPSC</a> / <a href="https://cnrs.fr/" target="_blank">CNRS</a>.
     </span>
 
     <!-- *********************************************************************************************************** -->
