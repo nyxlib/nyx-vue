@@ -166,7 +166,7 @@ onUnmounted(() => {
                 <div class="d-flex align-items-center justify-content-center h-100" v-else>
 
                     <div class="text-center">
-                        <span class="spinner-grow" style="width: 3rem; height: 3rem;"></span>
+                        <span class="spinner-grow" style="width: 2.5rem; height: 2.5rem;"></span>
                         <br />
                         Waiting for connection...
                     </div>
@@ -198,64 +198,5 @@ onUnmounted(() => {
     </div>
 
     <!-- *********************************************************************************************************** -->
-    <!-- MODAL                                                                                                       -->
-    <!-- *********************************************************************************************************** -->
-
-    <teleport to="body">
-
-        <div class="modal" tabindex="-1" id="nyx_console">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content">
-
-                    <!-- ******************************************************************************************* -->
-
-                    <div class="modal-header px-3 py-2">
-
-                        <h5 class="modal-title">
-                            <i class="bi bi-card-text"></i>
-                            {{ nyxStore.curDeviceName }}
-                            [
-                                <button class="btn btn-xs btn-secondary" type="button" @click="nyx.clearTerminal">
-                                    <i class="bi bi-trash"></i>
-                                    empty
-                                    <span class="badge rounded-pill bg-danger">
-                                        {{ nyxStore.numberOfMessages(nyxStore.curDeviceName) }}
-                                    </span>
-                                </button>
-                            ]
-                        </h5>
-
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-
-                    </div>
-
-                    <!-- ******************************************************************************************* -->
-
-                    <div class="modal-body bg-black px-3 py-2">
-
-                        <!-- DYNAMIC -->
-
-                    </div>
-
-                    <!-- ******************************************************************************************* -->
-
-                </div>
-            </div>
-        </div>
-
-    </teleport>
-
-    <!-- *********************************************************************************************************** -->
 
 </template>
-
-<style scoped>
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-.modal-body {
-    border-bottom-right-radius: var(--bs-modal-border-radius);
-    border-bottom-left-radius: var(--bs-modal-border-radius);
-}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-</style>
