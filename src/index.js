@@ -4,6 +4,7 @@ import {createPinia} from 'pinia';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+import * as popperJS from '@popperjs/core';
 import * as bootstrap from 'bootstrap';
 import draggable from 'vuedraggable';
 import flatpickr from 'flatpickr';
@@ -46,6 +47,7 @@ const setup = (app, pinia = null) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    window.__NYX_POPPERJS__ = /* NOSONAR */ popperJS;
     window.__NYX_BOOTSTRAP__ = /* NOSONAR */ bootstrap;
     window.__NYX_DRAGGABLE__ = /* NOSONAR */ draggable;
 	window.__NYX_FLATPICKR__ = /* NOSONAR */ flatpickr;
