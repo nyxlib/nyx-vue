@@ -150,6 +150,7 @@ body {
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 .nyx-group-disabled {
+
     position: relative;
     cursor: not-allowed;
     pointer-events: none;
@@ -160,6 +161,7 @@ body {
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /*----------------*/ .nyx-group-disabled::after {
+
     inset: 0;
     content: "";
     position: absolute;
@@ -167,6 +169,7 @@ body {
 }
 
 [data-bs-theme=dark] .nyx-group-disabled::after {
+
     inset: 0;
     content: "";
     position: absolute;
