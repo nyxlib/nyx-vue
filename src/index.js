@@ -8,6 +8,7 @@ import * as popperJS from '@popperjs/core';
 import * as bootstrap from 'bootstrap';
 import draggable from 'vuedraggable';
 import flatpickr from 'flatpickr';
+import chartJS from 'chart.js/auto';
 import {Graph3d} from 'vis-graph3d/peer';
 import {DataSet} from 'vis-data/peer';
 import * as uuid from 'uuid';
