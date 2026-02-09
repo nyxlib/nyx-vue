@@ -9,9 +9,7 @@ import * as bootstrap from 'bootstrap';
 import draggable from 'vuedraggable';
 import flatpickr from 'flatpickr';
 import chartJS from 'chart.js/auto';
-import Plotly from 'plotly.js-dist-min';
-import {Graph3d} from 'vis-graph3d/peer';
-import {DataSet} from 'vis-data/peer';
+import plotly from 'plotly.js-dist-min';
 import * as uuid from 'uuid';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -55,7 +53,7 @@ const setup = (app, pinia = null) => {
     window.__NYX_DRAGGABLE__ = /* NOSONAR */ draggable;
 	window.__NYX_FLATPICKR__ = /* NOSONAR */ flatpickr;
     window.__NYX_CHARTJS__ = /* NOSONAR */ chartJS;
-    window.__NYX_CHARTJS__ = /* NOSONAR */ Plotly;
+    window.__NYX_PLOTLY__ = /* NOSONAR */ plotly;
     window.__NYX_UUID__ = /* NOSONAR */ uuid;
 
     /*----------------------------------------------------------------------------------------------------------------*/
