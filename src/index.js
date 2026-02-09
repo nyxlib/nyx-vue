@@ -8,8 +8,8 @@ import * as popperJS from '@popperjs/core';
 import * as bootstrap from 'bootstrap';
 import draggable from 'vuedraggable';
 import flatpickr from 'flatpickr';
-import chartJS from 'chart.js/auto';
-import graph3d from 'vis-graph3d';
+import {Graph3d} from 'vis-graph3d/peer';
+import {DataSet} from 'vis-data/peer';
 import * as uuid from 'uuid';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -53,7 +53,8 @@ const setup = (app, pinia = null) => {
     window.__NYX_DRAGGABLE__ = /* NOSONAR */ draggable;
 	window.__NYX_FLATPICKR__ = /* NOSONAR */ flatpickr;
     window.__NYX_CHARTJS__ = /* NOSONAR */ chartJS;
-    window.__NYX_GRAPH3D__ = /* NOSONAR */ graph3d;
+    window.__NYX_GRAPH3D__ = /* NOSONAR */ Graph3d;
+    window.__NYX_DATASET__ = /* NOSONAR */ DataSet;
     window.__NYX_UUID__ = /* NOSONAR */ uuid;
 
     /*----------------------------------------------------------------------------------------------------------------*/
