@@ -125,7 +125,7 @@ const toggle = () => {
 
         <!-- ******************************************************************************************************* -->
 
-        <input class="form-control form-control-sm" type="text" placeholder="Nyx variable" v-model.trim="nyxVar" v-if="modelValue.mode === 'var'" />
+        <input class="form-control form-control-sm" type="text" placeholder="Nyx variable" :id="id" v-model.trim="nyxVar" v-if="modelValue.mode === 'var'" />
 
         <!-- ******************************************************************************************************* -->
 
