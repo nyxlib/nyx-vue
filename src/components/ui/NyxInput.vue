@@ -118,9 +118,10 @@ const toggle = () => {
                :max="parseFloat(max)"
                :step="parseFloat(step)"
                :placeholder="placeholder"
+               :readonly="modelValue.mode === 'var'"
                :id="id"
                v-model.number="nyxVal"
-               v-if="modelValue.mode === 'val' && type === 'number'"
+               v-if="type === 'number'"
         />
 
         <!-- ******************************************************************************************************* -->
@@ -128,9 +129,10 @@ const toggle = () => {
         <input class="form-control form-control-sm"
                :type="type"
                :placeholder="placeholder"
+               :readonly="modelValue.mode === 'var'"
                :id="id"
                v-model.trim="nyxVal"
-               v-if="modelValue.mode === 'val' && type !== 'number'"
+               v-if="type !== 'number'"
         />
 
         <!-- ******************************************************************************************************* -->
