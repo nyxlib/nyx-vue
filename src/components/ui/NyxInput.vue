@@ -102,7 +102,26 @@ const toggle = () => {
 
         <!-- ******************************************************************************************************* -->
 
-        <input class="form-control form-control-sm" :type="type" :min="type === 'number' ? parseFloat(min) : undefined" :max="type === 'number' ? parseFloat(max) : undefined" :step="type === 'number' ? parseFloat(step) : undefined" :placeholder="placeholder" :id="id" v-model="nyxVal" v-if="modelValue.mode === 'val'" />
+        <input class="form-control form-control-sm"
+               :type="type"
+               :min="parseFloat(min)"
+               :max="parseFloat(max)"
+               :step="parseFloat(step)"
+               :placeholder="placeholder"
+               :id="id"
+               v-model.number="nyxVal"
+               v-if="modelValue.mode === 'val' && type === 'number'"
+        />
+
+        <!-- ******************************************************************************************************* -->
+
+        <input class="form-control form-control-sm"
+               :type="type"
+               :placeholder="placeholder"
+               :id="id"
+               v-model.trim="nyxVal"
+               v-if="modelValue.mode === 'val' && type !== 'number'"
+        />
 
         <!-- ******************************************************************************************************* -->
 
