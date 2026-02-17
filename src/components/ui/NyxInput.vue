@@ -5,8 +5,18 @@ import {computed} from 'vue';
 
 import * as uuid from 'uuid';
 
+import Multiselect from '@vueform/multiselect';
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+import {useNyxStore} from '../../stores/nyx';
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const nyxStore = useNyxStore();
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const props = defineProps({
@@ -125,7 +135,18 @@ const toggle = () => {
 
         <!-- ******************************************************************************************************* -->
 
-        <input class="form-control form-control-sm" type="text" placeholder="Nyx variable" :id="id" v-model.trim="nyxVar" v-if="modelValue.mode === 'var'" />
+        <multiselect mode="single"
+                     :required="false"
+                     :can-clear="true"
+                     :searchable="true"
+                     :create-option="false"
+                     :allow-absent="true"
+                     :close-on-select="true"
+                     :options="nyxStore.variableDefs"
+                     :id="id"
+                     v-model.trim="nyxVar"
+                     v-if="modelValue.mode === 'var'"
+        />
 
         <!-- ******************************************************************************************************* -->
 
