@@ -1,7 +1,9 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {watch, computed, reactive} from 'vue';
+import {computed} from 'vue';
+
+import * as uuid from 'uuid';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -10,7 +12,12 @@ import {watch, computed, reactive} from 'vue';
 const props = defineProps({
     modelValue: {
         type: Object,
-        required: true,
+        required: false,
+        default: () => ({
+            mode: 'val',
+            val: '',
+            var: '',
+        }),
     },
     type: {
         type: String,
@@ -34,7 +41,7 @@ const props = defineProps({
     },
     id: {
         type: String,
-        required: true,
+        default: () => uuid.v4(),
     },
 });
 
@@ -44,18 +51,13 @@ const emit = defineEmits(['update:modelValue']);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const state = reactive({
-    showNyxVar: false,
-});
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 const nyxVal = computed({
 
     get: () => props.modelValue.val ?? '',
     set: (x) => {
 
         emit('update:modelValue', {
+            mode: 'val',
             var: props.modelValue.var ?? '',
             val: x,
         });
@@ -70,6 +72,7 @@ const nyxVar = computed({
     set: (x) => {
 
         emit('update:modelValue', {
+            mode: 'var',
             val: props.modelValue.val ?? '',
             var: x,
         });
@@ -82,18 +85,12 @@ const nyxVar = computed({
 
 const toggle = () => {
 
-    state.showNyxVar = !state.showNyxVar;
+    emit('update:modelValue', {
+        mode: props.modelValue.mode === 'var' ? 'val' : 'var',
+        val: props.modelValue.val ?? '',
+        var: props.modelValue.var ?? '',
+    });
 };
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-/* INITIALIZATION                                                                                                     */
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-watch(() => props.modelValue.var, (x) => {
-
-    state.showNyxVar = (typeof x === 'string' && x.trim().length > 0);
-
-}, {immediate: true});
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 </script>
@@ -106,15 +103,15 @@ watch(() => props.modelValue.var, (x) => {
 
         <!-- ******************************************************************************************************* -->
 
-        <input class="form-control form-control-sm" :type="type" :min="type === 'number' ? min : undefined" :max="type === 'number' ? max : undefined" :step="type === 'number' ? step : undefined" :placeholder="placeholder" :id="id" v-model="nyxVal" v-if="!state.showNyxVar" />
+        <input class="form-control form-control-sm" :type="type" :min="type === 'number' ? min : undefined" :max="type === 'number' ? max : undefined" :step="type === 'number' ? step : undefined" :placeholder="placeholder" :id="id" v-model="nyxVal" v-if="modelValue.mode === 'val'" />
 
         <!-- ******************************************************************************************************* -->
 
-        <input class="form-control form-control-sm" type="text" placeholder="Nyx variable" v-model.trim="nyxVar" v-if="state.showNyxVar" />
+        <input class="form-control form-control-sm" type="text" placeholder="Nyx variable" v-model.trim="nyxVar" v-if="modelValue.mode === 'var'" />
 
         <!-- ******************************************************************************************************* -->
 
-        <button :class="['btn', {'btn-outline-secondary': !state.showNyxVar, 'btn-outline-primary': state.showNyxVar}]" type="button" @click="toggle">
+        <button :class="['btn', {'btn-outline-secondary': modelValue.mode === 'val', 'btn-outline-primary': modelValue.mode === 'var'}]" type="button" @click="toggle">
             <i class="bi bi-braces"></i>
         </button>
 
