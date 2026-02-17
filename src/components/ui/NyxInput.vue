@@ -15,15 +15,15 @@ const props = defineProps({
         required: true,
     },
     min: {
-        type: Number,
+        type: [Number, String],
         default: undefined,
     },
     max: {
-        type: Number,
+        type: [Number, String],
         default: undefined,
     },
     step: {
-        type: Number,
+        type: [Number, String],
         default: undefined,
     },
     placeholder: {
@@ -102,7 +102,7 @@ const toggle = () => {
 
         <!-- ******************************************************************************************************* -->
 
-        <input class="form-control form-control-sm" :type="type" :min="type === 'number' ? min : undefined" :max="type === 'number' ? max : undefined" :step="type === 'number' ? step : undefined" :placeholder="placeholder" :id="id" v-model="nyxVal" v-if="modelValue.mode === 'val'" />
+        <input class="form-control form-control-sm" :type="type" :min="type === 'number' ? parseFloat(min) : undefined" :max="type === 'number' ? parseFloat(max) : undefined" :step="type === 'number' ? parseFloat(step) : undefined" :placeholder="placeholder" :id="id" v-model="nyxVal" v-if="modelValue.mode === 'val'" />
 
         <!-- ******************************************************************************************************* -->
 
