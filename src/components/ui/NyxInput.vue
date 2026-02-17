@@ -10,15 +10,6 @@ import * as uuid from 'uuid';
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const props = defineProps({
-    modelValue: {
-        type: Object,
-        required: false,
-        default: () => ({
-            mode: 'val',
-            val: '',
-            var: '',
-        }),
-    },
     type: {
         type: String,
         required: true,
@@ -42,6 +33,14 @@ const props = defineProps({
     id: {
         type: String,
         default: () => uuid.v4(),
+    },
+    modelValue: {
+        type: Object,
+        default: () => ({
+            mode: 'val',
+            val: '',
+            var: '',
+        }),
     },
 });
 
@@ -86,7 +85,7 @@ const nyxVar = computed({
 const toggle = () => {
 
     emit('update:modelValue', {
-        mode: props.modelValue.mode === 'var' ? 'val' : 'var',
+        mode: props.modelValue.mode !== 'val' ? 'val' : 'var',
         val: props.modelValue.val ?? '',
         var: props.modelValue.var ?? '',
     });
