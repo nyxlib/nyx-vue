@@ -12,10 +12,6 @@ const emit = defineEmits([
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const props = defineProps({
-    modelValue: {
-        type: Number,
-        default: 0.0,
-    },
     min: {
         type: Number,
         default: 0.0,
@@ -31,6 +27,10 @@ const props = defineProps({
     log: {
         type: Boolean,
         default: false,
+    },
+    modelValue: {
+        type: Number,
+        default: 0.0,
     },
 });
 
