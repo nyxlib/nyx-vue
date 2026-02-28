@@ -1,7 +1,7 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {ref, nextTick, onMounted, onUnmounted} from 'vue';
+import {ref, nextTick, onMounted, onBeforeUnmount} from 'vue';
 
 import Split from 'split.js';
 
@@ -56,12 +56,7 @@ let splitterInstance = null;
 
 const destroySplitter = () => {
 
-    if(splitterInstance)
-    {
-        splitterInstance.destroy();
-
-        splitterInstance = null;
-    }
+    splitterInstance?.destroy();
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -143,7 +138,7 @@ onMounted(async () => {
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-onUnmounted(() => {
+onBeforeUnmount(() => {
 
     window.removeEventListener('resize', updateSplitter);
 
