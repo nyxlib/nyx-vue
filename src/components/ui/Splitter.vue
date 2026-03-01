@@ -5,6 +5,8 @@ import {ref, nextTick, onMounted, onBeforeUnmount} from 'vue';
 
 import Split from 'split.js';
 
+import * as uuid from 'uuid';
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -28,11 +30,11 @@ const props = defineProps({
     },
     leftId: {
         type: String,
-        default: 'A63A8EE3',
+        default: () => `nyx_split_left_${uuid.v4()}`,
     },
     rightId: {
         type: String,
-        default: 'DE938E40',
+        default: () => `nyx_tab_right_${uuid.v4()}`,
     },
 });
 
