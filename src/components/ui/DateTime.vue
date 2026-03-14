@@ -87,7 +87,22 @@ const createDatepicker = () => {
         dateFormat: 'yyyy-MM-dd',
         timeFormat: 'HH:mm',
         minutesStep: 1,
-        buttons: ['today', 'clear'],
+
+        buttons: [
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            {
+                content: 'Now',
+                onClick: (dp) => {
+
+                    dp.selectDate(new Date(), {
+                        updateTime: true,
+                    });
+                }
+            }
+
+            /*--------------------------------------------------------------------------------------------------------*/
+        ],
 
         onSelect: ({date}) => {
 
