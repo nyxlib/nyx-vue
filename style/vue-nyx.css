@@ -122,22 +122,23 @@ body {
 
 .air-datepicker
 {
-    --adp-background-color: var(--bs-body-bg);
+    --adp-font-family: inherit;
+
     --adp-color: var(--bs-body-color);
+    --adp-background-color: var(--bs-body-bg);
 
     --adp-border-color: var(--bs-border-color);
+    --adp-border-radius: var(--bs-border-radius);
 
-    --adp-color-other-month: var(--bs-secondary-color);
     --adp-color-disabled: var(--bs-secondary-color);
+    --adp-color-other-month: var(--bs-secondary-color);
 
     --adp-background-color-hover: var(--bs-tertiary-bg);
     --adp-background-color-active: var(--bs-tertiary-bg);
 
+    --adp-day-name-color: var(--bs-primary);
     --adp-background-color-selected: var(--bs-primary);
     --adp-background-color-selected-hover: var(--bs-primary);
-    --adp-color-selected: #fff;
-
-    --adp-background-color-in-range: rgba(var(--bs-primary-rgb), 0.15);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
