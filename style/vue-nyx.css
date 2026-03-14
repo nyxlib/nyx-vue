@@ -8,7 +8,7 @@
 
 @import url("@vueform/multiselect/themes/default.css");
 
-@import url("flatpickr/dist/themes/material_blue.css");
+@import url("air-datepicker/air-datepicker.css");
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -114,6 +114,39 @@ body {
     min-width: 0;
     flex: 1 1 auto;
     width: auto !important;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* AIR DATEPICKER                                                                                                     */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+.air-datepicker
+{
+    --adp-background-color: var(--bs-body-bg);
+    --adp-color: var(--bs-body-color);
+
+    --adp-border-color: var(--bs-border-color);
+
+    --adp-color-other-month: var(--bs-secondary-color);
+    --adp-color-disabled: var(--bs-secondary-color);
+
+    --adp-background-color-hover: var(--bs-tertiary-bg);
+    --adp-background-color-active: var(--bs-tertiary-bg);
+
+    --adp-background-color-selected: var(--bs-primary);
+    --adp-background-color-selected-hover: var(--bs-primary);
+    --adp-color-selected: #fff;
+
+    --adp-background-color-in-range: rgba(var(--bs-primary-rgb), 0.15);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+.air-datepicker--pointer:after {
+
+    background-color: var(--bs-body-bg);
+
+    border-color: var(--bs-border-color);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
