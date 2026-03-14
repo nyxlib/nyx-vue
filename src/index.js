@@ -7,7 +7,7 @@ import {createPinia} from 'pinia';
 import * as popperJS from '@popperjs/core';
 import * as bootstrap from 'bootstrap';
 import draggable from 'vuedraggable';
-import flatpickr from 'flatpickr';
+import airDatepicker from 'air-datepicker';
 import chartJS from 'chart.js/auto';
 import * as echarts from 'echarts';
 import * as uuid from 'uuid';
@@ -58,7 +58,7 @@ const setup = (app, pinia = null) => {
     window.__NYX_POPPERJS__ = /* NOSONAR */ popperJS;
     window.__NYX_BOOTSTRAP__ = /* NOSONAR */ bootstrap;
     window.__NYX_DRAGGABLE__ = /* NOSONAR */ draggable;
-	window.__NYX_FLATPICKR__ = /* NOSONAR */ flatpickr;
+	window.__NYX_AIR_DATEPICKER__ = /* NOSONAR */ airDatepicker;
     window.__NYX_CHARTJS__ = /* NOSONAR */ chartJS;
     window.__NYX_ECHARTS__ = /* NOSONAR */ echarts;
     window.__NYX_UUID__ = /* NOSONAR */ uuid;

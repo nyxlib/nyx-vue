@@ -1,11 +1,11 @@
 <script setup>
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-import {ref, watch, nextTick, onMounted, onBeforeUnmount} from 'vue';
+import {ref, watch, onMounted, onBeforeUnmount} from 'vue';
 
-import {createPopper} from '@popperjs/core';
+import AirDatepicker from 'air-datepicker';
 
-import flatpickr from 'flatpickr';
+import en from 'air-datepicker/locale/en';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
@@ -21,7 +21,7 @@ const props = defineProps({
         default: true,
     },
     modelValue: {
-        type: [Date, null],
+        type: Date,
         default: null,
     },
 });
@@ -35,156 +35,133 @@ const emit = defineEmits([
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+const inlineRef = ref(null);
 const inputRef = ref(null);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-let flatpickrInstance = null;
-
-let popperInstance = null;
+let datepickerInstance = null;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const onDocClick = (e) => {
+const getTargetElement = () => props.inline ? inlineRef.value : inputRef.value;
 
-    if(flatpickrInstance && !props.inline)
-    {
-        const insideCalendar = flatpickrInstance.calendarContainer?.contains(e.target) || inputRef.value?.contains(e.target);
+/*--------------------------------------------------------------------------------------------------------------------*/
 
-        if(!insideCalendar)
-        {
-            flatpickrInstance.close();
-        }
-    }
+const getSelectedDates = () => props.modelValue instanceof Date ? [props.modelValue] : [];
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const areSameDates = (date1, date2) => (date1 === null && date2 === null) || (date1 instanceof Date && date2 instanceof Date && date1.getTime() === date2.getTime());
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const destroyDatepicker = () => {
+
+    datepickerInstance?.destroy();
+
+    datepickerInstance = null;
 };
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const createDatepicker = () => {
+
+    const element = getTargetElement();
+
+    if(!element)
+    {
+        return;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    datepickerInstance = new AirDatepicker(element, {
+        locale: en,
+        inline: props.inline,
+        timepicker: props.enableTime,
+        selectedDates: getSelectedDates(),
+        autoClose: !props.inline && !props.enableTime,
+        dateFormat: 'yyyy-MM-dd',
+        timeFormat: 'HH:mm',
+        minutesStep: 1,
+        buttons: ['today', 'clear'],
+
+        onSelect: ({date}) => {
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            const selectedDate = date instanceof Date ? new Date(date) : null;
+
+            emit('update:modelValue', selectedDate);
+
+            emit('date-change', selectedDate);
+
+            /*--------------------------------------------------------------------------------------------------------*/
+        },
+    });
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const rebuildDatepicker = () => {
+
+    destroyDatepicker();
+
+    createDatepicker();
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* WATCHERS                                                                                                           */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+watch(() => props.modelValue, (newValue) => {
+
+    if(!datepickerInstance)
+    {
+        return;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const currValue = datepickerInstance.selectedDates?.[0] ?? null;
+
+    if(areSameDates(currValue, newValue))
+    {
+        return;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(newValue instanceof Date)
+    {
+        datepickerInstance.selectDate(newValue, {silent: true});
+    }
+    else
+    {
+        datepickerInstance.clear({silent: true});
+    }
+});
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+watch(() => props.inline, rebuildDatepicker);
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+watch(() => props.enableTime, rebuildDatepicker);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* INITIALIZATION                                                                                                     */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-onMounted(() => {
-
-    nextTick().then(() => {
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        const defaultDate = props.modelValue ?? new Date();
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        flatpickrInstance = flatpickr(inputRef.value, {
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            static: false,
-            inline: props.inline,
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            time_24hr: true,
-            dateFormat: props.enableTime ? 'Y-m-d H:i:S' : 'Y-m-d',
-            enableTime: props.enableTime,
-            defaultDate: defaultDate,
-            minuteIncrement: 1,
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            onOpen: () => {
-
-                if(!props.inline)
-                {
-                    popperInstance = createPopper(inputRef.value, flatpickrInstance.calendarContainer, {
-                        placement: 'bottom-start',
-                        modifiers: [
-                            {name: 'flip', options: {fallbackPlacements: ['top-start', 'right-start', 'left-start']}},
-                            {name: 'preventOverflow', options: {boundary: 'viewport'}},
-                            {name: 'offset', options: {offset: [0, 6]}},
-                        ],
-                    });
-                }
-            },
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            onClose: () => {
-
-                popperInstance?.destroy();
-            },
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            onValueUpdate: () => {
-
-                popperInstance?.update();
-            },
-
-            onMonthChange: () => {
-
-                popperInstance?.update();
-            },
-
-            onYearChange: () => {
-
-                popperInstance?.update();
-            },
-
-            /*--------------------------------------------------------------------------------------------------------*/
-
-            onChange: (dates) => {
-
-                if(dates.length > 0)
-                {
-                    const date = new Date(dates[0]);
-
-                    emit('update:modelValue', date);
-
-                    emit('date-change', date);
-                }
-            },
-
-            /*--------------------------------------------------------------------------------------------------------*/
-        });
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        watch(() => props.modelValue, (value) => {
-
-            if((value instanceof Date) && (flatpickrInstance?.selectedDates?.at(0)?.getTime() !== value.getTime()))
-            {
-                flatpickrInstance.setDate(value, false);
-
-                popperInstance?.update();
-            }
-        });
-
-        /*------------------------------------------------------------------------------------------------------------*/
-
-        document.addEventListener('click', onDocClick, true);
-
-        /*------------------------------------------------------------------------------------------------------------*/
-    });
-});
+onMounted(createDatepicker);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-onBeforeUnmount(() => {
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    document.removeEventListener('click', onDocClick, true);
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    popperInstance?.destroy();
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    flatpickrInstance?.destroy();
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-});
+onBeforeUnmount(destroyDatepicker);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 </script>
@@ -193,7 +170,11 @@ onBeforeUnmount(() => {
 
     <!-- *********************************************************************************************************** -->
 
-    <input type="text" :hidden="inline" ref="inputRef" />
+    <div class="adp-inline-host" ref="inlineRef" v-if="inline"></div>
+
+    <!-- *********************************************************************************************************** -->
+
+    <input type="text" class="form-control" ref="inputRef" v-else />
 
     <!-- *********************************************************************************************************** -->
 
