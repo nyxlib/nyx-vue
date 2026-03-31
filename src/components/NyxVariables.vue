@@ -28,30 +28,36 @@ const streamFilter = ref('');
 
 const filteredVariables = computed(() => {
 
-    return Object.fromEntries(Object.entries(nyxStore.variables)
+    const f = variableFilter.value.toLowerCase();
+
+    return f ? Object.fromEntries(Object.entries(nyxStore.variables)
         .sort(([name1], [name2]) => name1.localeCompare(name2))
-        .filter(([name]) => !variableFilter.value || name.toLowerCase().includes(variableFilter.value.toLowerCase())
-    ));
+        .filter(([name]) => name.toLowerCase().includes(f)
+    )) : nyxStore.variables;
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const filteredBLOBs = computed(() => {
 
-    return Object.fromEntries(Object.entries(nyxStore.blobs)
+    const f = blobFilter.value.toLowerCase();
+
+    return f ? Object.fromEntries(Object.entries(nyxStore.blobs)
         .sort(([name1], [name2]) => name1.localeCompare(name2))
-        .filter(([name]) => !blobFilter.value || name.toLowerCase().includes(blobFilter.value.toLowerCase())
-    ));
+        .filter(([name]) => name.toLowerCase().includes(f)
+    )) : nyxStore.blobs;
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const filteredStreams = computed(() => {
 
-    return Object.fromEntries(Object.entries(nyxStore.streams)
+    const f = streamFilter.value.toLowerCase();
+
+    return f ? Object.fromEntries(Object.entries(nyxStore.streams)
         .sort(([name1], [name2]) => name1.localeCompare(name2))
-        .filter(([name]) => !streamFilter.value || name.toLowerCase().includes(streamFilter.value.toLowerCase())
-    ));
+        .filter(([name]) => name.toLowerCase().includes(f)
+    )) : nyxStore.streams;
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
