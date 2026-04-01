@@ -125,9 +125,13 @@ onUnmounted(() => {
 
             <tab-pane class="align-items-center justify-content-center" title="Home" icon="house">
 
-                <div class="d-flex align-items-center justify-content-center h-100">
+                <div class="d-flex flex-column align-items-center justify-content-center h-100">
 
-                    <nyx-home @connect="emit('connect')" @disconnect="emit('disconnect')" />
+                    <nyx-home @connect="emit('connect')" @disconnect="emit('disconnect')">
+
+                        <slot name="home"></slot>
+
+                    </nyx-home>
 
                 </div>
 
@@ -181,15 +185,7 @@ onUnmounted(() => {
             <!-- MISC PANELS                                                                                         -->
             <!-- *************************************************************************************************** -->
 
-            <slot></slot>
-
-            <!-- *************************************************************************************************** -->
-            <!-- BUTTONS                                                                                             -->
-            <!-- *************************************************************************************************** -->
-
-            <template #button>
-                <slot name="button"></slot>
-            </template>
+            <slot name="panels"></slot>
 
             <!-- *************************************************************************************************** -->
 
