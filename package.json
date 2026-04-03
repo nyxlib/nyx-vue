@@ -1,7 +1,14 @@
 {
     "name": "vue-nyx",
-    "description": "Nyx client",
+    "description": "Nyx for Vue3.js",
     "version": "1.0.0",
+    "author": "Jérôme Odier",
+    "license": "GPL-3.0-or-later",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/nyxlib/nyx-vue/"
+    },
+    "private": false,
     "type": "module",
     "main": "./src/index.js",
     "scripts": {
@@ -22,22 +29,16 @@
         "date-fns": "^4.1.0",
         "echarts": "^5.6.0",
         "echarts-gl": "^2.0.9",
-        "marked": "^17.0.2",
+        "marked": "^17.0.5",
         "paho-mqtt": "^1.1.0",
         "pinia": "^3.0.4",
         "split.js": "^1.6.5",
         "uuid": "^13.0.0",
-        "vue": "^3.5.28",
+        "vue": "^3.5.32",
         "vuedraggable": "^4.1.0"
     },
     "devDependencies": {
         "@types/bootstrap": "^5.2.10",
-        "eslint-plugin-vue": "^10.7.0"
-    },
-    "author": "Jérôme Odier",
-    "license": "CeCILL",
-    "repository": {
-        "type": "git",
-        "url": "https://gitlab.in2p3.fr/lpsc-kid/nyx-vue"
+        "eslint-plugin-vue": "^10.8.0"
     }
 }
