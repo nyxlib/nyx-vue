@@ -31,11 +31,11 @@ const emit = defineEmits([
 
         <br /><br />
 
-        <button class="btn btn-success w-100" type="button" @click="emit('connect')" v-if="!nyxStore.isConnected">
+        <button class="btn btn-outline-success" type="button" style="width: 225px;" @click="emit('connect')" v-if="!nyxStore.isConnected">
             Connect
         </button>
 
-        <button class="btn btn-secondary w-100" type="button" @click="emit('disconnect')" v-if="nyxStore.isConnected">
+        <button class="btn btn-outline-secondary" type="button" style="width: 225px;" @click="emit('disconnect')" v-if="nyxStore.isConnected">
             Disconnect
         </button>
 
