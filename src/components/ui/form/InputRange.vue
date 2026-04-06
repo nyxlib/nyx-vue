@@ -40,11 +40,29 @@ const effectiveMax = computed(() => props.log ? 100 : props.max - props.min);
 
 const effectiveStep = computed(() => props.log ? effectiveMax.value / 100.0 : props.step);
 
-const effectiveValue = computed(() => props.log ? (Math.log(props.modelValue / props.min) / Math.log(props.max / props.min)) * effectiveMax.value : props.modelValue - props.min);
+const effectiveValue = computed(() => {
+
+    if(!props.log)
+    {
+        return props.modelValue - props.min;
+    }
+
+    if(props.min <= 0.0 || props.max <= props.min || props.modelValue <= 0.0)
+    {
+        return 0.0;
+    }
+
+    return (Math.log(props.modelValue / props.min) / Math.log(props.max / props.min)) * effectiveMax.value;
+});
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-const handleInput = (e) => { const v = Number.parseFloat(e.target.value); return emit('update:modelValue', props.log ? (props.min * Math.pow(props.max / props.min, v / effectiveMax.value)).toPrecision(2) : v + props.min); };
+const handleInput = (e) => {
+
+    const v = Number.parseFloat(e.target.value);
+
+    return emit('update:modelValue', props.log ? Number((props.min * Math.pow(props.max / props.min, v / effectiveMax.value)).toPrecision(2)) : v + props.min);
+};
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 </script>
