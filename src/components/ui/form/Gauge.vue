@@ -73,25 +73,34 @@ const position = computed(() => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    const gradient = getGradient();
+    if(Number.isNaN(props.value))
+    {
+        return 0.0;
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    const gradient = getGradient();
+
+    const m = props.ranges.length;
+
     const l = gradient.length;
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     if(props.value < props.ranges[0])
     {
         return (gradient[0] + gradient[1]) / 2;
     }
 
-    if(props.value > props.ranges[l - 1])
+    if(props.value > props.ranges[m - 1])
     {
         return (gradient[l - 1] + gradient[l - 2]) / 2;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    for(let i = 0; i < props.ranges.length - 1; i++)
+    for(let i = 0; i < m - 1; i++)
     {
         const rangeStart = props.ranges[i + 0];
         const rangeStop = props.ranges[i + 1];
