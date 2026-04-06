@@ -180,17 +180,29 @@ const toNumber = (s, def = 0) => {
 
 const formatOutput = () => {
 
-    const _deg = toNumber(deg.value, 0.0);
-    const _min = toNumber(min.value, 0.0);
-    const _sec = toNumber(sec.value, 0.0);
+    /*----------------------------------------------------------------------------------------------------------------*/
 
-    const d = Math.max(0.0, Math.trunc(Math.abs(_deg)));
-    const m = Math.max(0.0, /*--------------*/  _min  );
-    const s = Math.max(0.0, /*--------------*/  _sec  );
+    let _deg = toNumber(deg.value, 0.0);
+    let _min = toNumber(min.value, 0.0);
+    let _sec = toNumber(sec.value, 0.0);
 
-    const val = (_deg < 0.0 ? -1.0 : +1.0) * (d + (m / 60.0) + (s / 3600.0));
+    const sign = (_deg < 0.0 || _min < 0.0 || _sec < 0.0) ? -1.0
+                                                          : +1.0
+    ;
 
-    return formatM(val, fmt.value.f).padStart(fmt.value.w || 0, ' ');
+    let d = Math.trunc(Math.abs(_deg));
+    let m = Math.max(0.0, Math.min(minMax.value, Math.abs(_min)));
+    let s = Math.max(0.0, Math.min(secMax.value, Math.abs(_sec)));
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const value = sign * (d + (m / 60.0) + (s / 3600.0));
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    return formatM(value, fmt.value.f).padStart(fmt.value.w || 0, ' ');
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
