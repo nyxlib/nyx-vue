@@ -59,9 +59,9 @@ const effectiveValue = computed(() => {
 
 const handleInput = (e) => {
 
-    const v = Number.parseFloat(e.target.value);
+    const value = Number.parseFloat(e.target.value);
 
-    return emit('update:modelValue', props.log ? Number((props.min * Math.pow(props.max / props.min, v / effectiveMax.value)).toPrecision(2)) : v + props.min);
+    return emit('update:modelValue', props.log ? Number((props.min * Math.pow(props.max / props.min, value / effectiveMax.value)).toPrecision(2)) : value + props.min);
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
