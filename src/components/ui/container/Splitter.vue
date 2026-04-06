@@ -59,6 +59,8 @@ let splitterInstance = null;
 const destroySplitter = () => {
 
     splitterInstance?.destroy();
+
+    splitterInstance = null;
 };
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -96,9 +98,9 @@ const updateSplitter = () => {
                     sizes: props.sizes,
                     direction: direction,
                     gutterSize: props.gutterSize,
-                    onDragEnd: () => {
+                    onDragEnd: (sizes) => {
 
-                        emit('resize', splitterInstance.getSizes());
+                        emit('resize', /*------*/ sizes /*------*/);
                     },
                 });
 
@@ -131,7 +133,7 @@ const updateSplitter = () => {
 /* INITIALIZATION                                                                                                     */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-onMounted(async () => {
+onMounted(() => {
 
     window.addEventListener('resize', updateSplitter);
 

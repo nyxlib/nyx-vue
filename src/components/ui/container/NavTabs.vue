@@ -11,8 +11,8 @@ import {Tab} from 'bootstrap';
 
 defineProps({
     card: {
-      type: Boolean,
-      default: false,
+        type: Boolean,
+        default: false,
     },
     margin: {
         type: String,
@@ -36,27 +36,64 @@ const sortedTabs = computed(() => Object.values(tabs.value).sort((x, y) => x.tab
 
 provide('addTab', /* NOSONAR */ (tabId, tabRank, tabTitle, tabIcon, tabClass, onShow, onShown, onHide, onHidden) => {
 
-    tabs.value[tabId] = {
+    const tab = tabs.value[tabId] = {
         tabId: tabId,
         tabRank: tabRank,
         tabTitle: tabTitle,
         tabIcon: tabIcon,
         tabClass: tabClass,
+        /**/
+        tabEl: null,
+        tabInstance: null,
+        /**/
+        onShow: onShow,
+        onShown: onShown,
+        onHide: onHide,
+        onHidden: onHidden,
     };
 
     nextTick(() => {
 
-        const el = tabListRef.value.querySelector(`button[data-bs-target="#${tabId}"]`);
+        /*------------------------------------------------------------------------------------------------------------*/
+
+        const el = tabListRef.value?.querySelector(`button[data-bs-target="#${tabId}"]`);
+
+        /*------------------------------------------------------------------------------------------------------------*/
 
         if(el)
         {
-            Tab.getOrCreateInstance(el);
+            /*--------------------------------------------------------------------------------------------------------*/
 
-            el.addEventListener('show.bs.tab', onShow);
-            el.addEventListener('shown.bs.tab', onShown);
-            el.addEventListener('hide.bs.tab', onHide);
-            el.addEventListener('hidden.bs.tab', onHidden);
+            const instance = Tab.getOrCreateInstance(el);
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            tab.tabEl = el;
+
+            tab.tabInstance = instance;
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            if(onShow) {
+                el.addEventListener('show.bs.tab', onShow);
+            }
+
+            if(onShown) {
+                el.addEventListener('shown.bs.tab', onShown);
+            }
+
+            if(onHide) {
+                el.addEventListener('hide.bs.tab', onHide);
+            }
+
+            if(onHidden) {
+                el.addEventListener('hidden.bs.tab', onHidden);
+            }
+
+            /*--------------------------------------------------------------------------------------------------------*/
         }
+
+        /*------------------------------------------------------------------------------------------------------------*/
     });
 
     return Object.keys(tabs.value).length === 1;
@@ -66,21 +103,63 @@ provide('addTab', /* NOSONAR */ (tabId, tabRank, tabTitle, tabIcon, tabClass, on
 
 provide('delTab', (tabId) => {
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    const tab = tabs.value[tabId];
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(tab?.tabEl)
+    {
+        if(tab.onShow) {
+            tab.tabEl.removeEventListener('show.bs.tab', tab.onShow);
+        }
+
+        if(tab.onShown) {
+            tab.tabEl.removeEventListener('shown.bs.tab', tab.onShown);
+        }
+
+        if(tab.onHide) {
+            tab.tabEl.removeEventListener('hide.bs.tab', tab.onHide);
+        }
+
+        if(tab.onHidden) {
+            tab.tabEl.removeEventListener('hidden.bs.tab', tab.onHidden);
+        }
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    if(tab?.tabInstance)
+    {
+        tab.tabInstance.dispose();
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     delete tabs.value[tabId];
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 provide('updateTitle', (tabId, tabTitle) => {
 
-    tabs.value[tabId].tabTitle = tabTitle;
+    if(tabs.value[tabId])
+    {
+        tabs.value[tabId].tabTitle = tabTitle;
+    }
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 provide('updateIcon', (tabId, tabIcon) => {
 
-    tabs.value[tabId].tabIcon = tabIcon;
+    if(tabs.value[tabId])
+    {
+        tabs.value[tabId].tabIcon = tabIcon;
+    }
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
