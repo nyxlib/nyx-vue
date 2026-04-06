@@ -7,8 +7,8 @@ import {ref, computed} from 'vue';
 
 import useNyxStore from '../stores/nyx';
 
-import NavTabs from './ui/NavTabs.vue';
-import TabPane from './ui/TabPane.vue';
+import NavTabs from './ui/container/NavTabs.vue';
+import TabPane from './ui/container/TabPane.vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */

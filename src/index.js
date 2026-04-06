@@ -27,14 +27,15 @@ import nyxPlugin from './plugins/nyx';
 
 import useNyxStore from './stores/nyx';
 
-import Splitter from './components/ui/Splitter.vue';
-import NavTabs from './components/ui/NavTabs.vue';
-import TabPane from './components/ui/TabPane.vue';
-import NyxInput from './components/ui/NyxInput.vue';
-import DateTime from './components/ui/DateTime.vue';
-import InputRange from './components/ui/InputRange.vue';
-import Sexagesimal from './components/ui/Sexagesimal.vue';
-import Gauge from './components/ui/Gauge.vue';
+import Splitter from './components/ui/container/Splitter.vue';
+import NavTabs from './components/ui/container/NavTabs.vue';
+import TabPane from './components/ui/container/TabPane.vue';
+
+import NyxInput from './components/ui/form/NyxInput.vue';
+import DateTime from './components/ui/form/DateTime.vue';
+import InputRange from './components/ui/form/InputRange.vue';
+import Sexagesimal from './components/ui/form/Sexagesimal.vue';
+import Gauge from './components/ui/form/Gauge.vue';
 
 import NyxTopology from './components/NyxTopology.vue';
 import NyxVariables from './components/NyxVariables.vue';
@@ -85,10 +86,10 @@ const setup = (app, pinia = null) => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-
     app.component('Splitter', Splitter);
     app.component('NavTabs', NavTabs);
     app.component('TabPane', TabPane);
+
     app.component('NyxInput', NyxInput);
     app.component('DateTime', DateTime);
     app.component('InputRange', InputRange);
