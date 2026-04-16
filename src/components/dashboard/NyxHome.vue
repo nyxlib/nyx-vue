@@ -23,21 +23,23 @@ const emit = defineEmits([
 
     <!-- *********************************************************************************************************** -->
 
-    <div class="text-center" style="width: 500px;">
+    <div class="text-center" style="width: 50%; max-width: 225px;">
 
-        <svg xmlns="http://www.w3.org/2000/svg" width="225" height="225" :fill="nyxStore.isConnected ? '#198754' : '#6c757d'" viewBox="0 0 16 16">
+        <svg xmlns="http://www.w3.org/2000/svg" :fill="nyxStore.isConnected ? '#198754' : '#6c757d'" viewBox="0 0 16 16" style="width: 100%; height: auto;">
             <path d="M7.5 1v7h1V1z" /><path d="M3 8.812a5 5 0 0 1 2.578-4.375l-.485-.874A6 6 0 1 0 11 3.616l-.501.865A5 5 0 1 1 3 8.812" />
         </svg>
 
         <br /><br />
 
-        <button class="btn btn-outline-success" type="button" style="width: 225px;" @click="emit('connect')" v-if="!nyxStore.isConnected">
+        <button class="btn btn-outline-success" type="button" style="width: 100%;" @click="emit('connect')" v-if="!nyxStore.isConnected">
             Connect
         </button>
 
-        <button class="btn btn-outline-secondary" type="button" style="width: 225px;" @click="emit('disconnect')" v-if="nyxStore.isConnected">
+        <button class="btn btn-outline-secondary" type="button" style="width: 100%;" @click="emit('disconnect')" v-if="nyxStore.isConnected">
             Disconnect
         </button>
+
+        <br /><br />
 
     </div>
 
