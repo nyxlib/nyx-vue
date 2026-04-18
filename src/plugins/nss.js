@@ -156,7 +156,17 @@ const _check_func = (endpoint, username, password) => new Promise((resolve, reje
 
             /*--------------------------------------------------------------------------------------------------------*/
 
-            fetch(url).then((response) => {
+            const controller = new AbortController();
+
+            const timeout = setTimeout(() => {
+
+                controller.abort();
+
+            }, 5000);
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            fetch(url, {signal: controller.signal}).then((response) => {
 
                 if(response.ok)
                 {
@@ -181,9 +191,20 @@ const _check_func = (endpoint, username, password) => new Promise((resolve, reje
                     reject(new Error('Connection error'));
                 }
 
-            }).catch(() => {
+            }).catch((e) => {
 
-                reject(new Error('Connection error'));
+                if(e?.name === 'AbortError')
+                {
+                    reject(new Error('Timeout error'));
+                }
+                else
+                {
+                    reject(new Error('Connection error'));
+                }
+
+            }).finally(() => {
+
+                clearTimeout(timeout);
             });
 
             /*--------------------------------------------------------------------------------------------------------*/
