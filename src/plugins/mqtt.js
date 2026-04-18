@@ -196,7 +196,7 @@ const _check_func = (endpoint, username, password) => new Promise((resolve, reje
             userName: username || '',
             password: password || '',
             reconnect: false,
-            timeout: 4,
+            timeout: 5,
             onSuccess: () => {
 
                 try {
