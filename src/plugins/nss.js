@@ -23,7 +23,7 @@ const _computeToken = (username, password) => new Promise((resolve) => {
         crypto.subtle.digest('SHA-256', new TextEncoder().encode(`${username}:${password}`)).then((buffer) => {
 
             const result = Array.from(new Uint8Array(buffer).slice(0, 8)).map((b) => b.toString(16).padStart(2, '0'))
-                                                                               .join('')
+                                                                         .join('')
             ;
 
             resolve(result);
