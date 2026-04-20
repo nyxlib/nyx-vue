@@ -115,93 +115,73 @@ onUnmounted(() => {
     <!-- DASHBOARD                                                                                                   -->
     <!-- *********************************************************************************************************** -->
 
-    <div class="d-flex flex-column h-100">
+    <nav-tabs margin="mb-2" content-class="flex-grow-1 overflow-y-scroll">
 
-        <nav-tabs margin="mb-2">
+        <!-- ******************************************************************************************************* -->
+        <!-- HOME PANEL                                                                                              -->
+        <!-- ******************************************************************************************************* -->
 
-            <!-- *************************************************************************************************** -->
-            <!-- HOME PANEL                                                                                          -->
-            <!-- *************************************************************************************************** -->
+        <tab-pane class="overflow-y-auto" pane-class="d-flex flex-column align-items-center justify-content-center" title="Home" icon="house">
 
-            <tab-pane class="align-items-center justify-content-center" title="Home" icon="house">
+            <nyx-home @connect="emit('connect')" @disconnect="emit('disconnect')">
 
-                <div class="d-flex flex-column align-items-center justify-content-center h-100">
+                <slot name="home"></slot>
 
-                    <nyx-home @connect="emit('connect')" @disconnect="emit('disconnect')">
+            </nyx-home>
 
-                        <slot name="home"></slot>
+        </tab-pane>
 
-                    </nyx-home>
+        <!-- ******************************************************************************************************* -->
+        <!-- NYX PANEL                                                                                               -->
+        <!-- ******************************************************************************************************* -->
 
-                </div>
-
-            </tab-pane>
-
-            <!-- *************************************************************************************************** -->
-            <!-- NYX PANEL                                                                                           -->
-            <!-- *************************************************************************************************** -->
-
-            <tab-pane title="Nyx" icon="command" v-if="showDevices">
-
-                <!-- *********************************************************************************************** -->
-
-                <div class="d-flex flex-column h-100" v-if="Object.keys(devices).length > 0">
-
-                    <nav-tabs margin="mb-2">
-
-                        <tab-pane :title="deviceName" icon="command" v-for="(deviceDescr, deviceName) in devices" :key="deviceName">
-
-                            <div class="d-flex align-items-center justify-content-center h-100">
-
-                                <nyx-device :device-name="deviceName"
-                                            :device-descr="deviceDescr"
-                                />
-
-                            </div>
-
-                        </tab-pane>
-
-                    </nav-tabs>
-
-                </div>
-
-                <!-- *********************************************************************************************** -->
-
-                <div class="d-flex align-items-center justify-content-center h-100" v-else>
-
-                    <div class="text-center">
-                        <span class="spinner-grow" style="width: 2.5rem; height: 2.5rem;"></span>
-                        <br />
-                        Waiting for connection...
-                    </div>
-
-                </div>
-
-                <!-- *********************************************************************************************** -->
-
-            </tab-pane>
-
-            <!-- *************************************************************************************************** -->
-            <!-- MISC PANELS                                                                                         -->
-            <!-- *************************************************************************************************** -->
-
-            <slot name="panels"></slot>
-
-            <!-- *************************************************************************************************** -->
-            <!-- MISC BUTTONS                                                                                        -->
-            <!-- *************************************************************************************************** -->
-
-            <template #button>
-
-                <slot name="button"></slot>
-
-            </template>
+        <tab-pane :pane-class="['d-flex', 'flex-column', {'align-items-center justify-content-center': Object.keys(devices).length === 0}]" title="Nyx" icon="command" v-if="showDevices">
 
             <!-- *************************************************************************************************** -->
 
-        </nav-tabs>
+            <nav-tabs margin="mb-2" v-if="Object.keys(devices).length > 0">
 
-    </div>
+                <tab-pane pane-class="d-flex flex-column align-items-center justify-content-center" :title="deviceName" icon="command" v-for="(deviceDescr, deviceName) in devices" :key="deviceName">
+
+                    <nyx-device :device-name="deviceName"
+                                :device-descr="deviceDescr"
+                    />
+
+                </tab-pane>
+
+            </nav-tabs>
+
+            <!-- *************************************************************************************************** -->
+
+            <div class="text-center" v-else>
+                <span class="spinner-grow" style="width: 2.5rem; height: 2.5rem;"></span>
+                <br />
+                Waiting for connection...
+            </div>
+
+            <!-- *************************************************************************************************** -->
+
+        </tab-pane>
+
+        <!-- ******************************************************************************************************* -->
+        <!-- MISC PANELS                                                                                             -->
+        <!-- ******************************************************************************************************* -->
+
+        <slot name="panels"></slot>
+
+        <!-- ******************************************************************************************************* -->
+        <!-- MISC BUTTONS                                                                                            -->
+        <!-- ******************************************************************************************************* -->
+
+        <template #button>
+
+            <slot name="button"></slot>
+
+        </template>
+
+        <!-- ******************************************************************************************************* -->
+
+    </nav-tabs>
 
     <!-- *********************************************************************************************************** -->
 
