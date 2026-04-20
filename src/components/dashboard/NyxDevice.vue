@@ -47,7 +47,7 @@ defineProps({
 
             <!-- *************************************************************************************************** -->
 
-            <nav-tabs margin="mb-4">
+            <nav-tabs nav-class="mb-4">
 
                 <template v-for="(groupDescr, groupName) in deviceDescr" :key="groupName">
 

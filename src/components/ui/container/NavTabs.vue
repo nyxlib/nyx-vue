@@ -209,7 +209,7 @@ provide('updateIcon', (tabId, tabIcon) => {
         <!-- TABS CONTENT                                                                                            -->
         <!-- ******************************************************************************************************* -->
 
-        <div class="['card-body', 'tab-content', contentClass]">
+        <div :class="['card-body', 'tab-content', contentClass]">
 
             <slot></slot>
 

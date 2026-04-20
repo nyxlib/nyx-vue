@@ -115,7 +115,7 @@ onUnmounted(() => {
     <!-- DASHBOARD                                                                                                   -->
     <!-- *********************************************************************************************************** -->
 
-    <nav-tabs margin="mb-2" content-class="flex-grow-1 overflow-y-auto">
+    <nav-tabs content-class="flex-grow-1 overflow-y-auto">
 
         <!-- ******************************************************************************************************* -->
         <!-- HOME PANEL                                                                                              -->
@@ -139,7 +139,7 @@ onUnmounted(() => {
 
             <!-- *************************************************************************************************** -->
 
-            <nav-tabs margin="mb-2" v-if="Object.keys(devices).length > 0">
+            <nav-tabs v-if="Object.keys(devices).length > 0">
 
                 <tab-pane pane-class="d-flex flex-column align-items-center justify-content-center" :title="deviceName" icon="command" v-for="(deviceDescr, deviceName) in devices" :key="deviceName">
 
