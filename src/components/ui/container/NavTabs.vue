@@ -14,7 +14,7 @@ defineProps({
         type: Boolean,
         default: false,
     },
-    margin: {
+    navClass: {
         type: [String, Array, Object],
         default: 'mb-3',
     },
@@ -209,7 +209,7 @@ provide('updateIcon', (tabId, tabIcon) => {
         <!-- TABS CONTENT                                                                                            -->
         <!-- ******************************************************************************************************* -->
 
-        <div class="card-body tab-content">
+        <div class="['card-body', 'tab-content', contentClass]">
 
             <slot></slot>
 
@@ -229,7 +229,7 @@ provide('updateIcon', (tabId, tabIcon) => {
         <!-- NAV TABS                                                                                                -->
         <!-- ******************************************************************************************************* -->
 
-        <div :class="['nav', 'nav-tabs', margin]" role="tablist" ref="tabListRef">
+        <div :class="['nav', 'nav-tabs', navClass]" role="tablist" ref="tabListRef">
 
             <!-- *************************************************************************************************** -->
 
