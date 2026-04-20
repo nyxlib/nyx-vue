@@ -15,8 +15,12 @@ defineProps({
         default: false,
     },
     margin: {
-        type: String,
+        type: [String, Array, Object],
         default: 'mb-3',
+    },
+    contentClass: {
+        type: [String, Array, Object],
+        default: '',
     },
 });
 
@@ -253,7 +257,7 @@ provide('updateIcon', (tabId, tabIcon) => {
         <!-- TABS CONTENT                                                                                            -->
         <!-- ******************************************************************************************************* -->
 
-        <div class="tab-content flex-grow-1">
+        <div :class="['tab-content', contentClass]">
 
             <slot></slot>
 
