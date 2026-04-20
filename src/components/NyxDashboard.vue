@@ -115,13 +115,13 @@ onUnmounted(() => {
     <!-- DASHBOARD                                                                                                   -->
     <!-- *********************************************************************************************************** -->
 
-    <nav-tabs margin="mb-2" content-class="flex-grow-1 overflow-y-scroll">
+    <nav-tabs margin="mb-2" content-class="flex-grow-1 overflow-y-auto">
 
         <!-- ******************************************************************************************************* -->
         <!-- HOME PANEL                                                                                              -->
         <!-- ******************************************************************************************************* -->
 
-        <tab-pane class="overflow-y-auto" pane-class="d-flex flex-column align-items-center justify-content-center" title="Home" icon="house">
+        <tab-pane pane-class="d-flex flex-column align-items-center justify-content-center" title="Home" icon="house">
 
             <nyx-home @connect="emit('connect')" @disconnect="emit('disconnect')">
 
