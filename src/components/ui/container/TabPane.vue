@@ -27,7 +27,11 @@ const props = defineProps({
         default: '',
     },
     tabClass: {
-        type: String,
+        type: [String, Array, Object],
+        default: '',
+    },
+    paneClass: {
+        type: [String, Array, Object],
         default: '',
     },
     rank: {
@@ -130,7 +134,11 @@ onUnmounted(() => {
 
     <div :class="['tab-pane', 'h-100', {'show': isFirst, 'active': isFirst}]" role="tabpanel" :id="tabId">
 
-        <slot></slot>
+        <div :class="['h-100', paneClass]">
+
+            <slot></slot>
+
+        </div>
 
     </div>
 
