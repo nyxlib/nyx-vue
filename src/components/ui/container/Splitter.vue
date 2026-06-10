@@ -8,6 +8,14 @@ import Split from 'split.js';
 import * as uuid from 'uuid';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+/* CONSTANTS                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const RESPONSIVE_BREAKPOINT = 768;
+
+const DEFAULT_SIZES = [50, 50];
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -69,7 +77,7 @@ const updateSplitter = () => {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    let direction = (props.direction === 'horizontal') ? (window.innerWidth >= 768 ? 'horizontal' : 'none')
+    let direction = (props.direction === 'horizontal') ? (window.innerWidth >= RESPONSIVE_BREAKPOINT ? 'horizontal' : 'none')
                                                        : props.direction
     ;
 
@@ -109,7 +117,7 @@ const updateSplitter = () => {
         }
         else
         {
-            emit('resize', [50, 50]);
+            emit('resize', DEFAULT_SIZES);
         }
 
         /*------------------------------------------------------------------------------------------------------------*/
@@ -122,7 +130,7 @@ const updateSplitter = () => {
         }
         else
         {
-            emit('resize', [50, 50]);
+            emit('resize', DEFAULT_SIZES);
         }
     }
 
@@ -153,7 +161,6 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-
     <!-- *********************************************************************************************************** -->
 
     <div :class="currDirection !== 'none' ? ['d-flex', currDirection !== 'horizontal' ? 'flex-column' : 'flex-row', 'h-100', 'w-100'] : ['overflow-x-hidden', 'overflow-y-auto', 'h-100', 'w-100']">
@@ -169,7 +176,6 @@ onBeforeUnmount(() => {
     </div>
 
     <!-- *********************************************************************************************************** -->
-
 </template>
 
 <style>
