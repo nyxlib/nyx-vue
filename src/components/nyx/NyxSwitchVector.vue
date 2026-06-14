@@ -92,7 +92,7 @@ onMounted(() => {
 
     <!-- *********************************************************************************************************** -->
 
-    <div class="row mx-0 w-100 text-start">
+    <div class="row">
 
         <!-- ******************************************************************************************************* -->
 
@@ -116,7 +116,7 @@ onMounted(() => {
 
                 <div class="btn-group btn-group-sm mb-1 w-75" v-if="defSwitchVector['children'].length < 4">
                     <button class="btn" :class="{'btn-primary': defSwitch['$'] === 'On', 'btn-outline-secondary': defSwitch['$'] === 'Off'}" :style="{'width': `${100.0 / props.defSwitchVector['children'].length}%`}" :disabled="defSwitchVector['@perm'] === 'wo'" v-for="(defSwitch, index) in defSwitchVector['children']" :key="index" @click="sendMessage(index)">
-                        <i :class="['position-absolute', 'bi', 'bi-circle-fill', `text-${COLORS[defSwitchVector['@state']]}`]" style="top: 0.25rem; left: 0.5rem;" v-if="index === 0 && !showStatus"></i>
+                        <i :class="['position-absolute', 'bi', 'bi-circle-fill', `text-${COLORS[defSwitchVector['@state']]}`]" style="top: calc(0.25rem + 1px); left: 0.5rem;" v-if="index === 0 && !showStatus"></i>
                         {{ defSwitch['@label'] || defSwitch['@name'] }}
                     </button>
                 </div>
@@ -142,7 +142,7 @@ onMounted(() => {
 
                 <div class="btn-group btn-group-sm mb-1 w-75">
                     <button class="btn" :class="{'btn-primary': defSwitch['$'] === 'On', 'btn-outline-secondary': defSwitch['$'] === 'Off'}" :style="{'width': `${100.0 / props.defSwitchVector['children'].length}%`}" :disabled="defSwitchVector['@perm'] === 'wo'" v-for="(defSwitch, index) in defSwitchVector['children']" :key="index" @click="sendMessage(index)">
-                        <i :class="['position-absolute', 'bi', 'bi-circle-fill', `text-${COLORS[defSwitchVector['@state']]}`]" style="top: 0.25rem; left: 0.5rem;" v-if="index === 0 && !showStatus"></i>
+                        <i :class="['position-absolute', 'bi', 'bi-circle-fill', `text-${COLORS[defSwitchVector['@state']]}`]" style="top: calc(0.25rem + 1px); left: 0.5rem;" v-if="index === 0 && !showStatus"></i>
                         <i :class="['bi', {'bi-check-circle': defSwitch['$'] === 'On', 'bi-circle': defSwitch['$'] === 'Off'}]" v-if="defSwitchVector['children'].length > 1"></i>
                         {{ defSwitch['@label'] || defSwitch['@name'] }}
                     </button>
@@ -158,7 +158,7 @@ onMounted(() => {
 
                 <div class="btn-group btn-group-sm mb-1 w-75">
                     <button class="btn" :class="{'btn-primary': defSwitch['$'] === 'On', 'btn-outline-secondary': defSwitch['$'] === 'Off'}" :style="{'width': `${100.0 / props.defSwitchVector['children'].length}%`}" :disabled="defSwitchVector['@perm'] === 'wo'" v-for="(defSwitch, index) in defSwitchVector['children']" :key="index" @click="sendMessage(index)">
-                        <i :class="['position-absolute', 'bi', 'bi-circle-fill', `text-${COLORS[defSwitchVector['@state']]}`]" style="top: 0.25rem; left: 0.5rem;" v-if="index === 0 && !showStatus"></i>
+                        <i :class="['position-absolute', 'bi', 'bi-circle-fill', `text-${COLORS[defSwitchVector['@state']]}`]" style="top: calc(0.25rem + 1px); left: 0.5rem;" v-if="index === 0 && !showStatus"></i>
                         <i :class="['bi', {'bi-check-square': defSwitch['$'] === 'On', 'bi-square': defSwitch['$'] === 'Off'}]" v-if="defSwitchVector['children'].length > 1"></i>
                         {{ defSwitch['@label'] || defSwitch['@name'] }}
                     </button>

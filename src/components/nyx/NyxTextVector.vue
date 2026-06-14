@@ -92,7 +92,7 @@ onMounted(() => {
 
     <!-- *********************************************************************************************************** -->
 
-    <div class="row mx-0 w-100">
+    <div class="row">
 
         <!-- ******************************************************************************************************* -->
 
@@ -126,10 +126,10 @@ onMounted(() => {
 
             <!-- *************************************************************************************************** -->
 
-            <div v-if="props.defTextVector['@perm'] !== 'ro' && direction === 'row'">
+            <div class="pb-1" v-if="props.defTextVector['@perm'] !== 'ro' && direction === 'row'">
 
-                <button class="btn btn-sm btn-outline-primary h-100 w-100" @click="sendMessage">
-                    <i :class="['position-absolute', 'bi', 'bi-circle-fill', `text-${COLORS[defTextVector['@state']]}`]" style="top: 0.25rem; left: 0.5rem;" v-if="!showStatus"></i>
+                <button class="btn btn-sm btn-primary h-100 w-100" @click="sendMessage">
+                    <i :class="['position-absolute', 'bi', 'bi-circle-fill', `text-${COLORS[defTextVector['@state']]}`]" style="top: calc(0.25rem + 1px); left: 0.5rem;" v-if="!showStatus"></i>
                     Apply
                 </button>
 
@@ -143,8 +143,8 @@ onMounted(() => {
 
         <div class="col-lg-2 pb-1" v-if="defTextVector['@perm'] !== 'ro' && direction === 'col'">
 
-            <button class="btn btn-sm btn-outline-primary h-100 w-100" @click="sendMessage">
-                <i :class="['position-absolute', 'bi', 'bi-circle-fill', `text-${COLORS[defTextVector['@state']]}`]" style="top: 0.25rem; left: 0.5rem;" v-if="!showStatus"></i>
+            <button class="btn btn-sm btn-primary h-100 w-100" @click="sendMessage">
+                <i :class="['position-absolute', 'bi', 'bi-circle-fill', `text-${COLORS[defTextVector['@state']]}`]" style="top: calc(0.25rem + 1px); left: 0.5rem;" v-if="!showStatus"></i>
                 Apply
             </button>
 
