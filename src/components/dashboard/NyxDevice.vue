@@ -6,7 +6,7 @@ import useNyxStore from '../../stores/nyx';
 import NavTabs from '../ui/container/NavTabs.vue';
 import TabPane from '../ui/container/TabPane.vue';
 
-import NyxPanel from './NyxGroup.vue';
+import NyxGroup from './NyxGroup.vue';
 import NyxConsole from './NyxConsole.vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -53,7 +53,7 @@ defineProps({
 
                     <tab-pane :title="groupName" v-if="Object.values(groupDescr).some((x) => !['defBLOBVector', 'defStreamVector'].includes(x['<>']))">
 
-                        <nyx-panel :group-descr="groupDescr" />
+                        <nyx-group :group-descr="groupDescr" />
 
                     </tab-pane>
 
