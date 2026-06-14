@@ -8,6 +8,17 @@ import {Popover} from 'bootstrap';
 import {marked} from 'marked';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+/* CONSTANTS                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const COLORS = {
+    'Idle': 'secondary',
+    'Ok': 'success',
+    'Busy': 'warning',
+    'Alert': 'danger',
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -21,20 +32,24 @@ const props = defineProps({
         type: Object,
         default: () => {},
     },
+    align: {
+        type: Boolean,
+        default: true,
+    },
+    direction: {
+        type: String,
+        default: 'col',
+        validator: (value) => ['row', 'column'].includes(value),
+    },
+    showStatus: {
+        type: Boolean,
+        default: true,
+    },
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const popoverRef = ref(null);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const COLORS = {
-    'Idle': 'secondary',
-    'Ok': 'success',
-    'Busy': 'warning',
-    'Alert': 'danger',
-};
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
@@ -81,7 +96,7 @@ onMounted(() => {
 
         <!-- ******************************************************************************************************* -->
 
-        <div class="col-lg-3">
+        <div class="col-lg-3" v-if="showStatus">
 
             <i :class="['bi', 'bi-circle-fill', `text-${COLORS[defSwitchVector['@state']]}`]"></i>
 
@@ -91,7 +106,7 @@ onMounted(() => {
 
         <!-- ******************************************************************************************************* -->
 
-        <div class="col-lg-7 text-center">
+        <div :class="[align ? (showStatus ? 'col-lg-7' : 'col-lg-10') : (showStatus ? 'col-lg-9' : 'col-lg-12'), 'text-center']">
 
             <!-- *************************************************************************************************** -->
             <!-- ONE OF MANY                                                                                         -->
@@ -101,15 +116,21 @@ onMounted(() => {
 
                 <div class="btn-group btn-group-sm mb-1 w-75" v-if="defSwitchVector['children'].length < 4">
                     <button class="btn" :class="{'btn-primary': defSwitch['$'] === 'On', 'btn-outline-secondary': defSwitch['$'] === 'Off'}" :style="{'width': `${100.0 / props.defSwitchVector['children'].length}%`}" :disabled="defSwitchVector['@perm'] === 'wo'" v-for="(defSwitch, index) in defSwitchVector['children']" :key="index" @click="sendMessage(index)">
+                        <i :class="['position-absolute', 'bi', 'bi-circle-fill', `text-${COLORS[defSwitchVector['@state']]}`]" style="top: 0.25rem; left: 0.5rem;" v-if="index === 0 && !showStatus"></i>
                         {{ defSwitch['@label'] || defSwitch['@name'] }}
                     </button>
                 </div>
 
-                <select class="form-select form-select-sm mx-auto mb-1 w-100" :disabled="defSwitchVector['@perm'] === 'wo'" @change="sendMessage($event.target.value)" v-else>
-                    <option :value="index" :selected="defSwitch['$'] === 'On'" v-for="(defSwitch, index) in defSwitchVector['children']" :key="index">
-                        {{ defSwitch['@label'] || defSwitch['@name'] }}
-                    </option>
-                </select>
+                <div class="input-group input-group-sm mb-1" v-else>
+                    <span class="input-group-text" v-if="!showStatus">
+                        <i :class="['bi', 'bi-circle-fill', `text-${COLORS[defSwitchVector['@state']]}`]"></i>
+                    </span>
+                    <select class="form-select" :disabled="defSwitchVector['@perm'] === 'wo'" @change="sendMessage($event.target.value)">
+                        <option :value="index" :selected="defSwitch['$'] === 'On'" v-for="(defSwitch, index) in defSwitchVector['children']" :key="index">
+                            {{ defSwitch['@label'] || defSwitch['@name'] }}
+                        </option>
+                    </select>
+                </div>
 
             </template>
 
@@ -121,6 +142,7 @@ onMounted(() => {
 
                 <div class="btn-group btn-group-sm mb-1 w-75">
                     <button class="btn" :class="{'btn-primary': defSwitch['$'] === 'On', 'btn-outline-secondary': defSwitch['$'] === 'Off'}" :style="{'width': `${100.0 / props.defSwitchVector['children'].length}%`}" :disabled="defSwitchVector['@perm'] === 'wo'" v-for="(defSwitch, index) in defSwitchVector['children']" :key="index" @click="sendMessage(index)">
+                        <i :class="['position-absolute', 'bi', 'bi-circle-fill', `text-${COLORS[defSwitchVector['@state']]}`]" style="top: 0.25rem; left: 0.5rem;" v-if="index === 0 && !showStatus"></i>
                         <i :class="['bi', {'bi-check-circle': defSwitch['$'] === 'On', 'bi-circle': defSwitch['$'] === 'Off'}]" v-if="defSwitchVector['children'].length > 1"></i>
                         {{ defSwitch['@label'] || defSwitch['@name'] }}
                     </button>
@@ -136,6 +158,7 @@ onMounted(() => {
 
                 <div class="btn-group btn-group-sm mb-1 w-75">
                     <button class="btn" :class="{'btn-primary': defSwitch['$'] === 'On', 'btn-outline-secondary': defSwitch['$'] === 'Off'}" :style="{'width': `${100.0 / props.defSwitchVector['children'].length}%`}" :disabled="defSwitchVector['@perm'] === 'wo'" v-for="(defSwitch, index) in defSwitchVector['children']" :key="index" @click="sendMessage(index)">
+                        <i :class="['position-absolute', 'bi', 'bi-circle-fill', `text-${COLORS[defSwitchVector['@state']]}`]" style="top: 0.25rem; left: 0.5rem;" v-if="index === 0 && !showStatus"></i>
                         <i :class="['bi', {'bi-check-square': defSwitch['$'] === 'On', 'bi-square': defSwitch['$'] === 'Off'}]" v-if="defSwitchVector['children'].length > 1"></i>
                         {{ defSwitch['@label'] || defSwitch['@name'] }}
                     </button>

@@ -12,6 +12,17 @@ import {marked} from 'marked';
 import Sexagesimal from '../ui/form/Sexagesimal.vue';
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+/* CONSTANTS                                                                                                          */
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+const COLORS = {
+    'Idle': 'secondary',
+    'Ok': 'success',
+    'Busy': 'warning',
+    'Alert': 'danger',
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* VARIABLES                                                                                                          */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -25,20 +36,24 @@ const props = defineProps({
         type: Object,
         default: () => {},
     },
+    align: {
+        type: Boolean,
+        default: true,
+    },
+    direction: {
+        type: String,
+        default: 'col',
+        validator: (value) => ['row', 'column'].includes(value),
+    },
+    showStatus: {
+        type: Boolean,
+        default: true,
+    },
 });
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 const popoverRef = ref(null);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-const COLORS = {
-    'Idle': 'secondary',
-    'Ok': 'success',
-    'Busy': 'warning',
-    'Alert': 'danger',
-};
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                                                          */
@@ -85,7 +100,7 @@ onMounted(() => {
 
         <!-- ******************************************************************************************************* -->
 
-        <div class="col-lg-3">
+        <div class="col-lg-3" v-if="showStatus">
 
             <i :class="['bi', 'bi-circle-fill', `text-${COLORS[defNumberVector['@state']]}`]"></i>
 
@@ -95,7 +110,9 @@ onMounted(() => {
 
         <!-- ******************************************************************************************************* -->
 
-        <div class="col-lg-7">
+        <div :class="[align || direction === 'col' ? (showStatus ? 'col-lg-7' : 'col-lg-10') : (showStatus ? 'col-lg-9' : 'col-lg-12')]">
+
+            <!-- *************************************************************************************************** -->
 
             <template v-for="defNumber in defNumberVector['children']" :key="defNumber">
 
@@ -113,13 +130,27 @@ onMounted(() => {
 
             </template>
 
+            <!-- *************************************************************************************************** -->
+
+            <div v-if="defNumberVector['@perm'] !== 'ro' && direction === 'row'">
+
+                <button class="btn btn-sm btn-outline-primary position-relative h-100 w-100" @click="sendMessage">
+                    <i :class="['position-absolute', 'bi', 'bi-circle-fill', `text-${COLORS[defNumberVector['@state']]}`]" style="top: 0.25rem; left: 0.5rem;" v-if="!showStatus"></i>
+                    Apply
+                </button>
+
+            </div>
+
+            <!-- *************************************************************************************************** -->
+
         </div>
 
         <!-- ******************************************************************************************************* -->
 
-        <div class="col-lg-2 pb-1" v-if="defNumberVector['@perm'] !== 'ro'">
+        <div class="col-lg-2 pb-1" v-if="defNumberVector['@perm'] !== 'ro' && direction === 'col'">
 
-            <button class="btn btn-xs btn-outline-primary h-100 w-100" @click="sendMessage">
+            <button class="btn btn-sm btn-outline-primary position-relative h-100 w-100" @click="sendMessage">
+                <i :class="['position-absolute', 'bi', 'bi-circle-fill', `text-${COLORS[defNumberVector['@state']]}`]" style="top: 0.25rem; left: 0.5rem;" v-if="!showStatus"></i>
                 Apply
             </button>
 
