@@ -24,7 +24,7 @@ defineProps({
 
     <!-- *********************************************************************************************************** -->
 
-    <div v-for="defXXXVector in Object.prototype.toString.call(groupDescr) === '[object Object]' ? Object.values(groupDescr) : groupDescr" :key="defXXXVector">
+    <template v-for="defXXXVector in Object.prototype.toString.call(groupDescr) === '[object Object]' ? Object.values(groupDescr) : groupDescr" :key="defXXXVector">
 
         <nyx-text-vector :def-text-vector="defXXXVector" v-if="defXXXVector['<>'] === 'defTextVector'" />
 
@@ -34,7 +34,7 @@ defineProps({
 
         <nyx-light-vector :def-light-vector="defXXXVector" v-else-if="defXXXVector['<>'] === 'defLightVector'" />
 
-    </div>
+    </template>
 
     <!-- *********************************************************************************************************** -->
 
